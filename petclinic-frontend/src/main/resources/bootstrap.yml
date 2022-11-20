@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: petclinic-frontend
+  cloud:
+    config:
+      enabled: false
+    kubernetes:
+      reload:
+        strategy: restart-context
+        enabled: true
+      config:
+        enabled: true
+        name: petclinic-config
+management:
+  endpoint:
+    restart:
+      enabled: true
