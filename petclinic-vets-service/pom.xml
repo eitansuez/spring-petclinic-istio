@@ -97,10 +97,6 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.zipkin.brave</groupId>
-			<artifactId>brave-instrumentation-mysql8</artifactId>
-		</dependency>
 
 		<!-- Testing -->
 		<dependency>

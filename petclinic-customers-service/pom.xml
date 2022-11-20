@@ -78,10 +78,6 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.zipkin.brave</groupId>
-			<artifactId>brave-instrumentation-mysql8</artifactId>
-		</dependency>
 
 		<!-- Testing -->
         <dependency>

@@ -1,61 +1,31 @@
-apiVersion: skaffold/v2beta6
+apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
-  name: spring-petclinic-k8s
+  name: spring-petclinic-istio
 build:
-  tagPolicy:
-    sha256: {}
   artifacts:
-  - image: spring-petclinic-customers-service
-    context:  ./spring-petclinic-customers-service
+  - image: my-cluster-registry:5000/petclinic-customers-service
+    context: petclinic-customers-service
     buildpacks:
-      builder:  gcr.io/paketo-buildpacks/builder:base
-      trustBuilder: true
-  - image: spring-petclinic-visits-service
-    context:  ./spring-petclinic-visits-service
+      builder: gcr.io/buildpacks/builder:v1
+  - image: my-cluster-registry:5000/petclinic-frontend
+    context: petclinic-frontend
     buildpacks:
-      builder: gcr.io/paketo-buildpacks/builder:base
-      trustBuilder: true
-  - image: spring-petclinic-vets-service
-    context:  ./spring-petclinic-vets-service
+      builder: gcr.io/buildpacks/builder:v1
+  - image: my-cluster-registry:5000/petclinic-vets-service
+    context: petclinic-vets-service
     buildpacks:
-      builder:  gcr.io/paketo-buildpacks/builder:base
-      trustBuilder: true
-  - image: petclinic
-    context:  ./petclinic
+      builder: gcr.io/buildpacks/builder:v1
+  - image: my-cluster-registry:5000/petclinic-visits-service
+    context: petclinic-visits-service
     buildpacks:
-      builder:  gcr.io/paketo-buildpacks/builder:base
-      trustBuilder: true
-deploy:
-  statusCheckDeadlineSeconds: 240
-  helm:
-    releases:
-    - name: customers-db-mysql
-      chartPath: bitnami/mysql #Change to your local ChartRepo if appropriate -> kubeapps/mysql
-      valuesFiles:
-        - manifests/db-values.yaml
-      remote: true
-      wait: true
-    - name: vets-db-mysql
-      chartPath: bitnami/mysql #Change to your local ChartRepo if appropriate -> kubeapps/mysql
-      valuesFiles:
-        - manifests/db-values.yaml
-      remote: true
-      wait: true
-    - name: visits-db-mysql
-      chartPath: bitnami/mysql #Change to your local ChartRepo if appropriate -> kubeapps/mysql
-      valuesFiles:
-        - manifests/db-values.yaml
-      remote: true
-      wait: true
-    flags:
-      install:
-        - "--create-namespace"
-  kubectl:
-    manifests:
-    - manifests/config-map.yaml
-    - manifests/role.yaml
-    - manifests/petclinic-frontendpetclinic-frontend.yaml
-    - manifests/customers-service.yaml
-    - manifests/vets-service.yaml
-    - manifests/visits-service.yaml
+      builder: gcr.io/buildpacks/builder:v1
+manifests:
+  rawYaml:
+  - manifests/config-map.yaml
+  - manifests/customers-service.yaml
+  - manifests/petclinic-frontend.yaml
+  - manifests/role.yaml
+  - manifests/routes.yaml
+  - manifests/vets-service.yaml
+  - manifests/visits-service.yaml

@@ -1,0 +1,10 @@
+# Enable mysql filter, see:
+# - https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
+# - https://istio.io/latest/docs/reference/commands/pilot-discovery/#envvars
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  values:
+    pilot:
+      env:
+        PILOT_ENABLE_MYSQL_FILTER: "true"

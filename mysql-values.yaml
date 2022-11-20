@@ -1,0 +1,4 @@
+---
+auth:
+  database: service-instance-db
+
