@@ -19,27 +19,27 @@ I suggest you give your VM 16GB of memory.
     k3d cluster create my-istio-cluster \
       --api-port 6443 \
       --k3s-arg "--disable=traefik@server:0" \
-      --k3s-arg "--kubelet-arg=eviction-hard=imagefs.available<1%,nodefs.available<1%@agent:*" \
-      --k3s-arg "--kubelet-arg=eviction-minimum-reclaim=imagefs.available=1%,nodefs.available=1%@agent:*" \
       --port 80:80@loadbalancer \
-      --registry-create my-cluster-registry:0.0.0.0:56619
+      --registry-create my-cluster-registry:0.0.0.0:5001
     ```
 
-    Above we disable the default traefik load balancer and configure local port 80 to forward to the "istio-ingressgateway" load balancer instead.
+    Above, we:
+    - Disable the default traefik load balancer and configure local port 80 to instead forward to the "istio-ingressgateway" load balancer.
+    - Create a registry we can push to locally on port 5001 that is accessible from the Kubernetes cluster at "my-cluster-registry:5000".
 
-    If you're curious about some of the above k3s arguments, see this [faq entry](https://k3d.io/v5.4.6/faq/faq/?h=storage#pods-evicted-due-to-lack-of-disk-space).
+1. Deploy Istio:
 
-3. Deploy Istio:
+    ```shell
+    istioctl install -f istio-install-manifest.yaml
+    ```
 
-   ```shell
-   istioctl install -f istio-install-manifest.yaml
-   ```
+    The manifest enables proxying of mysql databases in addition to the rest services.
 
-4. Label the default namespace for sidecar injection:
+1. Label the default namespace for sidecar injection:
 
-   ```shell
-   kubectl label ns default istio-injection=enabled
-   ```
+    ```shell
+    kubectl label ns default istio-injection=enabled
+    ```
 
 ## Deploy each microservice's backing database
 
