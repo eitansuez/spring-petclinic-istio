@@ -4,11 +4,10 @@ spring:
     name: vets-service
   cache:
     cache-names: vets
-  datasource:
-    schema: classpath*:db/mysql/schema.sql
-    data: classpath*:db/mysql/data.sql
-    platform: mysql
-    initialization-mode: always
+  sql:
+    init:
+      platform: mysql
+      mode: always
   jpa:
     show-sql: true
     hibernate:
