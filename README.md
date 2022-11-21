@@ -85,7 +85,6 @@ Now we're ready to deploy the databases with a `helm install` command for each a
     helm install customers-db-mysql bitnami/mysql -f mysql-values.yaml
     ```
 
-
 ## Build the apps, create the docker images, push them to the local registry
 
 1. Compile the apps and run the tests:
