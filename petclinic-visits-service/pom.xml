@@ -23,7 +23,7 @@
 		<spring-boot.version>2.7.5</spring-boot.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>
 
-		<spring-boot.build-image.imageName>localhost:56619/petclinic-visits-service</spring-boot.build-image.imageName>
+		<spring-boot.build-image.imageName>localhost:5001/petclinic-visits-service</spring-boot.build-image.imageName>
     </properties>
 
 	<dependencies>

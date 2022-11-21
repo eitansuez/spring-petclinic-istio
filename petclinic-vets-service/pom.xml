@@ -25,7 +25,7 @@
 
 		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
 
-		<spring-boot.build-image.imageName>localhost:56619/petclinic-vets-service</spring-boot.build-image.imageName>
+		<spring-boot.build-image.imageName>localhost:5001/petclinic-vets-service</spring-boot.build-image.imageName>
 	</properties>
 
 	<dependencies>

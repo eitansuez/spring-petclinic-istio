@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPOSITORY_PREFIX="localhost:56619"
+REPOSITORY_PREFIX="localhost:5001"
 
 docker push ${REPOSITORY_PREFIX}/petclinic-frontend:latest
 docker push ${REPOSITORY_PREFIX}/petclinic-visits-service:latest
