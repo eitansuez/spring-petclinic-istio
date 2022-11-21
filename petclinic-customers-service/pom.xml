@@ -22,7 +22,6 @@
 
 		<spring-boot.version>2.7.5</spring-boot.version>
 		<spring-cloud.version>2021.0.0</spring-cloud.version>
-        <spring-cloud-services.version>3.3.0</spring-cloud-services.version>
 
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <spring-boot.build-image.imageName>localhost:56619/petclinic-customers-service</spring-boot.build-image.imageName>
@@ -104,14 +103,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>io.pivotal.spring.cloud</groupId>
-				<artifactId>spring-cloud-services-dependencies</artifactId>
-				<version>${spring-cloud-services.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
