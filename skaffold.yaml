@@ -22,10 +22,8 @@ build:
       builder: gcr.io/buildpacks/builder:v1
 manifests:
   rawYaml:
-  - manifests/config-map.yaml
   - manifests/customers-service.yaml
   - manifests/petclinic-frontend.yaml
-  - manifests/role.yaml
   - manifests/routes.yaml
   - manifests/vets-service.yaml
   - manifests/visits-service.yaml
