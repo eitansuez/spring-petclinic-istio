@@ -62,10 +62,6 @@ data:
           override-none: true
       messages:
         basename: messages/messages
-      cloud:
-        kubernetes:
-          discovery:
-            enabled: true
     vets:
       cache:
         ttl: 60

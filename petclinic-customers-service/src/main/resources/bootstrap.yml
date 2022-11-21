@@ -7,8 +7,9 @@ spring:
         strategy: restart-context
         enabled: true
       config:
-        name: petclinic-config
         namespace: default
+        sources:
+        - name: petclinic-config
 management:
   endpoint:
     restart:

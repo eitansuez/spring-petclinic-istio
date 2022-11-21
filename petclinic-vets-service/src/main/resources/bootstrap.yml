@@ -3,12 +3,14 @@ spring:
     name: vets-service
   cloud:
     kubernetes:
-      reload:
-        strategy: restart-context
-        enabled: true
       config:
         name: petclinic-config
         namespace: default
+        sources:
+        - name: petclinic-config
+      reload:
+        strategy: restart-context
+        enabled: true
 management:
   endpoint:
     restart:
