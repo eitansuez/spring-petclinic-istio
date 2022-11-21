@@ -2,13 +2,16 @@
 
 Derived from [Spring PetClinic Cloud](https://github.com/spring-petclinic/spring-petclinic-cloud).
 
-For general information about the PetClinic sample application, see https://github.com/spring-petclinic/spring-petclinic-cloud
+For general information about the PetClinic sample application, see https://spring-petclinic.github.io/
 
 ## Summary
 
 The basic idea is that there's a ton of "cruft" inside tons of files in spring-petclinic that relate to "spring-cloud": configuration for service discovery, load balancing, routing, retries, resilience, etc.. None of that is an app's concern when you move to Istio. So we can get rid of it all. And little by little our apps become sane again.
 
 ## Setup
+
+On a Mac running Rancher Desktop, make sure your VM is given plenty of CPU and memory.
+I suggest you give your VM 16GB of memory.
 
 1. Deploy a local [K3D](https://k3d.io/) Kubernetes cluster with a local registry:
 
@@ -22,9 +25,9 @@ The basic idea is that there's a ton of "cruft" inside tons of files in spring-p
       --registry-create my-cluster-registry:0.0.0.0:56619
     ```
 
-    Above we disable the default traefik load balancer and configure local port 80 to forward to the "istio-ingressgateway" loadbalancer instead.
+    Above we disable the default traefik load balancer and configure local port 80 to forward to the "istio-ingressgateway" load balancer instead.
 
-    Separately, see this faq regarding some of the k3s arguments that had to be included in the above command: https://k3d.io/v5.4.6/faq/faq/?h=storage#pods-evicted-due-to-lack-of-disk-space
+    If you're curious about some of the above k3s arguments, see this [faq entry](https://k3d.io/v5.4.6/faq/faq/?h=storage#pods-evicted-due-to-lack-of-disk-space).
 
 3. Deploy Istio:
 
@@ -119,33 +122,15 @@ To deploy the app:
 kubectl apply -f manifests/
 ```
 
-## Example API calls
+## Visit the app
 
-Call the Vets controller endpoint:
+To see the running PetClinic application, open a browser tab and visit http://localhost/.
 
-```shell
-kubectl exec sleep -- curl vets-service.default.svc.cluster.local:8080/vets | jq
-```
+## Optional
 
-Here ar a couple of customers service endpoints:
+### Test database connectivity
 
-```shell
-kubectl exec sleep -- curl customers-service.default.svc.cluster.local:8080/owners | jq
-```
-
-```shell
-kubectl exec sleep -- curl customers-service.default.svc.cluster.local:8080/owners/1/pets/1 | jq
-```
-
-```shell
-kubectl exec sleep -- curl visits-service.default.svc.cluster.local:8080/pets/visits\?petId=1 | jq
-```
-
-## Troubleshooting
-
-### Database connectivity
-
-Connect directly to the vets-db-mysql database:
+Connect directly to the `vets-db-mysql` database:
 
 ```shell
 MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default vets-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
@@ -159,8 +144,27 @@ kubectl run vets-db-mysql-client --rm --tty -i --restart='Never' --image  docker
 mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
 ```
 
+### Test individual service endpoints
 
-## Issues
+1. Call the "Vets" controller endpoint:
 
-- On a Mac running Rancher Desktop, make sure your VM is given plenty of CPU and memory.
-  At the moment my VM is set to use 12GB of memory and 4 CPUs
+    ```shell
+    kubectl exec sleep -- curl vets-service.default.svc.cluster.local:8080/vets | jq
+    ```
+
+2. Here are a couple of `customers-service` endpoints to test:
+
+    ```shell
+    kubectl exec sleep -- curl customers-service.default.svc.cluster.local:8080/owners | jq
+    ```
+
+    ```shell
+    kubectl exec sleep -- curl customers-service.default.svc.cluster.local:8080/owners/1/pets/1 | jq
+    ```
+
+3. Test one of the `visits-service` endpoints:
+
+    ```shell
+    kubectl exec sleep -- curl visits-service.default.svc.cluster.local:8080/pets/visits\?petId=1 | jq
+    ```
+
