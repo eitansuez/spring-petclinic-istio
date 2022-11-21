@@ -88,6 +88,8 @@ Now we're ready to deploy the databases with a `helm install` command for each a
     helm install customers-db-mysql bitnami/mysql -f mysql-values.yaml
     ```
 
+Wait for the pods to be ready (2/2 containers).
+
 ## Build the apps, create the docker images, push them to the local registry
 
 1. Compile the apps and run the tests:
@@ -110,17 +112,19 @@ Now we're ready to deploy the databases with a `helm install` command for each a
 
 ## Deploy the apps
 
-Here is a brief explanation of each manifest:
+The deployment manifests are located in the folder named `manifests`.
 
-1. `routes.yaml` - configures the istio ingress gateway (which replaces spring cloud gatweay) to route requests to the application's api endpoints.
-2. `vets-service.yaml`, `visits-service.yaml`, `customers-service.yaml`, and `petclinic-frontend.yaml` - deployment + clusterIP service for each microservice that make up the spring petclinic application.
-3. `sleep.yaml` - a blank client pod that can be used to test direct calls to specific microservices
+1. The services are vets, visits, customers, and the frontend.  For each service we create a Kubernetes Service Account, a Deployment, and a ClusterIP service.
+2. `routes.yaml` configures the Istio ingress gateway (which replaces spring cloud gateway) to route requests to the application's api endpoints.
+3. `sleep.yaml` is a blank client Pod that can be used to send direct calls (for testing purposes) to specific microservices from within the Kubernetes cluster.
 
 To deploy the app:
 
 ```shell
 kubectl apply -f manifests/
 ```
+
+Wait for the pods to be ready (2/2 containers).
 
 ## Visit the app
 
