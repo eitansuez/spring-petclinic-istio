@@ -55,6 +55,10 @@ spec:
           preStop:
             exec:
               command: ["sh", "-c", "sleep 10"]
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 1Gi
         ports:
-        - containerPort: 8080
+          - containerPort: 8080
       restartPolicy: Always
