@@ -121,12 +121,6 @@ kubectl apply -f manifests/
 
 ## Example API calls
 
-Deploy sleep sample from Istio:
-
-```shell
-kubectl apply -f samples/sleep/sleep.yaml
-```
-
 Call the Vets controller endpoint:
 
 ```shell
