@@ -110,10 +110,9 @@ Now we're ready to deploy the databases with a `helm install` command for each a
 
 Here is a brief explanation of each manifest:
 
-1. `config-map.yaml` - configures a configmap named "petclinic-config" that each application is configured to consume its configuration from.
-2. `role.yaml` - has to do with the utilization of the [Spring Cloud Kubernetes](https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/) dependency.
-3. `routes.yaml` - configures the istio ingress gateway (which replaces spring cloud gatweay) to route requests to the application's api endpoints.
-4. `vets-service.yaml`, `visits-service.yaml`, `customers-service.yaml`, and `petclinic-frontend.yaml` - deployment + clusterIP service for each microservice that make up the spring petclinic application.
+1. `routes.yaml` - configures the istio ingress gateway (which replaces spring cloud gatweay) to route requests to the application's api endpoints.
+2. `vets-service.yaml`, `visits-service.yaml`, `customers-service.yaml`, and `petclinic-frontend.yaml` - deployment + clusterIP service for each microservice that make up the spring petclinic application.
+3. `sleep.yaml` - a blank client pod that can be used to test direct calls to specific microservices
 
 To deploy the app:
 

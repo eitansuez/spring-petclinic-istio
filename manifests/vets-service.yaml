@@ -1,5 +1,12 @@
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vets-service
+  labels:
+    account: vets-service
+---
+apiVersion: v1
 kind: Service
 metadata:
   labels:
@@ -32,6 +39,7 @@ spec:
         prometheus.io/port: "8080"
         prometheus.io/path: "/actuator/prometheus/"
     spec:
+      serviceAccountName: vets-service
       containers:
       - image: my-cluster-registry:5000/petclinic-vets-service:latest
         name: vets-service
