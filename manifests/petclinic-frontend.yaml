@@ -59,6 +59,8 @@ spec:
           requests:
             cpu: 2000m
             memory: 1Gi
+          limits:
+            memory: 1Gi
         ports:
           - containerPort: 8080
       restartPolicy: Always

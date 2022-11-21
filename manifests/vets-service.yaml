@@ -63,6 +63,8 @@ spec:
           requests:
             cpu: 2000m
             memory: 1Gi
+          limits:
+            memory: 1Gi
         env:
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://vets-db-mysql.default.svc.cluster.local:3306/service_instance_db
