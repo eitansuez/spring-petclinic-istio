@@ -135,12 +135,18 @@ Call the Vets controller endpoint:
 kubectl exec sleep -- curl vets-service.default.svc.cluster.local:8080/vets | jq
 ```
 
+Here ar a couple of customers service endpoints:
+
 ```shell
-kubectl exec sleep -- curl customers-service.default.svc.cluster.local:8080/
+kubectl exec sleep -- curl customers-service.default.svc.cluster.local:8080/owners | jq
 ```
 
 ```shell
-kubectl exec sleep -- curl visits-service.default.svc.cluster.local:8080/pets/visits?petId=? | jq
+kubectl exec sleep -- curl customers-service.default.svc.cluster.local:8080/owners/1/pets/1 | jq
+```
+
+```shell
+kubectl exec sleep -- curl visits-service.default.svc.cluster.local:8080/pets/visits\?petId=1 | jq
 ```
 
 ## Troubleshooting
@@ -164,20 +170,5 @@ mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
 
 ## Issues
 
-1. Database does not come up healthy.  After a few seconds where server is "ready for connections", container shuts down for some reason:
-
-    ```console
-    [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /tmp/mysqlx.sock
-    [Server] Received SHUTDOWN from user <via user signal>. Shutting down mysqld (Version: 8.0.31).
-    [Server] /opt/bitnami/mysql/bin/mysqld: Shutdown complete (mysqld 8.0.31)  Source distribution.
-    ```
-
-2. Service suddenly is interrupted after starting up and runs a graceful shutdown??
-
-    ```console
-    [visits-service,,] 1 --- [           main] o.s.s.p.visits.VisitsServiceApplication  : Started VisitsServiceApplication in 121.897 seconds (JVM running for 128.624)
-    [visits-service,,] 1 --- [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
-    [visits-service,,] 1 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
-    [visits-service,,] 1 --- [s.V1ConfigMap-1] i.k.c.informer.cache.ReflectorRunnable   : class io.kubernetes.client.openapi.models.V1ConfigMap#Read timeout retry list and watch
-    ERROR [visits-service,,] 1 --- [pool-4-thread-1] i.k.c.informer.cache.ProcessorListener   : processor interrupted: {}
-    ```
+- On a Mac running Rancher Desktop, make sure your VM is given plenty of CPU and memory.
+  At the moment my VM is set to use 12GB of memory and 4 CPUs
