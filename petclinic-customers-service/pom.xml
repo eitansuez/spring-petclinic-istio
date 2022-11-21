@@ -24,7 +24,7 @@
 		<spring-cloud.version>2021.0.5</spring-cloud.version>
 
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
-        <spring-boot.build-image.imageName>localhost:5001/petclinic-customers-service</spring-boot.build-image.imageName>
+        <spring-boot.build-image.imageName>localhost:5010/petclinic-customers-service</spring-boot.build-image.imageName>
     </properties>
 
 	<dependencies>

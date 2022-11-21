@@ -20,12 +20,12 @@ I suggest you give your VM 16GB of memory.
       --api-port 6443 \
       --k3s-arg "--disable=traefik@server:0" \
       --port 80:80@loadbalancer \
-      --registry-create my-cluster-registry:0.0.0.0:5001
+      --registry-create my-cluster-registry:0.0.0.0:5010
     ```
 
     Above, we:
     - Disable the default traefik load balancer and configure local port 80 to instead forward to the "istio-ingressgateway" load balancer.
-    - Create a registry we can push to locally on port 5001 that is accessible from the Kubernetes cluster at "my-cluster-registry:5000".
+    - Create a registry we can push to locally on port 5010 that is accessible from the Kubernetes cluster at "my-cluster-registry:5000".
 
 1. Deploy Istio:
 
