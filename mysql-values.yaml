@@ -1,4 +1,4 @@
 ---
 auth:
-  database: service-instance-db
+  database: service_instance_db
 
