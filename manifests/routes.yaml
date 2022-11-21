@@ -26,15 +26,9 @@ spec:
   http:
     - match:
       - uri:
-          prefix: "/api/gateway"
-      route:
-      - destination:
-          host: petclinic-frontend.default.svc.cluster.local
-          port:
-            number: 8080
-    - match:
-      - uri:
-          prefix: "/api/customer"
+          prefix: "/api/customer/"
+      rewrite:
+        uri: "/"
       route:
       - destination:
           host: customers-service.default.svc.cluster.local
@@ -42,7 +36,9 @@ spec:
             number: 8080
     - match:
       - uri:
-          prefix: "/api/visit"
+          prefix: "/api/visit/"
+      rewrite:
+        uri: "/"
       route:
       - destination:
           host: visits-service.default.svc.cluster.local
@@ -50,9 +46,25 @@ spec:
             number: 8080
     - match:
       - uri:
-          prefix: "/api/vet"
+          prefix: "/api/vet/"
+      rewrite:
+        uri: "/"
       route:
       - destination:
           host: vets-service.default.svc.cluster.local
           port:
             number: 8080
+    - match:
+        - uri:
+            prefix: "/api/gateway"
+      route:
+        - destination:
+            host: petclinic-frontend.default.svc.cluster.local
+            port:
+              number: 8080
+    - route:
+        - destination:
+            host: petclinic-frontend.default.svc.cluster.local
+            port:
+              number: 8080
+
