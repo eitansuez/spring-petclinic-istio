@@ -9,17 +9,19 @@ import org.springframework.samples.petclinic.api.dto.Visits;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @Component
-@RequiredArgsConstructor
 public class VisitsServiceClient {
 
   @Value("${visits-service-id://visits-service}")
   private String hostname;
 
   private final WebClient.Builder webClientBuilder;
+
+  public VisitsServiceClient(WebClient.Builder webClientBuilder) {
+    this.webClientBuilder = webClientBuilder;
+  }
 
   public Mono<Visits> getVisitsForPets(final List<Integer> petIds) {
     return webClientBuilder.build()

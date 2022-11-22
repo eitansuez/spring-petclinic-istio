@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.api.boundary.web;
 
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory;
@@ -14,17 +13,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/gateway")
 public class PetClinicController {
 
     private final CustomersServiceClient customersServiceClient;
     private final VisitsServiceClient visitsServiceClient;
     private final ReactiveCircuitBreakerFactory<?, ?> cbFactory;
+
+    public PetClinicController(CustomersServiceClient customersServiceClient, VisitsServiceClient visitsServiceClient, ReactiveCircuitBreakerFactory<?, ?> cbFactory) {
+        this.customersServiceClient = customersServiceClient;
+        this.visitsServiceClient = visitsServiceClient;
+        this.cbFactory = cbFactory;
+    }
 
     @GetMapping(value = "owners/{ownerId}")
     public Mono<OwnerDetails> getOwnerDetails(final @PathVariable int ownerId) {
@@ -44,8 +47,7 @@ public class PetClinicController {
             owner.getPets()
                 .forEach(pet -> pet.getVisits()
                     .addAll(visits.getItems().stream()
-                        .filter(v -> v.getPetId() == pet.getId())
-                        .collect(Collectors.toList()))
+                        .filter(v -> v.getPetId() == pet.getId()).toList())
                 );
             return owner;
         };

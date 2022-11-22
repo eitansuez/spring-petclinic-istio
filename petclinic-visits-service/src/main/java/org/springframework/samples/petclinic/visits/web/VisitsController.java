@@ -4,7 +4,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,11 +18,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @Slf4j
 @Timed("petclinic.visit")
 class VisitsController {
     private final VisitRepository visitRepository;
+
+    VisitsController(VisitRepository visitRepository) {
+        this.visitRepository = visitRepository;
+    }
 
     @PostMapping("owners/*/pets/{petId}/visits")
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,7 +1,5 @@
 package org.springframework.samples.petclinic.vets.web;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.samples.petclinic.vets.model.Vet;
@@ -12,9 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/vets")
 @RestController
-@RequiredArgsConstructor
 class VetsController {
     private final VetRepository vetRepository;
+
+    VetsController(VetRepository vetRepository) {
+        this.vetRepository = vetRepository;
+    }
 
     @GetMapping
     public List<Vet> showResourcesVetList() {

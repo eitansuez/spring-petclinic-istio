@@ -1,7 +1,6 @@
 package org.springframework.samples.petclinic.customers.web;
 
 import io.micrometer.core.annotation.Timed;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.customers.model.*;
@@ -12,11 +11,15 @@ import java.util.Optional;
 
 @RestController
 @Timed("petclinic.pet")
-@RequiredArgsConstructor
 @Slf4j
 class PetsController {
     private final PetRepository petRepository;
     private final OwnerRepository ownerRepository;
+
+    PetsController(PetRepository petRepository, OwnerRepository ownerRepository) {
+        this.petRepository = petRepository;
+        this.ownerRepository = ownerRepository;
+    }
 
     @GetMapping("/petTypes")
     public List<PetType> getPetTypes() {
@@ -63,7 +66,7 @@ class PetsController {
 
     private Pet findPetById(int petId) {
         Optional<Pet> pet = petRepository.findById(petId);
-        if (!pet.isPresent()) {
+        if (pet.isEmpty()) {
             throw new ResourceNotFoundException("Pet "+petId+" not found");
         }
         return pet.get();
