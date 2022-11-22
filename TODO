@@ -2,10 +2,6 @@
 
 --todo:
 
-- accessing http://localhost/#!/owners/details/6 from a browser
-   results in being able to see the full distributed trace,
-   but when i use siege i cannot see the backend services in kiali
-
 - Find & study a load testing script specifically designed for petclinic
     i suspect someone's already put together a jmeter (or other) script for petclinic
 
@@ -58,3 +54,7 @@ x Verify/fix trace headers propagation
   x see https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/
   x replace deprecated spring cloud sleuth with new way to propagate distributed traces
 x Verify that app metrics are collected in addition to envoy metrics
+x accessing http://localhost/#!/owners/details/6 from a browser
+   results in being able to see the full distributed trace,
+   but when i use siege i cannot see the backend services in kiali
+   - that's because you are calling the frontend url which assumes a browser that executes javascript to then call the backend api endpoint

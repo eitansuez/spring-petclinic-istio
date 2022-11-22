@@ -1,5 +1,10 @@
 # pet clinic list of url's to target
-http://localhost/#!/owners
-http://localhost/#!/vets
-http://localhost/#!/owners/details/6
-http://localhost/#!/owners/6/pets/2
+
+# 1. frontend url http://localhost/#!/owners calls backend at..
+http://localhost/api/customer/owners
+# 2. frontend url http://localhost/#!/vets calls backend at..
+http://localhost/api/vet/vets
+# 3. frontend url http://localhost/#!/owners/details/6 calls backend at..
+http://localhost/api/gateway/owners/3
+# 4. frontend url http://localhost/#!/owners/6/pets/2 calls backend at..
+http://localhost/api/customer/owners/6/pets/2
