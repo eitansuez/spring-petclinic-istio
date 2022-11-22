@@ -1,0 +1,5 @@
+# pet clinic list of url's to target
+# http://localhost/#!/owners
+# http://localhost/#!/vets
+http://localhost/#!/owners/details/6
+# http://localhost/#!/owners/6/pets/2
