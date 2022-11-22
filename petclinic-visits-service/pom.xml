@@ -21,7 +21,8 @@
 		<assertj.version>3.23.1</assertj.version>
 		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
 		<spring-boot.version>2.7.5</spring-boot.version>
-		<spring-cloud.version>2021.0.5</spring-cloud.version>
+
+		<micrometer-tracing.version>1.0.0</micrometer-tracing.version>
 
 		<spring-boot.build-image.imageName>localhost:5010/petclinic-visits-service</spring-boot.build-image.imageName>
     </properties>
@@ -56,20 +57,24 @@
 			<optional>true</optional>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
-
 		<!-- Third parties -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-otel</artifactId>
 		</dependency>
 
 		<!-- Testing -->
@@ -99,9 +104,9 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
+				<groupId>io.micrometer</groupId>
+				<artifactId>micrometer-tracing-bom</artifactId>
+				<version>${micrometer-tracing.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
