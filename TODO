@@ -1,0 +1,60 @@
+2022.11
+
+--todo:
+
+- accessing http://localhost/#!/owners/details/6 from a browser
+   results in being able to see the full distributed trace,
+   but when i use siege i cannot see the backend services in kiali
+
+- Find & study a load testing script specifically designed for petclinic
+    i suspect someone's already put together a jmeter (or other) script for petclinic
+
+- Replace build system: mvn -> gradle
+
+- Gain familiarity with skaffold & learn to spin this system up with skaffold
+
+- Replace resilience4j configuration with istio circuit breaker configuration
+  - rather simple to configure the 4s timeout in terms of istio resources.
+  - but there's also a test and a fallback configuration that i would have to retrofit
+
+- Leverage workload identity: add an authorization policy that restricts who can talk to each db
+
+- Re-implement backend in Kotlin
+
+--misc:
+Keeping a tight loop between dev and deploy with skaffold or similar tool
+  - https://skaffold.dev/
+  - https://tilt.dev/
+
+Has someone already adapted PetClinic for Istio?
+  - https://github.com/rverma-jm/spring-petclinic-istio
+  - https://piotrminkowski.com/2020/06/01/service-mesh-on-kubernetes-with-istio-and-spring-boot/
+
+--done:
+x review the docs/readme learn the basics of using the repo
+x setup a local k3d environment with registry, install istio
+x review the code
+x understand the app and how it functions
+x reconfigure gateway routing of service api endpoints in istio terms using a VirtualService
+x add prometheus annotations to app deployment manifests so that sidecar can pick up app container metrics
+x eliminate unneeded spring cloud dependencies
+x learn to build the code, create the images, and push them to a registry that k8s can fetch images from
+x deploy the app to k8s (manifests)
+x configure/deploy the mysql databases for each service
+x update to latest stable version of jkd/jvm - from 11 to 19
+x remove spring cloud kubernetes, can revisit that at a later time
+x update version of spring/springboot to latest stable: 2.6.3 -> 2.7.5
+x read up on spring cloud kubernetes - https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/
+x is the manifest role.yaml (that configures a role named "namespacereader" with rolebinding) even needed?
+  i think so.  it has to do with the ability to read the application.yaml info from the configmap.
+  see the spring cloud kubernetes project documentation for more information.
+x give each service its own service account
+x Deploy the app and see it work
+x get routing to function
+x Get to the bottom of why services often fail to come up or take an inordinate amount of time.
+  need to pay closer attention to service resource requests/limits
+x Run prometheus, grafana, jaeger & kiali; send traffic to the app; watch kiali dashboard
+x Verify/fix trace headers propagation
+  x see https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/
+  x replace deprecated spring cloud sleuth with new way to propagate distributed traces
+x Verify that app metrics are collected in addition to envoy metrics
