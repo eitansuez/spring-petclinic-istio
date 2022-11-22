@@ -23,7 +23,9 @@ public class PetClinicController {
     private final VisitsServiceClient visitsServiceClient;
     private final ReactiveCircuitBreakerFactory<?, ?> cbFactory;
 
-    public PetClinicController(CustomersServiceClient customersServiceClient, VisitsServiceClient visitsServiceClient, ReactiveCircuitBreakerFactory<?, ?> cbFactory) {
+    public PetClinicController(CustomersServiceClient customersServiceClient,
+                               VisitsServiceClient visitsServiceClient,
+                               ReactiveCircuitBreakerFactory<?, ?> cbFactory) {
         this.customersServiceClient = customersServiceClient;
         this.visitsServiceClient = visitsServiceClient;
         this.cbFactory = cbFactory;
