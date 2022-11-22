@@ -2,10 +2,10 @@
 
 --todo:
 
-- Find & study a load testing script specifically designed for petclinic
-    i suspect someone's already put together a jmeter (or other) script for petclinic
-
 - Replace build system: mvn -> gradle
+  dsyer worked on this, see:
+  - https://github.com/wro4j/wro4j-gradle-plugin/issues/2
+  - https://github.com/dsyer/spring-petclinic/tree/gradle
 
 - Gain familiarity with skaffold & learn to spin this system up with skaffold
 
