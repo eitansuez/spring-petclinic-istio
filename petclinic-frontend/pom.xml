@@ -170,7 +170,6 @@
 	</dependencyManagement>
 
 	<build>
-		<finalName>petclinic-frontend</finalName>
 		<plugins>
 			<plugin>
 				<groupId>ro.isdc.wro4j</groupId>
