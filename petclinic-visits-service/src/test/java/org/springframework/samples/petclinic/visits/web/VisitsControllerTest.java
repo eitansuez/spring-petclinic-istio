@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(VisitResource.class)
+@WebMvcTest(VisitsController.class)
 @ActiveProfiles("test")
-class VisitResourceTest {
+class VisitsControllerTest {
 
     @Autowired
     MockMvc mvc;

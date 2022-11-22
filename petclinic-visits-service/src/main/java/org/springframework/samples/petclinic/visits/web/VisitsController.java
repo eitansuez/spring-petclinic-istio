@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 @Timed("petclinic.visit")
-class VisitResource {
+class VisitsController {
     private final VisitRepository visitRepository;
 
     @PostMapping("owners/*/pets/{petId}/visits")

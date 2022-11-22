@@ -19,9 +19,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(VetResource.class)
+@WebMvcTest(VetsController.class)
 @ActiveProfiles("test")
-class VetResourceTest {
+class VetsControllerTest {
 
     @Autowired
     MockMvc mvc;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/vets")
 @RestController
 @RequiredArgsConstructor
-class VetResource {
+class VetsController {
     private final VetRepository vetRepository;
 
     @GetMapping

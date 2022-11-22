@@ -2,10 +2,19 @@
 
 --todo:
 
+- Remind yourself how to work with maven multi-module projects.
+  I suspect that many of the common dependencies in the child modules can be pulled into the parent.
+
 - Replace build system: mvn -> gradle
-  dsyer worked on this, see:
-  - https://github.com/wro4j/wro4j-gradle-plugin/issues/2
-  - https://github.com/dsyer/spring-petclinic/tree/gradle
+  - there may be an issue with the wro plugin for gradle and the converstion of .less files to .css in the build.
+    dsyer worked on this, see:
+    - https://github.com/wro4j/wro4j-gradle-plugin/issues/2
+     - https://github.com/dsyer/spring-petclinic/tree/gradle
+
+- The codebase appears to be out of sync with the monolith version of petclinic:
+    - the less files are now scss files
+    - i don't see the wro plugin anymore
+    - the java class names are different
 
 - Gain familiarity with skaffold & learn to spin this system up with skaffold
 
@@ -15,7 +24,7 @@
 
 - Leverage workload identity: add an authorization policy that restricts who can talk to each db
 
-- Re-implement backend in Kotlin
+- Re-implement backend in Kotlin.  Can then remove use of Lombok and other cruft.
 
 --misc:
 Keeping a tight loop between dev and deploy with skaffold or similar tool

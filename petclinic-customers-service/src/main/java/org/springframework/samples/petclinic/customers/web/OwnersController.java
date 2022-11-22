@@ -17,7 +17,7 @@ import java.util.Optional;
 @Timed("petclinic.owner")
 @RequiredArgsConstructor
 @Slf4j
-class OwnerResource {
+class OwnersController {
     private final OwnerRepository ownerRepository;
 
     @PostMapping
