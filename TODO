@@ -2,29 +2,20 @@
 
 --todo:
 
-- Remind yourself how to work with maven multi-module projects.
-  I suspect that many of the common dependencies in the child modules can be pulled into the parent.
+- Replace resilience4j configuration with istio circuit breaker configuration
+  - start by configuring the 4s timeout with istio instead of resilience4j.
+  - there's also the matter of the fallback and its accompanying test.
 
-- Replace build system: mvn -> gradle
-  - there may be an issue with the wro plugin for gradle and the converstion of .less files to .css in the build.
-    dsyer worked on this, see:
-    - https://github.com/wro4j/wro4j-gradle-plugin/issues/2
-     - https://github.com/dsyer/spring-petclinic/tree/gradle
+- Gain familiarity with skaffold & learn to spin this system up with skaffold
+
+- Leverage workload identity: add an authorization policy that restricts who can talk to each db
+
+- Re-implement backend in Kotlin?  Can then remove use of Lombok and other cruft.
 
 - The codebase appears to be out of sync with the monolith version of petclinic:
     - the less files are now scss files
     - i don't see the wro plugin anymore
     - the java class names are different
-
-- Gain familiarity with skaffold & learn to spin this system up with skaffold
-
-- Replace resilience4j configuration with istio circuit breaker configuration
-  - rather simple to configure the 4s timeout in terms of istio resources.
-  - but there's also a test and a fallback configuration that i would have to retrofit
-
-- Leverage workload identity: add an authorization policy that restricts who can talk to each db
-
-- Re-implement backend in Kotlin.  Can then remove use of Lombok and other cruft.
 
 --misc:
 Keeping a tight loop between dev and deploy with skaffold or similar tool
@@ -67,3 +58,12 @@ x accessing http://localhost/#!/owners/details/6 from a browser
    results in being able to see the full distributed trace,
    but when i use siege i cannot see the backend services in kiali
    - that's because you are calling the frontend url which assumes a browser that executes javascript to then call the backend api endpoint
+x improve the build files - i see a lot of repetition; perhaps even incorrect parent-child relationship configuration
+x Remind yourself how to work with maven multi-module projects.
+  I suspect that many of the common dependencies in the child modules can be pulled into the parent.
+x Replace build system: mvn -> gradle
+  - there may be an issue with the wro plugin for gradle and the converstion of .less files to .css in the build.
+    dsyer worked on this, see:
+    - https://github.com/wro4j/wro4j-gradle-plugin/issues/2
+     - https://github.com/dsyer/spring-petclinic/tree/gradle
+  changed my mind.  this is not important.  stick with maven for now.
