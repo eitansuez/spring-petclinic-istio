@@ -22,18 +22,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: petclinic-frontend-v1
   labels:
     app: petclinic-frontend
-  name: petclinic-frontend
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: petclinic-frontend
+      version: v1
   template:
     metadata:
       labels:
         app: petclinic-frontend
+        version: v1
     spec:
       serviceAccountName: petclinic-frontend
       containers:
