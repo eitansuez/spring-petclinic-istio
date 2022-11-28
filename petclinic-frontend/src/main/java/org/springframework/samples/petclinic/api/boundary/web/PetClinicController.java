@@ -2,8 +2,8 @@ package org.springframework.samples.petclinic.api.boundary.web;
 
 import java.util.function.Function;
 
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreaker;
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.api.application.CustomersServiceClient;
 import org.springframework.samples.petclinic.api.application.VisitsServiceClient;
 import org.springframework.samples.petclinic.api.dto.OwnerDetails;
@@ -13,22 +13,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/gateway")
 public class PetClinicController {
-
     private final CustomersServiceClient customersServiceClient;
     private final VisitsServiceClient visitsServiceClient;
-    private final ReactiveCircuitBreakerFactory<?, ?> cbFactory;
 
     public PetClinicController(CustomersServiceClient customersServiceClient,
-                               VisitsServiceClient visitsServiceClient,
-                               ReactiveCircuitBreakerFactory<?, ?> cbFactory) {
+                               VisitsServiceClient visitsServiceClient) {
         this.customersServiceClient = customersServiceClient;
         this.visitsServiceClient = visitsServiceClient;
-        this.cbFactory = cbFactory;
     }
 
     @GetMapping(value = "owners/{ownerId}")
@@ -36,10 +34,14 @@ public class PetClinicController {
         return customersServiceClient.getOwner(ownerId)
             .flatMap(owner ->
                 visitsServiceClient.getVisitsForPets(owner.getPetIds())
-                    .transform(it -> {
-                        ReactiveCircuitBreaker cb = cbFactory.create("getOwnerDetails");
-                        return cb.run(it, throwable -> emptyVisitsForPets());
-                    })
+                    .transform(it -> it.onErrorResume(throwable -> {
+                        HttpStatus responseStatus = ((WebClientResponseException) throwable).getStatusCode();
+                        boolean timedOut = (responseStatus == HttpStatus.GATEWAY_TIMEOUT);
+                        if (timedOut) {
+                            log.info("Response from visits service is a 504, returning an empty visits response as fallback..");
+                        }
+                        return timedOut;
+                    }, throwable -> emptyVisitsForPets()))
                     .map(addVisitsToOwner(owner))
             );
     }

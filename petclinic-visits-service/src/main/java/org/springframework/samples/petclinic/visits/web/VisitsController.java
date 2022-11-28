@@ -23,8 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 class VisitsController {
     private final VisitRepository visitRepository;
 
-    VisitsController(VisitRepository visitRepository) {
+    private final int delayMillis;
+
+    VisitsController(VisitRepository visitRepository,
+                     @org.springframework.beans.factory.annotation.Value("${delay.millis:0}") int delayMillis) {
         this.visitRepository = visitRepository;
+        this.delayMillis = delayMillis;
     }
 
     @PostMapping("owners/*/pets/{petId}/visits")
@@ -45,12 +49,15 @@ class VisitsController {
 
     @GetMapping("pets/visits")
     Visits visitsMultiGet(@RequestParam("petId") List<Integer> petIds) {
+        try {
+            Thread.sleep(delayMillis);
+        } catch (InterruptedException ignored) { }
         final List<Visit> byPetIdIn = visitRepository.findByPetIdIn(petIds);
         return new Visits(byPetIdIn);
     }
 
     @Value
     static class Visits {
-        private final List<Visit> items;
+        List<Visit> items;
     }
 }

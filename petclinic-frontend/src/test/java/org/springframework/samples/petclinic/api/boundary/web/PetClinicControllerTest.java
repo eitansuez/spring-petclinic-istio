@@ -5,8 +5,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.cloud.circuitbreaker.resilience4j.ReactiveResilience4JAutoConfiguration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.api.application.CustomersServiceClient;
 import org.springframework.samples.petclinic.api.application.VisitsServiceClient;
 import org.springframework.samples.petclinic.api.dto.OwnerDetails;
@@ -14,13 +14,13 @@ import org.springframework.samples.petclinic.api.dto.PetDetails;
 import org.springframework.samples.petclinic.api.dto.VisitDetails;
 import org.springframework.samples.petclinic.api.dto.Visits;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
-import java.net.ConnectException;
 import java.util.Collections;
 
 @WebFluxTest(controllers = PetClinicController.class)
-@Import({ReactiveResilience4JAutoConfiguration.class, CircuitBreakerConfiguration.class, InsecurityConfiguration.class})
+@Import({InsecurityConfiguration.class})
 class PetClinicControllerTest {
 
 	@MockBean
@@ -66,7 +66,7 @@ class PetClinicControllerTest {
 	}
 
 	/**
-	 * Test Resilience4j fallback method
+	 * Test fallback
 	 */
 	@Test
 	void getOwnerDetails_withServiceError() {
@@ -82,7 +82,11 @@ class PetClinicControllerTest {
 
 		Mockito
 				.when(visitsServiceClient.getVisitsForPets(Collections.singletonList(cat.getId())))
-				.thenReturn(Mono.error(new ConnectException("Simulate error")));
+				.thenReturn(
+						Mono.error(
+								new WebClientResponseException(HttpStatus.GATEWAY_TIMEOUT.value(), "Simulated Gateway Timeout", null, null, null)
+						)
+				);
 
 		client.get()
 				.uri("/api/gateway/owners/1")

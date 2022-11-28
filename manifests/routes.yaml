@@ -67,4 +67,3 @@ spec:
             host: petclinic-frontend.default.svc.cluster.local
             port:
               number: 8080
-

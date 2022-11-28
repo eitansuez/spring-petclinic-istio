@@ -2,14 +2,10 @@
 
 --todo:
 
-- Replace resilience4j configuration with istio circuit breaker configuration
-  - start by configuring the 4s timeout with istio instead of resilience4j.
-  - there's also the matter of the fallback and its accompanying test.
+- Add version labels to each service
 
 - Gain familiarity with skaffold & learn to spin this system up with skaffold
-
 - Leverage workload identity: add an authorization policy that restricts who can talk to each db
-
 - Re-implement backend in Kotlin?  Can then remove use of Lombok and other cruft.
 
 - The codebase appears to be out of sync with the monolith version of petclinic:
@@ -25,6 +21,7 @@ Keeping a tight loop between dev and deploy with skaffold or similar tool
 Has someone already adapted PetClinic for Istio?
   - https://github.com/rverma-jm/spring-petclinic-istio
   - https://piotrminkowski.com/2020/06/01/service-mesh-on-kubernetes-with-istio-and-spring-boot/
+  - https://piotrminkowski.com/2020/06/03/circuit-breaker-and-retries-on-kubernetes-with-istio-and-spring-boot/
 
 --done:
 x review the docs/readme learn the basics of using the repo
@@ -57,7 +54,9 @@ x Verify that app metrics are collected in addition to envoy metrics
 x accessing http://localhost/#!/owners/details/6 from a browser
    results in being able to see the full distributed trace,
    but when i use siege i cannot see the backend services in kiali
-   - that's because you are calling the frontend url which assumes a browser that executes javascript to then call the backend api endpoint
+   - that's because you are calling the frontend url which assumes a browser
+     that executes javascript to then call the backend api endpoint.
+     what you want is to capture the url of the backend api endpoint
 x improve the build files - i see a lot of repetition; perhaps even incorrect parent-child relationship configuration
 x Remind yourself how to work with maven multi-module projects.
   I suspect that many of the common dependencies in the child modules can be pulled into the parent.
@@ -67,3 +66,8 @@ x Replace build system: mvn -> gradle
     - https://github.com/wro4j/wro4j-gradle-plugin/issues/2
      - https://github.com/dsyer/spring-petclinic/tree/gradle
   changed my mind.  this is not important.  stick with maven for now.
+x Replace resilience4j configuration with istio circuit breaker configuration
+  x configure the 4s timeout with istio instead of resilience4j.
+  x there's also the matter of the fallback when the call times out and its accompanying test.
+x Retrofit Visits service so can be configured with a specified delay
+x Write up how to test fallback for timeout on visits service endpoint.

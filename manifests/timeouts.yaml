@@ -1,0 +1,13 @@
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: visits
+spec:
+  hosts:
+  - visits-service.default.svc.cluster.local
+  http:
+  - route:
+      - destination:
+          host: visits-service.default.svc.cluster.local
+    timeout: 4s

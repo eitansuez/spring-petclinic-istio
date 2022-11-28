@@ -7,5 +7,5 @@ import lombok.Value;
 
 @Value
 public class Visits {
-    private List<VisitDetails> items = new ArrayList<>();
+    List<VisitDetails> items = new ArrayList<>();
 }
