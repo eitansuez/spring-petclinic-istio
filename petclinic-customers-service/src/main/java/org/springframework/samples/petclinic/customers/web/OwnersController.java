@@ -28,7 +28,7 @@ class OwnersController {
         return ownerRepository.save(owner);
     }
 
-    @GetMapping(value = "/{ownerId}")
+    @GetMapping("/{ownerId}")
     public Optional<Owner> findOwner(@PathVariable("ownerId") int ownerId) {
         return ownerRepository.findById(ownerId);
     }
@@ -38,7 +38,7 @@ class OwnersController {
         return ownerRepository.findAll();
     }
 
-    @PutMapping(value = "/{ownerId}")
+    @PutMapping("/{ownerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateOwner(@PathVariable("ownerId") int ownerId, @Valid @RequestBody Owner ownerRequest) {
         final Optional<Owner> owner = ownerRepository.findById(ownerId);

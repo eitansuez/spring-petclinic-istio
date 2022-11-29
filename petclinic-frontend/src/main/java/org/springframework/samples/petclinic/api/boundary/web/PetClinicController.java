@@ -30,7 +30,7 @@ public class PetClinicController {
         this.visitsServiceClient = visitsServiceClient;
     }
 
-    @GetMapping(value = "owners/{ownerId}")
+    @GetMapping("owners/{ownerId}")
     public Mono<OwnerDetails> getOwnerDetails(final @PathVariable int ownerId) {
         return customersServiceClient.getOwner(ownerId)
             .flatMap(owner ->
