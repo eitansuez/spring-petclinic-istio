@@ -1,0 +1,51 @@
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: vets-db-allow-vets-service
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vets-db-mysql
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/default/sa/vets-service"]
+    to:
+    - operation:
+        ports: ["3306"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: customers-db-allow-customers-service
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: customers-db-mysql
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: ["cluster.local/ns/default/sa/customers-service"]
+      to:
+        - operation:
+            ports: ["3306"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: visits-db-allow-visits-service
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: visits-db-mysql
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals: ["cluster.local/ns/default/sa/visits-service"]
+      to:
+        - operation:
+            ports: ["3306"]

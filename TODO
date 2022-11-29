@@ -2,8 +2,6 @@
 
 --todo:
 
-- Leverage workload identity: add an authorization policy that restricts who can talk to each db
-
 - Re-implement backend in Kotlin?  Can then remove use of Lombok and other cruft.
 
 - The codebase appears to be out of sync with the monolith version of petclinic:
@@ -65,3 +63,4 @@ x Question: Has someone already adapted PetClinic for Istio, or otherwise played
   - https://github.com/rverma-jm/spring-petclinic-istio
   - https://piotrminkowski.com/2020/06/01/service-mesh-on-kubernetes-with-istio-and-spring-boot/
   - https://piotrminkowski.com/2020/06/03/circuit-breaker-and-retries-on-kubernetes-with-istio-and-spring-boot/
+x Leverage workload identity: add an authorization policy that restricts who can talk to each db
