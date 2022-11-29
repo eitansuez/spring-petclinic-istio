@@ -10,8 +10,8 @@ The basic idea is that there's a ton of "cruft" inside tons of files in spring-p
 
 ## Setup
 
-On a Mac running Rancher Desktop, make sure your VM is given plenty of CPU and memory.
-I suggest you give your VM 16GB of memory and 6 CPUs.
+On a Mac running Docker Desktop or Rancher Desktop, make sure to give your VM plenty of CPU and memory.
+16GB of memory and 6 CPUs seems to work for me.
 
 1. Deploy a local [K3D](https://k3d.io/) Kubernetes cluster with a local registry:
 

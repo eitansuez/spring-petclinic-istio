@@ -2,25 +2,14 @@
 
 --todo:
 
-- Learn to use skaffold
-
 - Leverage workload identity: add an authorization policy that restricts who can talk to each db
+
 - Re-implement backend in Kotlin?  Can then remove use of Lombok and other cruft.
+
 - The codebase appears to be out of sync with the monolith version of petclinic:
     - the less files are now scss files
     - i don't see the wro plugin anymore
     - the java class names are different
-
---miscellaneous:
-
-- Keeping a tight loop between dev and deploy with skaffold or similar tool
-  - https://skaffold.dev/
-  - https://tilt.dev/
-
-- Question: Has someone already adapted PetClinic for Istio?
-  - https://github.com/rverma-jm/spring-petclinic-istio
-  - https://piotrminkowski.com/2020/06/01/service-mesh-on-kubernetes-with-istio-and-spring-boot/
-  - https://piotrminkowski.com/2020/06/03/circuit-breaker-and-retries-on-kubernetes-with-istio-and-spring-boot/
 
 --done:
 x review the docs/readme learn the basics of using the repo
@@ -72,3 +61,7 @@ x Retrofit Visits service so can be configured with a specified delay
 x Write up how to test fallback for timeout on visits service endpoint.
 x Add version labels to each service
 x Upgrade to Spring Boot 3.0
+x Question: Has someone already adapted PetClinic for Istio, or otherwise played with Spring Boot on Istio?
+  - https://github.com/rverma-jm/spring-petclinic-istio
+  - https://piotrminkowski.com/2020/06/01/service-mesh-on-kubernetes-with-istio-and-spring-boot/
+  - https://piotrminkowski.com/2020/06/03/circuit-breaker-and-retries-on-kubernetes-with-istio-and-spring-boot/
