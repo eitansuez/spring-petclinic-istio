@@ -20,12 +20,12 @@ x eliminate unneeded spring cloud dependencies
 x learn to build the code, create the images, and push them to a registry that k8s can fetch images from
 x deploy the app to k8s (manifests)
 x configure/deploy the mysql databases for each service
-x update to latest stable version of jkd/jvm - from 11 to 19
+x update to latest stable version of jdk/jvm - from 11 to 19
 x remove spring cloud kubernetes, can revisit that at a later time
 x update version of spring/springboot to latest stable: 2.6.3 -> 2.7.5
 x read up on spring cloud kubernetes - https://docs.spring.io/spring-cloud-kubernetes/docs/current/reference/html/
 x is the manifest role.yaml (that configures a role named "namespacereader" with rolebinding) even needed?
-  i think so.  it has to do with the ability to read the application.yaml info from the configmap.
+  it is necessary to allow reading the application.yaml info from the configmap.
   see the spring cloud kubernetes project documentation for more information.
 x give each service its own service account
 x Deploy the app and see it work
