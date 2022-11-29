@@ -1,6 +1,7 @@
-# Enable mysql filter, see:
+# 1. Enables mysql filter, see:
 # - https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
 # - https://istio.io/latest/docs/reference/commands/pilot-discovery/#envvars
+# 2. Turns on sidecar access loging to stdout
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 spec:
