@@ -7,19 +7,31 @@ build:
   - image: my-cluster-registry:5000/petclinic-customers-service
     context: petclinic-customers-service
     buildpacks:
-      builder: gcr.io/buildpacks/builder:v1
+      builder: gcr.io/paketo-buildpacks/builder:base
+      trustBuilder: true
+      env:
+        - "BP_JVM_VERSION=19"
   - image: my-cluster-registry:5000/petclinic-frontend
     context: petclinic-frontend
     buildpacks:
-      builder: gcr.io/buildpacks/builder:v1
+      builder: gcr.io/paketo-buildpacks/builder:base
+      trustBuilder: true
+      env:
+        - "BP_JVM_VERSION=19"
   - image: my-cluster-registry:5000/petclinic-vets-service
     context: petclinic-vets-service
     buildpacks:
-      builder: gcr.io/buildpacks/builder:v1
+      builder: gcr.io/paketo-buildpacks/builder:base
+      trustBuilder: true
+      env:
+        - "BP_JVM_VERSION=19"
   - image: my-cluster-registry:5000/petclinic-visits-service
     context: petclinic-visits-service
     buildpacks:
-      builder: gcr.io/buildpacks/builder:v1
+      builder: gcr.io/paketo-buildpacks/builder:base
+      trustBuilder: true
+      env:
+        - "BP_JVM_VERSION=19"
 manifests:
   rawYaml:
   - manifests/petclinic-frontend.yaml
