@@ -5,7 +5,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.api.application.CustomersServiceClient;
 import org.springframework.samples.petclinic.api.application.VisitsServiceClient;
@@ -20,7 +19,6 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 
 @WebFluxTest(controllers = PetClinicController.class)
-@Import({InsecurityConfiguration.class})
 class PetClinicControllerTest {
 
 	@MockBean

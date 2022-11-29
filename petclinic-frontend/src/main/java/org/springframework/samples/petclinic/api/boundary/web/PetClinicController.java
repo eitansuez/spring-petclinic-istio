@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.samples.petclinic.api.application.CustomersServiceClient;
 import org.springframework.samples.petclinic.api.application.VisitsServiceClient;
 import org.springframework.samples.petclinic.api.dto.OwnerDetails;
@@ -35,7 +36,7 @@ public class PetClinicController {
             .flatMap(owner ->
                 visitsServiceClient.getVisitsForPets(owner.getPetIds())
                     .transform(it -> it.onErrorResume(throwable -> {
-                        HttpStatus responseStatus = ((WebClientResponseException) throwable).getStatusCode();
+                        HttpStatusCode responseStatus = ((WebClientResponseException) throwable).getStatusCode();
                         boolean timedOut = (responseStatus == HttpStatus.GATEWAY_TIMEOUT);
                         if (timedOut) {
                             log.info("Response from visits service is a 504, returning an empty visits response as fallback..");

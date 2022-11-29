@@ -7,14 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.samples.petclinic.customers.model.Owner;
-import org.springframework.samples.petclinic.customers.model.OwnerRepository;
-import org.springframework.samples.petclinic.customers.model.Pet;
-import org.springframework.samples.petclinic.customers.model.PetRepository;
-import org.springframework.samples.petclinic.customers.model.PetType;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.samples.petclinic.customers.model.*;
 import org.springframework.test.web.servlet.MockMvc;
-
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,11 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * @author Maciej Szarlinski
- */
-@WebMvcTest(PetsController.class)
-@ActiveProfiles("test")
+@WebMvcTest(value = PetsController.class)
 class PetsControllerTest {
 
     @Autowired
@@ -40,12 +30,8 @@ class PetsControllerTest {
 
     @Test
     void shouldGetAPetInJSonFormat() throws Exception {
-
         Pet pet = setupPet();
-
         given(petRepository.findById(2)).willReturn(Optional.of(pet));
-
-
         mvc.perform(get("/owners/2/pets/2").accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json"))
@@ -60,7 +46,6 @@ class PetsControllerTest {
         owner.setLastName("Bush");
 
         Pet pet = new Pet();
-
         pet.setName("Basil");
         pet.setId(2);
 

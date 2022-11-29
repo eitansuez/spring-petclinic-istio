@@ -2,7 +2,8 @@
 
 --todo:
 
-- Gain familiarity with skaffold & learn to spin this system up with skaffold
+- Learn to use skaffold
+
 - Leverage workload identity: add an authorization policy that restricts who can talk to each db
 - Re-implement backend in Kotlin?  Can then remove use of Lombok and other cruft.
 - The codebase appears to be out of sync with the monolith version of petclinic:
@@ -70,3 +71,4 @@ x Replace resilience4j configuration with istio circuit breaker configuration
 x Retrofit Visits service so can be configured with a specified delay
 x Write up how to test fallback for timeout on visits service endpoint.
 x Add version labels to each service
+x Upgrade to Spring Boot 3.0

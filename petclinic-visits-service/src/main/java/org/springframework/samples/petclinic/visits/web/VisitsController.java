@@ -1,7 +1,7 @@
 package org.springframework.samples.petclinic.visits.web;
 
 import java.util.List;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import io.micrometer.core.annotation.Timed;
 import lombok.Value;
