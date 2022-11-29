@@ -73,19 +73,19 @@ Now we're ready to deploy the databases with a `helm install` command for each a
 1. Vets:
 
     ```bash
-    helm install vets-db-mysql bitnami/mysql -f mysql-values.yaml
+    helm install vets-db-mysql bitnami/mysql --set auth.database=service_instance_db
     ```
 
 2. Visits:
 
     ```bash
-    helm install visits-db-mysql bitnami/mysql -f mysql-values.yaml
+    helm install visits-db-mysql bitnami/mysql --set auth.database=service_instance_db
     ```
 
 3. Customers:
 
     ```bash
-    helm install customers-db-mysql bitnami/mysql -f mysql-values.yaml
+    helm install customers-db-mysql bitnami/mysql --set auth.database=service_instance_db
     ```
 
 Wait for the pods to be ready (2/2 containers).
