@@ -98,16 +98,10 @@ Wait for the pods to be ready (2/2 containers).
    mvn clean package
    ```
 
-2. Build the images:
+2. Build the images and publish them to the local registry:
 
    ```shell
    mvn spring-boot:build-image
-   ```
-
-3. Push the images to the local registry:
-
-   ```shell
-   ./push-images.sh
    ```
 
 ## Deploy the apps

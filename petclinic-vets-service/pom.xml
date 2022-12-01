@@ -18,6 +18,7 @@
 	<properties>
 		<java.version>19</java.version>
 		<spring-boot.build-image.imageName>localhost:5010/${project.artifactId}</spring-boot.build-image.imageName>
+		<spring-boot.build-image.publish>true</spring-boot.build-image.publish>
 	</properties>
 
 	<dependencies>

@@ -4,11 +4,13 @@
 
 Optional, app-specific:
 
-- https://github.com/spring-petclinic/spring-petclinic-cloud appears to be out of sync with, or to have diverged from the https://github.com/spring-projects/spring-petclinic
+- https://github.com/spring-petclinic/spring-petclinic-cloud appears to be out of sync with,
+  or to have diverged from the https://github.com/spring-projects/spring-petclinic:
   - the .less files are now .scss files, and the wro plugin is no longer used (since we're using sass)
   - the java class names are different
-- Java -> Kotlin & eliminate Lombok
-- Mvn -> Gradle
+
+- java -> kotlin & eliminate lombok
+- mvn -> gradle
 
 
 --done:
