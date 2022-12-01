@@ -75,9 +75,9 @@ spec:
           value: root
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
-             secretKeyRef:
-               name: customers-db-mysql
-               key: mysql-root-password
+            secretKeyRef:
+              name: customers-db-mysql
+              key: mysql-root-password
         ports:
         - containerPort: 8080
       restartPolicy: Always
