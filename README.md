@@ -166,10 +166,10 @@ mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
     kubectl exec sleep -- curl visits-service:8080/pets/visits\?petId=8 | jq
     ```
 
-4. Call `petclinic-frontend` endpoint that calls the visits service:
+4. Call `petclinic-frontend` endpoint that calls the customers and visits services:
 
     ```shell
-    curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
 ## Test resilience and fallback
@@ -189,7 +189,7 @@ Here is how to test the behavior:
 1. Call `visits-service` directly:
 
     ```shell
-    curl visits-service:8080/pets/visits\?petId=8 | jq
+    kubectl exec sleep -- curl visits-service:8080/pets/visits\?petId=8 | jq
     ```
 
     Observe the call succeed and return a list of visits for this particular pet.
@@ -197,7 +197,7 @@ Here is how to test the behavior:
 2. Call the `petclinic-frontend` endpoint, and note that for each pet, we see a list of visits:
 
     ```shell
-    curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
 3. Edit the deployment manifest for the `visits-service` so that the environment variable `DELAY_MILLIS` is set to the value "5000" (which is 5 seconds).
@@ -205,7 +205,7 @@ Here is how to test the behavior:
 4. Once the new visits-service pod reaches ready status, make the same call again:
 
     ```shell
-    curl -v visits-service:8080/pets/visits\?petId=8
+    kubectl exec sleep -- curl -v visits-service:8080/pets/visits\?petId=8
     ```
 
     Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).
@@ -213,7 +213,7 @@ Here is how to test the behavior:
 5. Call the `petclinic-frontend` endpoint once more, and note that for each pet, the list of visits is empty:
 
     ```shell
-    curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
     That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
