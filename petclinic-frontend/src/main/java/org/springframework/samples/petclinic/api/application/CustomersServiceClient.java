@@ -13,14 +13,14 @@ public class CustomersServiceClient {
   @Value("${customers-service-id://customers-service}")
   private String hostname;
 
-  private final WebClient.Builder webClientBuilder;
+  private final WebClient webClient;
 
-  public CustomersServiceClient(WebClient.Builder webClientBuilder) {
-    this.webClientBuilder = webClientBuilder;
+  public CustomersServiceClient(WebClient webClient) {
+    this.webClient = webClient;
   }
 
   public Mono<OwnerDetails> getOwner(final int ownerId) {
-    return webClientBuilder.build().get()
+    return webClient.get()
         .uri(hostname + "/owners/{ownerId}", ownerId)
         .retrieve()
         .bodyToMono(OwnerDetails.class);

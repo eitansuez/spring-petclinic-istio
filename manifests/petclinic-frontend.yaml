@@ -37,6 +37,10 @@ spec:
       labels:
         app: petclinic-frontend
         version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       serviceAccountName: petclinic-frontend
       containers:

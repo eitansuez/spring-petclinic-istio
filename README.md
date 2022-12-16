@@ -220,7 +220,7 @@ Here is how to test the behavior:
     Tail the logs of `petclinic-frontend` and observe a log message indicating the fallback was triggered.
 
 
-## Leveraging workload identity
+## Leverage workload identity
 
 Workloads in Istio are assigned a [SPIFFE](https://spiffe.io/) identity.
 
@@ -247,3 +247,48 @@ The above policy is specified in the file `authorization-policies.yaml`.
 3. Attempt once more to create a client pod to connect to the "vets" database.  This time the operation will fail.  That's because only the vets service is now allowed to connect to the database.
 
 4. Also verify that the application itself continues to function because all database queries are performed via its accompanying service.
+
+## Observe Distributed Traces
+
+All boot apps are configured to propagate trace headers using [micrometer-tracing](https://micrometer.io/docs/tracing), per the [Istio documentation](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/#trace-context-propagation).
+
+See the `application.yaml` resource files and the property `management.tracing.baggage.remote-fields` which configures the fields to propagate.
+
+To make testing this easier, Istio is configured with 100% trace sampling.
+
+### Steps
+
+1. From the Istio distribution directory, deploy Istio observability samples:
+
+    ```shell
+    kubectl apply -f samples/addons/prometheus.yaml
+    kubectl apply -f samples/addons/jaeger.yaml
+    kubectl apply -f samples/addons/kiali.yaml
+    kubectl apply -f samples/addons/grafana.yaml
+    ```
+
+    Wait for the observability pods to be ready:
+
+    ```shell
+    kubectl get pod -n istio-system
+    ```
+
+1. Start the jaeger dashboard:
+
+    ```shell
+    istioctl dashboard jaeger
+    ```
+
+1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
+
+    ```shell
+    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    ```
+
+1. In Jaeger, search for traces involving the services petclinic-frontend, customers, and visits.
+
+    There should be a new trace with six spans showing the full end-to-end request-response flow across all three services.
+
+    ![Distributed Trace Example](jaeger-screenshot.png)
+
+The Kiali dashboard can likewise be used to display visualizations of such end-to-end flows.

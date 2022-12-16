@@ -1,24 +1,11 @@
 ---
+customers-service-id: http://customers-service.default.svc.cluster.local:8080
+visits-service-id: http://visits-service.default.svc.cluster.local:8080
 spring:
   application:
-    name: vets-service
-  cache:
-    cache-names: vets
-  sql:
-    init:
-      platform: mysql
-      mode: always
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-      generate-ddl: false
+    name: petclinic-frontend
   messages:
     basename: messages/messages
-vets:
-  cache:
-    ttl: 60
-    heap-size: 101
 server:
   shutdown: graceful
   lifecycle:
@@ -53,3 +40,12 @@ management:
     metrics:
       export:
         enabled: true
+  tracing:
+    baggage:
+      remote-fields:
+      - x-request-id
+      - x-b3-traceid
+      - x-b3-spanid
+      - x-b3-parentspanid
+      - x-b3-sampled
+      - x-b3-flags

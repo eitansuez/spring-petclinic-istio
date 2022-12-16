@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.api.boundary.web;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.api.application.CustomersServiceClient;
@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 
-@WebFluxTest(controllers = PetClinicController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PetClinicControllerTest {
 
 	@MockBean

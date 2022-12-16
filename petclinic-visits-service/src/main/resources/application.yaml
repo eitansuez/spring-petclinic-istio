@@ -1,7 +1,7 @@
 ---
 spring:
   application:
-    name: customers-service
+    name: visits-service
   sql:
     init:
       platform: mysql
@@ -47,3 +47,12 @@ management:
     metrics:
       export:
         enabled: true
+  tracing:
+    baggage:
+      remote-fields:
+      - x-request-id
+      - x-b3-traceid
+      - x-b3-spanid
+      - x-b3-parentspanid
+      - x-b3-sampled
+      - x-b3-flags

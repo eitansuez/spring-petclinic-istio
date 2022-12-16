@@ -17,14 +17,14 @@ public class VisitsServiceClient {
   @Value("${visits-service-id://visits-service}")
   private String hostname;
 
-  private final WebClient.Builder webClientBuilder;
+  private final WebClient webClient;
 
-  public VisitsServiceClient(WebClient.Builder webClientBuilder) {
-    this.webClientBuilder = webClientBuilder;
+  public VisitsServiceClient(WebClient webClient) {
+    this.webClient = webClient;
   }
 
   public Mono<Visits> getVisitsForPets(final List<Integer> petIds) {
-    return webClientBuilder.build()
+    return webClient
         .get()
         .uri(hostname + "/pets/visits?petId={petId}", joinIds(petIds))
         .retrieve()

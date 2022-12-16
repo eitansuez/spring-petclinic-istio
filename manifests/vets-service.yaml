@@ -40,7 +40,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/actuator/prometheus/"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       serviceAccountName: vets-service
       containers:

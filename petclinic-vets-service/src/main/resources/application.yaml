@@ -1,7 +1,9 @@
 ---
 spring:
   application:
-    name: visits-service
+    name: vets-service
+  cache:
+    cache-names: vets
   sql:
     init:
       platform: mysql
@@ -13,6 +15,10 @@ spring:
       generate-ddl: false
   messages:
     basename: messages/messages
+vets:
+  cache:
+    ttl: 60
+    heap-size: 101
 server:
   shutdown: graceful
   lifecycle:
@@ -47,3 +53,12 @@ management:
     metrics:
       export:
         enabled: true
+  tracing:
+    baggage:
+      remote-fields:
+      - x-request-id
+      - x-b3-traceid
+      - x-b3-spanid
+      - x-b3-parentspanid
+      - x-b3-sampled
+      - x-b3-flags

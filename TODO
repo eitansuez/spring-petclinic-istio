@@ -12,7 +12,6 @@ Optional, app-specific:
 - java -> kotlin & eliminate lombok
 - mvn -> gradle
 
-
 --done:
 x review the docs/readme learn the basics of using the repo
 x setup a local k3d environment with registry, install istio
@@ -68,3 +67,4 @@ x Question: Has someone already adapted PetClinic for Istio, or otherwise played
   - https://piotrminkowski.com/2020/06/01/service-mesh-on-kubernetes-with-istio-and-spring-boot/
   - https://piotrminkowski.com/2020/06/03/circuit-breaker-and-retries-on-kubernetes-with-istio-and-spring-boot/
 x Leverage workload identity: add an authorization policy that restricts who can talk to each db
+x resolve problem with trace header propagation in boot3 & micrometer

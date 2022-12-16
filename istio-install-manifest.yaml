@@ -1,14 +1,45 @@
 # 1. Enables mysql filter, see:
 # - https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/
 # - https://istio.io/latest/docs/reference/commands/pilot-discovery/#envvars
-# 2. Turns on sidecar access loging to stdout
+# 2. Turns on sidecar access logging to stdout
+# 3. Sets trace sampling to 100% to easily expose see distributed traces (for testing)
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 spec:
   meshConfig:
     accessLogFile: /dev/stdout
-  values:
+    extensionProviders:
+    - name: otel
+      envoyOtelAls:
+        service: opentelemetry-collector.istio-system.svc.cluster.local
+        port: 4317
+
+  components:
     pilot:
+      k8s:
+        env:
+          - name: PILOT_TRACE_SAMPLING
+            value: "100"
+        resources:
+          requests:
+            cpu: 10m
+            memory: 100Mi
+
+  values:
+    global:
+      proxy:
+        resources:
+          requests:
+            cpu: 10m
+            memory: 40Mi
+
+    pilot:
+      autoscaleEnabled: false
       env:
         PILOT_ENABLE_MYSQL_FILTER: "true"
 
+    gateways:
+      istio-egressgateway:
+        autoscaleEnabled: false
+      istio-ingressgateway:
+        autoscaleEnabled: false
