@@ -44,7 +44,7 @@ spec:
     spec:
       serviceAccountName: vets-service
       containers:
-      - image: my-cluster-registry:5000/petclinic-vets-service:latest
+      - image: ${PULL_IMAGE_REGISTRY}/petclinic-vets-service:latest
         name: vets-service
         imagePullPolicy: Always
         livenessProbe:

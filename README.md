@@ -8,24 +8,43 @@ For general information about the PetClinic sample application, see https://spri
 
 The basic idea is that there's a ton of "cruft" inside tons of files in spring-petclinic that relate to "spring-cloud": configuration for service discovery, load balancing, routing, retries, resilience, etc.. None of that is an app's concern when you move to Istio. So we can get rid of it all. And little by little our apps become sane again.
 
-## Setup
+## Local Setup
 
 On a Mac running Docker Desktop or Rancher Desktop, make sure to give your VM plenty of CPU and memory.
 16GB of memory and 6 CPUs seems to work for me.
 
-1. Deploy a local [K3D](https://k3d.io/) Kubernetes cluster with a local registry:
+Deploy a local [K3D](https://k3d.io/) Kubernetes cluster with a local registry:
 
-    ```shell
-    k3d cluster create my-istio-cluster \
-      --api-port 6443 \
-      --k3s-arg "--disable=traefik@server:0" \
-      --port 80:80@loadbalancer \
-      --registry-create my-cluster-registry:0.0.0.0:5010
-    ```
+```shell
+k3d cluster create my-istio-cluster \
+  --api-port 6443 \
+  --k3s-arg "--disable=traefik@server:0" \
+  --port 80:80@loadbalancer \
+  --registry-create my-cluster-registry:0.0.0.0:5010
+```
 
-    Above, we:
-    - Disable the default traefik load balancer and configure local port 80 to instead forward to the "istio-ingressgateway" load balancer.
-    - Create a registry we can push to locally on port 5010 that is accessible from the Kubernetes cluster at "my-cluster-registry:5000".
+Above, we:
+- Disable the default traefik load balancer and configure local port 80 to instead forward to the "istio-ingressgateway" load balancer.
+- Create a registry we can push to locally on port 5010 that is accessible from the Kubernetes cluster at "my-cluster-registry:5000".
+
+## Remote Setup
+
+Provision a k8s cluster in the cloud of your choice.  For example, on GCP:
+
+```shell
+gcloud container clusters create my-istio-cluster \
+  --cluster-version latest \
+  --machine-type "e2-standard-2" \
+  --num-nodes "3" \
+  --network "default"
+```
+
+## Instructions
+
+1. Use the file `envrc-template.sh` as the basis for configuring environment variables, as follows:
+
+    1. Set the local variable `local_setup` to either "true" or "false"
+    2. If using a remote setup, set the value of PUSH_IMAGE_REGISTRY to the value of your image registry url
 
 1. Deploy Istio:
 
@@ -94,15 +113,21 @@ Wait for the pods to be ready (2/2 containers).
 
 1. Compile the apps and run the tests:
 
-   ```shell
-   mvn clean package
-   ```
+    ```shell
+    mvn clean package
+    ```
 
-2. Build the images and publish them to the local registry:
+2. Build the images
 
-   ```shell
-   mvn spring-boot:build-image
-   ```
+    ```shell
+    mvn spring-boot:build-image
+    ```
+
+3. Publish the images
+
+    ```shell
+    ./push-images.sh
+    ```
 
 ## Deploy the apps
 
@@ -116,14 +141,14 @@ The deployment manifests are located in the folder named `manifests`.
 To deploy the app:
 
 ```shell
-kubectl apply -f manifests/
+cat manifests/*.yaml | envsubst | kubectl apply -f -
 ```
 
 Wait for the pods to be ready (2/2 containers).
 
 ## Visit the app
 
-To see the running PetClinic application, open a browser tab and visit http://localhost/.
+To see the running PetClinic application, open a browser tab and visit http://${LB_IP}/.
 
 ## Optional
 

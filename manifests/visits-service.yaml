@@ -44,7 +44,7 @@ spec:
     spec:
       serviceAccountName: visits-service
       containers:
-      - image: my-cluster-registry:5000/petclinic-visits-service:latest
+      - image: ${PULL_IMAGE_REGISTRY}/petclinic-visits-service:latest
         name: visits-service
         imagePullPolicy: Always
         livenessProbe:

@@ -45,7 +45,7 @@ spec:
       serviceAccountName: petclinic-frontend
       containers:
       - name: petclinic-frontend
-        image: my-cluster-registry:5000/petclinic-frontend:latest
+        image: ${PULL_IMAGE_REGISTRY}/petclinic-frontend:latest
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

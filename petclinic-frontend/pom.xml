@@ -28,8 +28,8 @@
 
 	<properties>
 		<java.version>19</java.version>
-		<spring-boot.build-image.imageName>localhost:5010/${project.artifactId}</spring-boot.build-image.imageName>
-		<spring-boot.build-image.publish>true</spring-boot.build-image.publish>
+		<spring-boot.build-image.imageName>${env.PUSH_IMAGE_REGISTRY}/${project.artifactId}</spring-boot.build-image.imageName>
+		<spring-boot.build-image.publish>false</spring-boot.build-image.publish>
 
 		<webjars-bootstrap.version>3.3.7-1</webjars-bootstrap.version>
 		<webjars-jquery-ui.version>1.11.4</webjars-jquery-ui.version>

@@ -1,10 +1,6 @@
 # pet clinic sample list of endpoints to target
 
-# 1. frontend url http://localhost/#!/owners calls backend at..
-http://localhost/api/customer/owners
-# 2. frontend url http://localhost/#!/vets calls backend at..
-http://localhost/api/vet/vets
-# 3. frontend url http://localhost/#!/owners/details/6 calls backend at..
-http://localhost/api/gateway/owners/6
-# 4. frontend url http://localhost/#!/owners/6/pets/2 calls backend at..
-http://localhost/api/customer/owners/6/pets/2
+http://${LB_IP}/api/customer/owners
+http://${LB_IP}/api/vet/vets
+http://${LB_IP}/api/gateway/owners/6
+http://${LB_IP}/api/customer/owners/6/pets/2

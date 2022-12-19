@@ -68,3 +68,6 @@ x Question: Has someone already adapted PetClinic for Istio, or otherwise played
   - https://piotrminkowski.com/2020/06/03/circuit-breaker-and-retries-on-kubernetes-with-istio-and-spring-boot/
 x Leverage workload identity: add an authorization policy that restricts who can talk to each db
 x resolve problem with trace header propagation in boot3 & micrometer
+x make project function for either a local or a remote/cloud setup; differences are:
+  x ingress endpoint is either localhost or LB_IP of istio-system/istio-ingressgateway
+  x push and pull image registries differ
