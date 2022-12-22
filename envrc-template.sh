@@ -1,6 +1,6 @@
 #!/bin/bash
 
-local_setup=false
+local_setup=false  # TODO: configure me
 
 if [ "$local_setup" = true ] ; then
   export LB_IP=localhost
