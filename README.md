@@ -62,7 +62,7 @@ gcloud container clusters create my-istio-cluster \
 
 ## Deploy each microservice's backing database
 
-Deployment Decisions:
+Deployment decisions:
 
 - We use mysql.  Mysql can be installed with helm.  Its charts are in the bitnami repository.
 - We deploy a separate database statefulset for each service
