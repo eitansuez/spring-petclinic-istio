@@ -161,7 +161,7 @@ MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default vets-db-mysql -o js
 ```
 
 ```shell
-kubectl run vets-db-mysql-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --command -- bash
+kubectl run vets-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --command -- bash
 ```
 
 ```shell
@@ -169,32 +169,39 @@ mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
 ```
 
 ### Test individual service endpoints
+
+1. Capture the name of the sleep pod to the variable `$SLEEP`:
+
+   ```shell
+   SLEEP=$(kubectl get pod -l app=sleep -o jsonpath='{.items[0].metadata.name}')
+   ```
+
 1. Call the "Vets" controller endpoint:
 
     ```shell
-    kubectl exec sleep -- curl vets-service:8080/vets | jq
+    kubectl exec $SLEEP -- curl -s vets-service:8080/vets | jq
     ```
 
-2. Here are a couple of `customers-service` endpoints to test:
+1. Here are a couple of `customers-service` endpoints to test:
 
     ```shell
-    kubectl exec sleep -- curl customers-service:8080/owners | jq
+    kubectl exec $SLEEP -- curl -s customers-service:8080/owners | jq
     ```
 
     ```shell
-    kubectl exec sleep -- curl customers-service:8080/owners/1/pets/1 | jq
+    kubectl exec $SLEEP -- curl -s customers-service:8080/owners/1/pets/1 | jq
     ```
 
-3. Test one of the `visits-service` endpoints:
+1. Test one of the `visits-service` endpoints:
 
     ```shell
-    kubectl exec sleep -- curl visits-service:8080/pets/visits\?petId=8 | jq
+    kubectl exec $SLEEP -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
     ```
 
-4. Call `petclinic-frontend` endpoint that calls the customers and visits services:
+1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
 
     ```shell
-    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
 ## Test resilience and fallback
@@ -214,36 +221,41 @@ Here is how to test the behavior:
 1. Call `visits-service` directly:
 
     ```shell
-    kubectl exec sleep -- curl visits-service:8080/pets/visits\?petId=8 | jq
+    kubectl exec $SLEEP -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
     ```
 
     Observe the call succeed and return a list of visits for this particular pet.
 
-2. Call the `petclinic-frontend` endpoint, and note that for each pet, we see a list of visits:
+1. Call the `petclinic-frontend` endpoint, and note that for each pet, we see a list of visits:
 
     ```shell
-    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
-3. Edit the deployment manifest for the `visits-service` so that the environment variable `DELAY_MILLIS` is set to the value "5000" (which is 5 seconds).
-
-4. Once the new visits-service pod reaches ready status, make the same call again:
+1. Edit the deployment manifest for the `visits-service` so that the environment variable `DELAY_MILLIS` is set to the value "5000" (which is 5 seconds).  One way to do this is to edit the file with (then save and exit):
 
     ```shell
-    kubectl exec sleep -- curl -v visits-service:8080/pets/visits\?petId=8
+    kubectl edit deploy visits-v1
+    ```
+
+1. Once the new visits-service pod reaches ready status, make the same call again:
+
+    ```shell
+    kubectl exec $SLEEP -- curl -v visits-service:8080/pets/visits\?petId=8
     ```
 
     Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).
 
-5. Call the `petclinic-frontend` endpoint once more, and note that for each pet, the list of visits is empty:
+1. Call the `petclinic-frontend` endpoint once more, and note that for each pet, the list of visits is empty:
 
     ```shell
-    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
     That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
     Tail the logs of `petclinic-frontend` and observe a log message indicating the fallback was triggered.
 
+1. To restore the original behavior with no delay, edit the `visits-v1` deployment again and set the environment variable value to "0".
 
 ## Leverage workload identity
 
@@ -263,15 +275,15 @@ The above policy is specified in the file `authorization-policies.yaml`.
 
 1. Use the above [Test database connectivity](#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
 
-2. Apply the authorization policies:
+1. Apply the authorization policies:
 
     ```shell
     kubectl apply -f authorization-policies.yaml
     ```
 
-3. Attempt once more to create a client pod to connect to the "vets" database.  This time the operation will fail.  That's because only the vets service is now allowed to connect to the database.
+1. Attempt once more to create a client pod to connect to the "vets" database.  This time the operation will fail.  That's because only the vets service is now allowed to connect to the database.
 
-4. Also verify that the application itself continues to function because all database queries are performed via its accompanying service.
+1. Also verify that the application itself continues to function because all database queries are performed via its accompanying service.
 
 ## Observe Distributed Traces
 
@@ -307,7 +319,7 @@ To make testing this easier, Istio is configured with 100% trace sampling.
 1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
 
     ```shell
-    kubectl exec sleep -- curl petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
 1. In Jaeger, search for traces involving the services petclinic-frontend, customers, and visits.
