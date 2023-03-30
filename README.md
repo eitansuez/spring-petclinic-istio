@@ -210,11 +210,11 @@ The original spring-cloud version of petclinic used [resilience4j](https://resil
 
 Spring cloud was removed and the timeout was replaced with an Istio configuration.
 
-See the file [`manifests/timeouts.yaml`](./blob/master/manifests/timeouts.yaml) which configures a 4-second timeout for calls to the visits service.
+See the file [`manifests/timeouts.yaml`](./manifests/timeouts.yaml) which configures a 4-second timeout for calls to the visits service.
 
-The fallback in [`PetClinicController.getOwnerDetails`](./blob/master/petclinic-frontend/src/main/java/org/springframework/samples/petclinic/api/boundary/web/PetClinicController.java#L34) was retrofitted to detect the Gateway Timeout (504) response code instead of using a resilience4j API.
+The fallback in [`PetClinicController.getOwnerDetails`](./petclinic-frontend/src/main/java/org/springframework/samples/petclinic/api/boundary/web/PetClinicController.java#L34) was retrofitted to detect the Gateway Timeout (504) response code instead of using a resilience4j API.
 
-To test this feature, the environment variable [DELAY_MILLIS](./blob/master/manifests/visits-service.yaml#L72) was introduced into the visits service to insert a delay when fetching visits.
+To test this feature, the environment variable [DELAY_MILLIS](./manifests/visits-service.yaml#L72) was introduced into the visits service to insert a delay when fetching visits.
 
 Here is how to test the behavior:
 
@@ -289,9 +289,9 @@ The above policy is specified in the file `authorization-policies.yaml`.
 
 All boot apps are configured to propagate trace headers using [micrometer-tracing](https://micrometer.io/docs/tracing), per the [Istio documentation](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/#trace-context-propagation).
 
-See the [`application.yaml` resource files](./blob/master/petclinic-vets-service/src/main/resources/application.yaml#L56) and the property `management.tracing.baggage.remote-fields` which configures the fields to propagate.
+See the [`application.yaml` resource files](./petclinic-vets-service/src/main/resources/application.yaml#L56) and the property `management.tracing.baggage.remote-fields` which configures the fields to propagate.
 
-To make testing this easier, Istio is [configured with 100% trace sampling](./blob/master/istio-install-manifest.yaml#L21).
+To make testing this easier, Istio is [configured with 100% trace sampling](./istio-install-manifest.yaml#L21).
 
 ### Steps
 
