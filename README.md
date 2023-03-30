@@ -134,9 +134,9 @@ Wait for the pods to be ready (2/2 containers).
 The deployment manifests are located in the folder named `manifests`.
 
 1. The services are vets, visits, customers, and the frontend.  For each service we create a Kubernetes Service Account, a Deployment, and a ClusterIP service.
-2. `routes.yaml` configures the Istio ingress gateway (which replaces spring cloud gateway) to route requests to the application's api endpoints.
-3. `timeouts.yaml` configures a 4s timeout on requests to the visits service, replacing the previous resilience4j based implementation.
-4. `sleep.yaml` is a blank client Pod that can be used to send direct calls (for testing purposes) to specific microservices from within the Kubernetes cluster.
+2. [`routes.yaml`](manifests/routes.yaml) configures the Istio ingress gateway (which [replaces spring cloud gateway](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95)) to route requests to the application's api endpoints.
+3. [`timeouts.yaml`](manifests/timeouts.yaml) configures a 4s timeout on requests to the visits service, replacing the previous resilience4j based implementation.
+4. [`sleep.yaml`](manifests/sleep.yaml) is a blank client Pod that can be used to send direct calls (for testing purposes) to specific microservices from within the Kubernetes cluster.
 
 To deploy the app:
 
