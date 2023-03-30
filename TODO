@@ -2,25 +2,16 @@
 
 --todo:
 
-- add to readme a section that discusses the spring cloud gateway replacement
-  - should be able to access the api endpoints either:
+- should be able to access the api endpoints either:
   1. as shown internally from inside the cluster via the sleep pod, for example
   2. via the gateway-exposed routes via the exposed /api/* endpoints
   >> test this
 
-- go through readme once more with a remote setup using a gcp-provisioned cluster
-- make sure the latest images work (updated spring boot from v3.0.0 to v3.0.5)
-
-- add to readme a section that discusses/documents exposing a prometheus scrape endoint through "micrometer registry" dependency,
+- add to readme a section that discusses/documents exposing a prometheus scrape endpoint through "micrometer registry" dependency,
     and how i use the istio conventional annotation to expose app-specific metrics in deployments
 
-- add to readme a section that discusses spring dependency changes
-  - catalog removed dependencies
-  - review remaining dependencies:
-    boot, actuator, micrometer tracing
-    web or reactive web, spring data jpa, mysql jdbc driver/connector
-
-  also discuss removal of a number of submodules
+- go through readme once more with a remote setup using a gcp-provisioned cluster
+- make sure the latest images work (updated spring boot from v3.0.0 to v3.0.5)
 
 - give yourself a camtasia refresher
 - go through this again, this time recording.
@@ -100,7 +91,12 @@ x make project function for either a local or a remote/cloud setup; differences 
 202303..
 x give yourself a refresher on the work you did with that app
 x review the code, compare with original state
-
+x add to readme a section that discusses the spring cloud gateway replacement
+x add to readme a section that discusses spring dependency changes
+  x catalog removed dependencies
+  x review remaining dependencies:
+    boot, actuator, micrometer tracing
+    web or reactive web, spring data jpa, mysql jdbc driver/connector
 
 --saved:
 

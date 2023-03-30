@@ -6,7 +6,15 @@ For general information about the PetClinic sample application, see https://spri
 
 ## Summary
 
-The basic idea is that there's a ton of "cruft" inside tons of files in spring-petclinic that relate to "spring-cloud": configuration for service discovery, load balancing, routing, retries, resilience, etc.. None of that is an app's concern when you move to Istio. So we can get rid of it all. And little by little our apps become sane again.
+A great deal of "cruft" accumulates inside many files in `spring-petclinic-cloud`: configuration for service discovery, load balancing, routing, retries, resilience, and so on.
+
+When you move to Istio, you get separation of concerns.  It's ironic that the Spring framework's raison d'être was separation of concerns, but inside a monolithic application.  When you move to cloud-native applications, you end up with a tangle of concerns that Istio helps you untangle.
+
+And little by little our apps become sane again.  It reminds me of one of Antoine de Saint-Exupéry's famous quotes, that _perfection is finally attained not when there is no longer anything to add, but when there is no longer anything to take away_.
+
+The following instructions will walk you through deploying `spring-petclinic-istio` either using a local Kubernetes instance or a remote, cloud-based one.
+
+After the application is deployed, I walk you through some aspects of the application and additional benefits gained from running on the Istio platform:  orthogonal configuration of traffic management and resilience concerns, stronger security and workload identity, and observability.
 
 ## Local Setup
 
@@ -150,9 +158,7 @@ Wait for the pods to be ready (2/2 containers).
 
 To see the running PetClinic application, open a browser tab and visit http://${LB_IP}/.
 
-## Optional
-
-### Test database connectivity
+## Test database connectivity
 
 Connect directly to the `vets-db-mysql` database:
 
@@ -168,7 +174,25 @@ kubectl run vets-db-mysql-client --rm --tty -i --restart='Never' --image docker.
 mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
 ```
 
-### Test individual service endpoints
+## Analysis
+
+Prior to Istio, the common solution in the Spring ecosystem to issues of service discovery, resilience, load balancing was Spring Cloud.  Spring Cloud consists of multiple projects that provide dependencies that developers add to their applications to help them deal with issues of client-side load-balancing, retries, circuit-breaking, service discovery and so on.
+
+In `spring-petclinic-istio`, those dependencies have been removed.  What remains as dependencies inside each service are what you'd expect to find:
+
+- Spring boot and actuator are the foundation of modern Spring applications
+- Spring data jpa and the mysql connector for database access
+- micrometer for exposing application metrics via a prometheus endpoint
+- micrometer-tracing for [propagating trace headers](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/) through these applications
+
+### Ingress Gateway configuration and routing
+
+The original project made use of the Spring Cloud Gateway project to configure ingress and routing.
+This is Istio's bread and butter.  Envoy provides those capabilities.  And so the dependency was removed and replaced with a standard Istio Ingress Gateway.
+
+The original [Spring Cloud Gateway configuration](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) was replaced and is now captured with a standard Istio VirtualService CRD in [`routes.yaml`](manifests/routes.yaml).
+
+## Test individual service endpoints
 
 1. Capture the name of the sleep pod to the variable `$SLEEP`:
 
