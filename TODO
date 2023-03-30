@@ -2,21 +2,9 @@
 
 --todo:
 
-- should be able to access the api endpoints either:
-  1. as shown internally from inside the cluster via the sleep pod, for example
-  2. via the gateway-exposed routes via the exposed /api/* endpoints
-  >> test this
-
-- add to readme a section that discusses/documents exposing a prometheus scrape endpoint through "micrometer registry" dependency,
-    and how i use the istio conventional annotation to expose app-specific metrics in deployments
-
-- go through readme once more with a remote setup using a gcp-provisioned cluster
-- make sure the latest images work (updated spring boot from v3.0.0 to v3.0.5)
-
 - give yourself a camtasia refresher
 - go through this again, this time recording.
   each time there's an operation that takes a long time, just pause the recording or edit out the pauses in camtasia afterwards
-
 
 Optional, app-specific:
 
@@ -97,19 +85,11 @@ x add to readme a section that discusses spring dependency changes
   x review remaining dependencies:
     boot, actuator, micrometer tracing
     web or reactive web, spring data jpa, mysql jdbc driver/connector
-
---saved:
-
-* fish shell version of commands to access each db..
-
-set VETS_DB_PASSWORD $(kubectl get secret --namespace default vets-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
-kubectl run vets-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$VETS_DB_PASSWORD --command -- bash
-mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
-
-set CUSTOMERS_DB_PASSWORD $(kubectl get secret --namespace default customers-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
-kubectl run customers-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$CUSTOMERS_DB_PASSWORD --command -- bash
-mysql -h customers-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
-
-set VISITS_DB_PASSWORD $(kubectl get secret --namespace default visits-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
-kubectl run visits-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$VISITS_DB_PASSWORD --command -- bash
-mysql -h visits-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
+x should be able to access the api endpoints either:
+  1. as shown internally from inside the cluster via the sleep pod, for example
+  2. via the gateway-exposed routes via the exposed /api/* endpoints
+x should mention that the mysql services are also proxied by Envoy.  i actually already do.
+x add to readme a section that discusses/documents exposing a prometheus scrape endpoint through "micrometer registry" dependency,
+    and how i use the istio conventional annotation to expose app-specific metrics in deployments
+x go through readme once more with a remote setup using a gcp-provisioned cluster
+x make sure the latest images work (updated spring boot from v3.0.0 to v3.0.5)

@@ -156,7 +156,7 @@ Wait for the pods to be ready (2/2 containers).
 
 ## Visit the app
 
-To see the running PetClinic application, open a browser tab and visit http://${LB_IP}/.
+To see the running PetClinic application, open a browser tab and visit http://$LB_IP/.
 
 ## Test database connectivity
 
@@ -175,10 +175,19 @@ kubectl run vets-db-mysql-client \
   --command -- bash
 ```
 
-
 ```shell
 mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
 ```
+
+At the mysql prompt, can select the database, show tables, and query records:
+
+```shell
+use service_instance_db;
+show tables;
+select * from vets;
+```
+
+Exit with `\q` then `exit`.
 
 One can similarly access the other two databases `customers-db-mysql` and `visits-db-mysql`.
 
@@ -202,17 +211,32 @@ The original [Spring Cloud Gateway configuration](https://github.com/spring-petc
 
 ## Test individual service endpoints
 
-1. Capture the name of the sleep pod to the variable `$SLEEP`:
+These calls can be made either:
 
-   ```shell
-   SLEEP=$(kubectl get pod -l app=sleep -o jsonpath='{.items[0].metadata.name}')
-   ```
+1. Directly internally from within the Kubernetes cluster.  The `sleep` deployment uses a `curl` image and so is convenient for this purpose.
+
+    Capture the name of the sleep pod to the variable `$SLEEP`:
+
+    ```shell
+    SLEEP=$(kubectl get pod -l app=sleep -o jsonpath='{.items[0].metadata.name}')
+    ```
+   
+1. Through the "front door", via the ingress gateway.
+
+Both methods are shown below.
 
 1. Call the "Vets" controller endpoint:
 
     ```shell
     kubectl exec $SLEEP -- curl -s vets-service:8080/vets | jq
     ```
+   
+    Or:
+   
+    ```shell
+    curl -s http://$LB_IP/api/vet/vets | jq
+    ```
+
 
 1. Here are a couple of `customers-service` endpoints to test:
 
@@ -224,16 +248,39 @@ The original [Spring Cloud Gateway configuration](https://github.com/spring-petc
     kubectl exec $SLEEP -- curl -s customers-service:8080/owners/1/pets/1 | jq
     ```
 
+   Or:
+
+    ```shell
+    curl -s http://$LB_IP/api/customer/owners | jq
+    ```
+
+    ```shell
+    curl -s http://$LB_IP/api/customer/owners/1/pets/1 | jq
+    ```
+
+
 1. Test one of the `visits-service` endpoints:
 
     ```shell
     kubectl exec $SLEEP -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
     ```
 
+   Or:
+
+    ```shell
+    curl -s http://$LB_IP/api/visit/pets/visits\?petId=8 | jq
+    ```
+
 1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
 
     ```shell
     kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
+    ```
+
+   Or:
+
+    ```shell
+    curl -s http://$LB_IP/api/gateway/owners/6 | jq
     ```
 
 ## Test resilience and fallback
@@ -361,3 +408,51 @@ To make testing this easier, Istio is [configured with 100% trace sampling](./is
     ![Distributed Trace Example](jaeger-screenshot.png)
 
 The Kiali dashboard can likewise be used to display visualizations of such end-to-end flows.
+
+## Exposing metrics
+
+Istio has built-in support for Prometheus as a mechanism for metrics collection.
+
+Each Spring boot application is configured with a [micrometer dependency](./petclinic-customers-service/pom.xml#L65) to expose a scrape endpoint for prometheus to collect metrics.
+
+To inspect the metrics exposed directly by the Spring boot application:
+
+1. Capture the name of the customers-service pod:
+
+    ```shell
+    CUSTOMERS=$(kubectl get pod -l app=customers-service -ojsonpath='{.items[0].metadata.name}')
+    ```
+
+1. Call the scrape endpoint and review the output:
+
+    ```shell
+    kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:8080/actuator/prometheus
+    ```
+
+Separately, Envoy collects a variety of metrics, often referred to as RED metrics (requests, errors, durations).
+
+Inspect the metrics collected and exposed by the Envoy sidecar:
+
+```shell
+kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:15090/stats/prometheus
+```
+
+One common metric to note is `istio_requests_total`
+
+```shell
+kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_requests_total
+```
+
+Both sets of metrics are aggregated (merged) and exposed on port 15020:
+
+```shell
+kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:15020/stats/prometheus
+```
+
+For this to work, Envoy must be given the url (endpoint) where the application's metrics are exposed.
+
+This is done with a set of [annotations on the deployment](./manifests/customers-service.yaml#L40).
+
+See [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging) for more information.
+
+We leave as an exercise to access the prometheus dashboard and perform queries against any of these metrics.
