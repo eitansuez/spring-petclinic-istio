@@ -167,12 +167,20 @@ MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default vets-db-mysql -o js
 ```
 
 ```shell
-kubectl run vets-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD --command -- bash
+kubectl run vets-db-mysql-client \
+  --rm --tty -i --restart='Never' \
+  --image docker.io/bitnami/mysql:8.0.32-debian-11-r14 \
+  --namespace default \
+  --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
+  --command -- bash
 ```
+
 
 ```shell
 mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
 ```
+
+One can similarly access the other two databases `customers-db-mysql` and `visits-db-mysql`.
 
 ## Analysis
 
