@@ -44,6 +44,7 @@ spec:
           host: visits-service.default.svc.cluster.local
           port:
             number: 8080
+      timeout: 4s
     - match:
       - uri:
           prefix: "/api/vet/"
