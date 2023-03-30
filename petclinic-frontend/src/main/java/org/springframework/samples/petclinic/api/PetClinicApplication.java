@@ -3,8 +3,6 @@ package org.springframework.samples.petclinic.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
@@ -17,15 +15,6 @@ public class PetClinicApplication {
   @Bean
   public WebClient webClient(WebClient.Builder builder) {
     return builder.build();
-  }
-
-  @Bean
-  public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-    return http
-        .authorizeExchange().anyExchange().permitAll()
-        .and()
-        .csrf().disable()
-        .build();
   }
 
 }
