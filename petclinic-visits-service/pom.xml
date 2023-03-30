@@ -10,16 +10,16 @@
 		<version>3.0.0</version>
 	</parent>
 
-  <repositories>
-    <repository>
-      <id>spring-snapshot</id>
-      <name>Spring Snapshot Repository</name>
-      <url>https://repo.spring.io/snapshot</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+	<repositories>
+		<repository>
+			<id>spring-snapshot</id>
+			<name>Spring Snapshot Repository</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<groupId>org.springframework.samples.petclinic</groupId>
 	<artifactId>petclinic-visits-service</artifactId>
