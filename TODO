@@ -2,6 +2,31 @@
 
 --todo:
 
+- add to readme a section that discusses the spring cloud gateway replacement
+  - should be able to access the api endpoints either:
+  1. as shown internally from inside the cluster via the sleep pod, for example
+  2. via the gateway-exposed routes via the exposed /api/* endpoints
+  >> test this
+
+- go through readme once more with a remote setup using a gcp-provisioned cluster
+- make sure the latest images work (updated spring boot from v3.0.0 to v3.0.5)
+
+- add to readme a section that discusses/documents exposing a prometheus scrape endoint through "micrometer registry" dependency,
+    and how i use the istio conventional annotation to expose app-specific metrics in deployments
+
+- add to readme a section that discusses spring dependency changes
+  - catalog removed dependencies
+  - review remaining dependencies:
+    boot, actuator, micrometer tracing
+    web or reactive web, spring data jpa, mysql jdbc driver/connector
+
+  also discuss removal of a number of submodules
+
+- give yourself a camtasia refresher
+- go through this again, this time recording.
+  each time there's an operation that takes a long time, just pause the recording or edit out the pauses in camtasia afterwards
+
+
 Optional, app-specific:
 
 - https://github.com/spring-petclinic/spring-petclinic-cloud appears to be out of sync with,
@@ -71,3 +96,24 @@ x resolve problem with trace header propagation in boot3 & micrometer
 x make project function for either a local or a remote/cloud setup; differences are:
   x ingress endpoint is either localhost or LB_IP of istio-system/istio-ingressgateway
   x push and pull image registries differ
+
+202303..
+x give yourself a refresher on the work you did with that app
+x review the code, compare with original state
+
+
+--saved:
+
+* fish shell version of commands to access each db..
+
+set VETS_DB_PASSWORD $(kubectl get secret --namespace default vets-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
+kubectl run vets-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$VETS_DB_PASSWORD --command -- bash
+mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
+
+set CUSTOMERS_DB_PASSWORD $(kubectl get secret --namespace default customers-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
+kubectl run customers-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$CUSTOMERS_DB_PASSWORD --command -- bash
+mysql -h customers-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
+
+set VISITS_DB_PASSWORD $(kubectl get secret --namespace default visits-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
+kubectl run visits-db-mysql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/mysql:8.0.31-debian-11-r10 --namespace default --env MYSQL_ROOT_PASSWORD=$VISITS_DB_PASSWORD --command -- bash
+mysql -h visits-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
