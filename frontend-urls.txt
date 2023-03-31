@@ -1,0 +1,12 @@
+# pet clinic front-end app owner endpoints
+
+http://${LB_IP}/api/gateway/owners/1
+http://${LB_IP}/api/gateway/owners/2
+http://${LB_IP}/api/gateway/owners/3
+http://${LB_IP}/api/gateway/owners/4
+http://${LB_IP}/api/gateway/owners/5
+http://${LB_IP}/api/gateway/owners/6
+http://${LB_IP}/api/gateway/owners/7
+http://${LB_IP}/api/gateway/owners/8
+http://${LB_IP}/api/gateway/owners/9
+http://${LB_IP}/api/gateway/owners/10
