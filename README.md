@@ -202,7 +202,7 @@ In `spring-petclinic-istio`, those dependencies have been removed.  What remains
 - micrometer for exposing application metrics via a prometheus endpoint
 - micrometer-tracing for [propagating trace headers](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/) through these applications
 
-### Ingress Gateway configuration and routing
+## Ingress Gateway configuration and routing
 
 The original project made use of the Spring Cloud Gateway project to configure ingress and routing.
 This is Istio's bread and butter.  Envoy provides those capabilities.  And so the dependency was removed and replaced with a standard Istio Ingress Gateway.
