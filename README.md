@@ -4,6 +4,8 @@ Derived from [Spring PetClinic Cloud](https://github.com/spring-petclinic/spring
 
 For general information about the PetClinic sample application, see https://spring-petclinic.github.io/
 
+Watch [a video walkthrough](https://youtu.be/1UybZGws4m8).
+
 ## Summary
 
 A great deal of "cruft" accumulates inside many files in `spring-petclinic-cloud`: configuration for service discovery, load balancing, routing, retries, resilience, and so on.
