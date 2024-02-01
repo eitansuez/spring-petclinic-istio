@@ -394,7 +394,7 @@ To make testing this easier, Istio is [configured with 100% trace sampling](./is
 1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
 
     ```shell
-    kubectl exec deploy/sleep -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
+    curl -s http://$LB_IP/api/gateway/owners/6 | jq
     ```
 
 1. In Jaeger, search for traces involving the services petclinic-frontend, customers, and visits.
