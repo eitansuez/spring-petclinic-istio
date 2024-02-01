@@ -201,7 +201,7 @@ In `spring-petclinic-istio`, those dependencies have been removed.  What remains
 
 - Spring boot and actuator are the foundation of modern Spring applications
 - Spring data jpa and the mysql connector for database access
-- micrometer for exposing application metrics via a prometheus endpoint
+- micrometer for exposing application metrics via a Prometheus endpoint
 - micrometer-tracing for [propagating trace headers](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/) through these applications
 
 ## Ingress Gateway configuration and routing
@@ -409,46 +409,38 @@ The Kiali dashboard can likewise be used to display visualizations of such end-t
 
 Istio has built-in support for Prometheus as a mechanism for metrics collection.
 
-Each Spring boot application is configured with a [micrometer dependency](./petclinic-customers-service/pom.xml#L65) to expose a scrape endpoint for prometheus to collect metrics.
+Each Spring Boot application is configured with a [micrometer dependency](./petclinic-customers-service/pom.xml#L65) to expose a scrape endpoint for Prometheus to collect metrics.
 
-To inspect the metrics exposed directly by the Spring boot application:
+Call the scrape endpoint and inspect the metrics exposed directly by the Spring Boot application:
 
-1. Capture the name of the customers-service pod:
+```shell
+kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:8080/actuator/prometheus
+```
 
-    ```shell
-    CUSTOMERS=$(kubectl get pod -l app=customers-service -ojsonpath='{.items[0].metadata.name}')
-    ```
-
-1. Call the scrape endpoint and review the output:
-
-    ```shell
-    kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:8080/actuator/prometheus
-    ```
-
-Separately, Envoy collects a variety of metrics, often referred to as RED metrics (requests, errors, durations).
+Separately, Envoy collects a variety of metrics, often referred to as RED metrics (Requests, Errors, Durations).
 
 Inspect the metrics collected and exposed by the Envoy sidecar:
 
 ```shell
-kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:15090/stats/prometheus
+kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15090/stats/prometheus
 ```
 
 One common metric to note is `istio_requests_total`
 
 ```shell
-kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_requests_total
+kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15090/stats/prometheus | grep istio_requests_total
 ```
 
 Both sets of metrics are aggregated (merged) and exposed on port 15020:
 
 ```shell
-kubectl exec $CUSTOMERS -c istio-proxy -- curl -s localhost:15020/stats/prometheus
+kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15020/stats/prometheus
 ```
 
-For this to work, Envoy must be given the url (endpoint) where the application's metrics are exposed.
+For this to work, Envoy must be given the URL (endpoint) where the application's metrics are exposed.
 
 This is done with a set of [annotations on the deployment](./manifests/customers-service.yaml#L40).
 
 See [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging) for more information.
 
-We leave as an exercise to access the prometheus dashboard and perform queries against any of these metrics.
+We leave as an exercise to access the Prometheus dashboard and perform queries against any of these metrics.
