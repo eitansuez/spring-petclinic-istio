@@ -217,12 +217,6 @@ These calls can be made either:
 
 1. Directly internally from within the Kubernetes cluster.  The `sleep` deployment uses a `curl` image and so is convenient for this purpose.
 
-    Capture the name of the sleep pod to the variable `$SLEEP`:
-
-    ```shell
-    SLEEP=$(kubectl get pod -l app=sleep -o jsonpath='{.items[0].metadata.name}')
-    ```
-   
 1. Through the "front door", via the ingress gateway.
 
 Both methods are shown below.
@@ -230,7 +224,7 @@ Both methods are shown below.
 1. Call the "Vets" controller endpoint:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s vets-service:8080/vets | jq
+    kubectl exec deploy/sleep -- curl -s vets-service:8080/vets | jq
     ```
    
     Or:
@@ -243,11 +237,11 @@ Both methods are shown below.
 1. Here are a couple of `customers-service` endpoints to test:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s customers-service:8080/owners | jq
+    kubectl exec deploy/sleep -- curl -s customers-service:8080/owners | jq
     ```
 
     ```shell
-    kubectl exec $SLEEP -- curl -s customers-service:8080/owners/1/pets/1 | jq
+    kubectl exec deploy/sleep -- curl -s customers-service:8080/owners/1/pets/1 | jq
     ```
 
    Or:
@@ -264,7 +258,7 @@ Both methods are shown below.
 1. Test one of the `visits-service` endpoints:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
+    kubectl exec deploy/sleep -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
     ```
 
    Or:
@@ -276,7 +270,7 @@ Both methods are shown below.
 1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec deploy/sleep -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
    Or:
@@ -302,7 +296,7 @@ Here is how to test the behavior:
 1. Call `visits-service` directly:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
+    kubectl exec deploy/sleep -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
     ```
 
     Observe the call succeed and return a list of visits for this particular pet.
@@ -310,7 +304,7 @@ Here is how to test the behavior:
 1. Call the `petclinic-frontend` endpoint, and note that for each pet, we see a list of visits:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec deploy/sleep -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
 1. Edit the deployment manifest for the `visits-service` so that the environment variable `DELAY_MILLIS` is set to the value "5000" (which is 5 seconds).  One way to do this is to edit the file with (then save and exit):
@@ -322,7 +316,7 @@ Here is how to test the behavior:
 1. Once the new `visits-service` pod reaches _Ready_ status, make the same call again:
 
     ```shell
-    kubectl exec $SLEEP -- curl -v visits-service:8080/pets/visits\?petId=8
+    kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits\?petId=8
     ```
 
     Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).
@@ -330,7 +324,7 @@ Here is how to test the behavior:
 1. Call the `petclinic-frontend` endpoint once more, and note that for each pet, the list of visits is empty:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec deploy/sleep -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
     That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
@@ -400,7 +394,7 @@ To make testing this easier, Istio is [configured with 100% trace sampling](./is
 1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
 
     ```shell
-    kubectl exec $SLEEP -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
+    kubectl exec deploy/sleep -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
 1. In Jaeger, search for traces involving the services petclinic-frontend, customers, and visits.
