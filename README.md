@@ -141,24 +141,17 @@ Wait for the pods to be ready (2/2 containers).
 
 ## Deploy the apps
 
-The deployment manifests are located in the folder named `manifests`.
+The deployment manifests are located in `manifests/deploy`.
 
-1. The services are vets, visits, customers, and the frontend.  For each service we create a Kubernetes Service Account, a Deployment, and a ClusterIP service.
-2. [`routes.yaml`](manifests/routes.yaml) configures the Istio ingress gateway (which [replaces spring cloud gateway](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95)) to route requests to the application's api endpoints.
-3. [`timeouts.yaml`](manifests/timeouts.yaml) configures a 4s timeout on requests to the visits service, replacing the previous resilience4j based implementation.
-4. [`sleep.yaml`](manifests/sleep.yaml) is a blank client Pod that can be used to send direct calls (for testing purposes) to specific microservices from within the Kubernetes cluster.
+The services are `vets`, `visits`, `customers`, and `petclinic-frontend`.  For each service we create a Kubernetes Service Account, a Deployment, and a ClusterIP service.
 
-To deploy the app:
+Apply the deployment manifests:
 
 ```shell
-cat manifests/*.yaml | envsubst | kubectl apply -f -
+cat manifests/deploy/*.yaml | envsubst | kubectl apply -f -
 ```
 
 Wait for the pods to be ready (2/2 containers).
-
-## Visit the app
-
-To see the running PetClinic application, open a browser tab and visit http://$LB_IP/.
 
 ## Test database connectivity
 
@@ -206,20 +199,68 @@ In `spring-petclinic-istio`, those dependencies have been removed.  What remains
 
 ## Ingress Gateway configuration and routing
 
-The original project made use of the Spring Cloud Gateway project to configure ingress and routing.
-This is Istio's bread and butter.  Envoy provides those capabilities.  And so the dependency was removed and replaced with a standard Istio Ingress Gateway.
+The original project made use of the [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) project to configure ingress and routing.
 
-The original [Spring Cloud Gateway configuration](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) was replaced and is now captured with a standard Istio VirtualService CRD in [`routes.yaml`](manifests/routes.yaml).
+Ingress is Istio's bread and butter.  Envoy provides those capabilities.  And so the dependency was removed and replaced with a standard Istio Ingress Gateway.
+
+The Isito installation from earlier includes the Ingress Gateway component.  You should be able to see the deployment in the `istio-system` namespace with:
+
+```shell
+kubectl get deploy -n istio-system
+```
+
+### Configure the Gateway
+
+```shell
+kubectl apply -f manifests/ingress/gateway.yaml
+```
+
+The above configuration creates a listener on the ingress gateway for HTTP traffic on port 80.
+
+### Configure routing
+
+The original [Spring Cloud Gateway routing rules](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) were replaced and are now captured with a standard Istio VirtualService CRD in [`manifests/ingress/routes.yaml`](manifests/ingress/routes.yaml).
+
+Apply the routing rules for the gateway:
+
+```shell
+kubectl apply -f manifests/ingress/routes.yaml
+```
+
+[`routes.yaml`](manifests/ingress/routes.yaml) configures routing for the Istio ingress gateway (which [replaces spring cloud gateway](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95)) to the application's API endpoints.
+
+It exposes endpoints to each of the services, and in addition, routes requests with the `/api/gateway` prefix to the `petclinic-frontend` application.  In the original version, the petclinic-frontend application and the gateway "proper" were bundled together as a single microservice.
+
+## Visit the app
+
+With the application deployed, and ingress configured, we can finally view the application's user interface.
+
+To see the running PetClinic application, open a browser tab and visit http://$LB_IP/.
+
 
 ## Test individual service endpoints
 
-These calls can be made either:
+Below, we demonstrate calling endpoints on the application in either of two ways:
 
-1. Directly internally from within the Kubernetes cluster.  The `sleep` deployment uses a `curl` image and so is convenient for this purpose.
+1. Internally from within the Kubernetes cluster
 
-1. Through the "front door", via the ingress gateway.
+    We make use of Istio's [sleep](https://github.com/istio/istio/tree/master/samples/sleep) sample application to facilitate the task.  
 
-Both methods are shown below.
+    The `sleep` deployment is a blank client Pod that can be used to send direct calls to specific microservices from within the Kubernetes cluster.
+
+    Deploy [`sleep`](manifests/sleep.yaml) to your cluster:
+
+    ```shell
+    kubectl apply -f manifests/sleep.yaml
+    ```
+
+    Wait for the sleep pod to be ready (2/2 containers).
+
+1. Through the "front door", via the ingress gateway
+
+    The environment variable `LB_IP` captures the public IP address of the load balancer fronting the ingress gateway.  We can access the service endpoints through that IP address.
+
+### Call the endpoints
 
 1. Call the "Vets" controller endpoint:
 
@@ -227,12 +268,11 @@ Both methods are shown below.
     kubectl exec deploy/sleep -- curl -s vets-service:8080/vets | jq
     ```
    
-    Or:
+    Or, via the ingress gateway:
    
     ```shell
     curl -s http://$LB_IP/api/vet/vets | jq
     ```
-
 
 1. Here are a couple of `customers-service` endpoints to test:
 
@@ -253,7 +293,6 @@ Both methods are shown below.
     ```shell
     curl -s http://$LB_IP/api/customer/owners/1/pets/1 | jq
     ```
-
 
 1. Test one of the `visits-service` endpoints:
 
@@ -281,15 +320,21 @@ Both methods are shown below.
 
 ## Test resilience and fallback
 
-The original spring-cloud version of petclinic used [resilience4j](https://resilience4j.readme.io/docs) to [configure calls to the visit service with a timeout of 4 seconds](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/ApiGatewayApplication.java#L83), and [a fallback to return an empty list of visits](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/boundary/web/ApiGatewayController.java#L56) in the event that the request to get visits timed out (took longer).
+The original spring-cloud version of petclinic used [Resilience4j](https://resilience4j.readme.io/docs) to [configure calls to the visit service with a timeout of 4 seconds](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/ApiGatewayApplication.java#L83), and [a fallback to return an empty list of visits](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/boundary/web/ApiGatewayController.java#L56) in the event that the request to get visits timed out (took longer).
 
-Spring cloud was removed and the timeout was replaced with an Istio configuration.
+Spring Cloud was removed.  We can replace this configuration with an Istio Custom Resource.
 
-See the file [`manifests/timeouts.yaml`](./manifests/timeouts.yaml) which configures a 4-second timeout for calls to the visits service.
+The file [`timeouts.yaml`](manifests/config/timeouts.yaml) configures the equivalent 4s timeout on requests to the `visits` service, replacing the previous Resilience4j-based implementation.
 
-The fallback in [`PetClinicController.getOwnerDetails`](./petclinic-frontend/src/main/java/org/springframework/samples/petclinic/api/boundary/web/PetClinicController.java#L34) was retrofitted to detect the Gateway Timeout (504) response code instead of using a resilience4j API.
+Apply the timeout configuration to your cluster:
 
-To test this feature, the environment variable [DELAY_MILLIS](./manifests/visits-service.yaml#L72) was introduced into the visits service to insert a delay when fetching visits.
+```shell
+kubectl apply -f manifests/config/timeouts.yaml
+```
+
+The fallback logic in [`PetClinicController.getOwnerDetails`](./petclinic-frontend/src/main/java/org/springframework/samples/petclinic/api/boundary/web/PetClinicController.java#L34) was retrofitted to detect the Gateway Timeout (504) response code instead of using a Resilience4j API.
+
+To test this feature, the environment variable [DELAY_MILLIS](./manifests/deploy/visits-service.yaml#L72) was introduced into the visits service to insert a delay when fetching visits.
 
 Here is how to test the behavior:
 
@@ -348,12 +393,12 @@ The above policy is specified in the file `authorization-policies.yaml`.
 
 ### Exercise:
 
-1. Use the above [Test database connectivity](#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
+1. Use the previous [Test database connectivity](#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
 
 1. Apply the authorization policies:
 
     ```shell
-    kubectl apply -f authorization-policies.yaml
+    kubectl apply -f manifests/config/authorization-policies.yaml
     ```
 
 1. Attempt once more to create a client pod to connect to the "vets" database.  This time the operation will fail.  That's because only the vets service is now allowed to connect to the database.
@@ -439,7 +484,7 @@ kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15020/stats
 
 For this to work, Envoy must be given the URL (endpoint) where the application's metrics are exposed.
 
-This is done with a set of [annotations on the deployment](./manifests/customers-service.yaml#L40).
+This is done with a set of [annotations on the deployment](./manifests/deploy/customers-service.yaml#L40).
 
 See [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging) for more information.
 

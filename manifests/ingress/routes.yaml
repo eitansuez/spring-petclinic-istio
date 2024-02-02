@@ -1,20 +1,5 @@
 ---
 apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  name: main-gateway
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-    - port:
-        number: 80
-        name: http
-        protocol: HTTP
-      hosts:
-      - "*"
----
-apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: petclinic-routes
