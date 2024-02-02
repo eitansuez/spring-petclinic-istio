@@ -2,6 +2,7 @@ package org.springframework.samples.petclinic.customers.web;
 
 import java.util.Optional;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,6 +25,9 @@ class PetsControllerTest {
 
     @MockBean
     PetRepository petRepository;
+
+    @MockBean
+    MeterRegistry meterRegistry;
 
     @MockBean
     OwnerRepository ownerRepository;

@@ -1,5 +1,6 @@
 package org.springframework.samples.petclinic.visits.web;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,13 +18,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(VisitsController.class)
 class VisitsControllerTest {
 
-    @Autowired
-    MockMvc mvc;
+  @Autowired
+  MockMvc mvc;
 
-    @MockBean
-    VisitRepository visitRepository;
+  @MockBean
+  VisitRepository visitRepository;
 
-    @Test
+  @MockBean
+  MeterRegistry meterRegistry;
+
+  @Test
     void shouldFetchVisits() throws Exception {
         given(visitRepository.findByPetIdIn(asList(111, 222)))
             .willReturn(
