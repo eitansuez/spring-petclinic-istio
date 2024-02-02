@@ -59,7 +59,7 @@ gcloud container clusters create my-istio-cluster \
 1. Deploy Istio:
 
     ```shell
-    istioctl install -f istio-install-manifest.yaml
+    istioctl install -f manifests/istio-install-manifest.yaml
     ```
 
     The manifest enables proxying of mysql databases in addition to the rest services.
@@ -164,7 +164,7 @@ MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default vets-db-mysql -o js
 ```shell
 kubectl run vets-db-mysql-client \
   --rm --tty -i --restart='Never' \
-  --image docker.io/bitnami/mysql:8.0.32-debian-11-r14 \
+  --image docker.io/bitnami/mysql:8.0.36-debian-11-r2 \
   --namespace default \
   --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
   --command -- bash
@@ -203,7 +203,7 @@ The original project made use of the [Spring Cloud Gateway](https://spring.io/pr
 
 Ingress is Istio's bread and butter.  Envoy provides those capabilities.  And so the dependency was removed and replaced with a standard Istio Ingress Gateway.
 
-The Isito installation from earlier includes the Ingress Gateway component.  You should be able to see the deployment in the `istio-system` namespace with:
+The Istio installation from earlier includes the Ingress Gateway component.  You should be able to see the deployment in the `istio-system` namespace with:
 
 ```shell
 kubectl get deploy -n istio-system
