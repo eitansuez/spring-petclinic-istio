@@ -217,6 +217,13 @@ kubectl apply -f manifests/ingress/gateway.yaml
 
 The above configuration creates a listener on the ingress gateway for HTTP traffic on port 80.
 
+Since no routing has been configured yet for the gateway, a request to the gateway should return an HTTP 404 response:
+
+```shell
+curl -v http://$LB_IP/
+```
+
+
 ### Configure routing
 
 The original [Spring Cloud Gateway routing rules](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) were replaced and are now captured with a standard Istio VirtualService CRD in [`manifests/ingress/routes.yaml`](manifests/ingress/routes.yaml).
@@ -237,6 +244,7 @@ With the application deployed, and ingress configured, we can finally view the a
 
 To see the running PetClinic application, open a browser tab and visit http://$LB_IP/.
 
+You should see a home page.  Navigate to the Vets page, then the Pet Owners page, and finally, drill down to a specific pet owner, and otherwise get acquainted with the UI.
 
 ## Test individual service endpoints
 
@@ -403,7 +411,7 @@ The above policy is specified in the file `authorization-policies.yaml`.
 
 1. Attempt once more to create a client pod to connect to the "vets" database.  This time the operation will fail.  That's because only the vets service is now allowed to connect to the database.
 
-1. Also verify that the application itself continues to function because all database queries are performed via its accompanying service.
+1. Also verify that the application itself continues to function because all database queries are performed via its associated service.
 
 ## Observe Distributed Traces
 
@@ -436,7 +444,7 @@ To make testing this easier, Istio is [configured with 100% trace sampling](./is
     istioctl dashboard jaeger
     ```
 
-1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
+1. Call the `petclinic-frontend` endpoint that calls both the customers and visits services, perhaps a two or three times so that the requests get sampled:
 
     ```shell
     curl -s http://$LB_IP/api/gateway/owners/6 | jq
