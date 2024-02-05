@@ -508,7 +508,7 @@ The Kiali dashboard can likewise be used to display visualizations of such end-t
 
 Istio has built-in support for Prometheus as a mechanism for metrics collection.
 
-Each Spring Boot application is configured with a [micrometer dependency](./petclinic-customers-service/pom.xml#L65) to expose a scrape endpoint for Prometheus to collect metrics.
+Each Spring Boot application is configured with a [micrometer dependency](./petclinic-customers-service/pom.xml#L55-L58) to expose a scrape endpoint for Prometheus to collect metrics.
 
 Call the scrape endpoint and inspect the metrics exposed directly by the Spring Boot application:
 
@@ -538,7 +538,7 @@ kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15020/stats
 
 For this to work, Envoy must be given the URL (endpoint) where the application's metrics are exposed.
 
-This is done with a set of [annotations on the deployment](./manifests/deploy/customers-service.yaml#L40).
+This is done with a set of [annotations on the deployment](./manifests/deploy/customers-service.yaml#L40-L43).
 
 See [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging) for more information.
 
