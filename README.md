@@ -324,13 +324,13 @@ Below, we demonstrate calling endpoints on the application in either of two ways
 1. Test one of the `visits-service` endpoints:
 
     ```shell
-    kubectl exec deploy/sleep -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
+    kubectl exec deploy/sleep -- curl -s visits-service:8080/pets/visits?petId=8 | jq
     ```
 
    Or:
 
     ```shell
-    curl -s http://$LB_IP/api/visit/pets/visits\?petId=8 | jq
+    curl -s http://$LB_IP/api/visit/pets/visits?petId=8 | jq
     ```
 
 1. Call `petclinic-frontend` endpoint that calls both the customers and visits services:
@@ -369,7 +369,7 @@ Here is how to test the behavior:
 1. Call `visits-service` directly:
 
     ```shell
-    kubectl exec deploy/sleep -- curl -s visits-service:8080/pets/visits\?petId=8 | jq
+    kubectl exec deploy/sleep -- curl -s visits-service:8080/pets/visits?petId=8 | jq
     ```
 
     Observe the call succeed and return a list of visits for this particular pet.
@@ -389,7 +389,7 @@ Here is how to test the behavior:
 1. Once the new `visits-service` pod reaches _Ready_ status, make the same call again:
 
     ```shell
-    kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits\?petId=8
+    kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits?petId=8 | jq
     ```
 
     Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).
