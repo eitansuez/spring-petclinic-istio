@@ -9,13 +9,13 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
+  name: petclinic-frontend
   labels:
     app: petclinic-frontend
-  name: petclinic-frontend
 spec:
   ports:
-    - name: http
-      port: 8080
+  - name: http
+    port: 8080
   selector:
     app: petclinic-frontend
 ---
@@ -69,5 +69,5 @@ spec:
           limits:
             memory: 1Gi
         ports:
-          - containerPort: 8080
+        - containerPort: 8080
       restartPolicy: Always
