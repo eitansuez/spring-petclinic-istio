@@ -44,9 +44,11 @@ spec:
     spec:
       serviceAccountName: customers-service
       containers:
-      - image: ${PULL_IMAGE_REGISTRY}/petclinic-customers-service:latest
-        name: customers-service
+      - name: customers-service
+        image: ${PULL_IMAGE_REGISTRY}/petclinic-customers-service:latest
         imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
         livenessProbe:
           httpGet:
             port: 8080
@@ -78,6 +80,3 @@ spec:
             secretKeyRef:
               name: customers-db-mysql
               key: mysql-root-password
-        ports:
-        - containerPort: 8080
-      restartPolicy: Always

@@ -47,6 +47,8 @@ spec:
       - name: petclinic-frontend
         image: ${PULL_IMAGE_REGISTRY}/petclinic-frontend:latest
         imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
         livenessProbe:
           httpGet:
             port: 8080
@@ -68,6 +70,3 @@ spec:
             memory: 1Gi
           limits:
             memory: 1Gi
-        ports:
-        - containerPort: 8080
-      restartPolicy: Always
