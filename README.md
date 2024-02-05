@@ -302,6 +302,25 @@ Below, we demonstrate calling endpoints on the application in either of two ways
     curl -s http://$LB_IP/api/customer/owners/1/pets/1 | jq
     ```
 
+1. Give the owner _George Franklin_ a new pet, _Sir Hiss_ (a snake):
+
+    ```shell
+    kubectl exec deploy/sleep -- curl -s \
+      -X POST -H 'Content-Type: application/json' \
+      customers-service:8080/owners/1/pets \
+      -d '{ "name": "Sir Hiss", "typeId": 4, "birthDate": "2020-01-01" }'
+    ```
+
+   Or:
+
+    ```shell
+    curl -X POST -H 'Content-Type: application/json' \
+      http://$LB_IP/api/customer/owners/1/pets \
+      -d '{ "name": "Sir Hiss", "typeId": 4, "birthDate": "2020-01-01" }'
+    ```
+
+    This can also be performed directly from the UI.
+
 1. Test one of the `visits-service` endpoints:
 
     ```shell
@@ -314,7 +333,7 @@ Below, we demonstrate calling endpoints on the application in either of two ways
     curl -s http://$LB_IP/api/visit/pets/visits\?petId=8 | jq
     ```
 
-1. Call `petclinic-frontend` endpoint that calls the customers and visits services:
+1. Call `petclinic-frontend` endpoint that calls both the customers and visits services:
 
     ```shell
     kubectl exec deploy/sleep -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
@@ -325,6 +344,7 @@ Below, we demonstrate calling endpoints on the application in either of two ways
     ```shell
     curl -s http://$LB_IP/api/gateway/owners/6 | jq
     ```
+
 
 ## Test resilience and fallback
 
@@ -423,7 +443,13 @@ To make testing this easier, Istio is [configured with 100% trace sampling](./is
 
 ### Steps
 
-1. From the Istio distribution directory, deploy Istio observability samples:
+1. Navigate to the base directory of your Istio distribution:
+
+    ```shell
+    cd istio-1.20.2
+    ```
+
+1. Deploy Istio observability samples:
 
     ```shell
     kubectl apply -f samples/addons/prometheus.yaml
@@ -438,23 +464,25 @@ To make testing this easier, Istio is [configured with 100% trace sampling](./is
     kubectl get pod -n istio-system
     ```
 
-1. Start the jaeger dashboard:
-
-    ```shell
-    istioctl dashboard jaeger
-    ```
-
 1. Call the `petclinic-frontend` endpoint that calls both the customers and visits services, perhaps a two or three times so that the requests get sampled:
 
     ```shell
     curl -s http://$LB_IP/api/gateway/owners/6 | jq
     ```
 
+1. Start the jaeger dashboard:
+
+    ```shell
+    istioctl dashboard jaeger
+    ```
+
 1. In Jaeger, search for traces involving the services petclinic-frontend, customers, and visits.
 
-    There should be a new trace with six spans showing the full end-to-end request-response flow across all three services.
+    You should see new traces, with six spans, showing the full end-to-end request-response flow across all three services.
 
     ![Distributed Trace Example](jaeger-screenshot.png)
+
+Close the jaeger dashboard.
 
 The Kiali dashboard can likewise be used to display visualizations of such end-to-end flows.
 
