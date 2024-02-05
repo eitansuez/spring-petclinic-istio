@@ -484,7 +484,25 @@ To make testing this easier, Istio is [configured with 100% trace sampling](./is
 
 Close the jaeger dashboard.
 
+## Kiali
+
 The Kiali dashboard can likewise be used to display visualizations of such end-to-end flows.
+
+1. Send a light load of requests against your application.
+
+    We provide a simple [siege](https://www.joedog.org/siege-manual/) script to send requests through to the `petclinic-frontend` endpoint that aggregates responses from both `customers` and `visits` services.
+
+    ```shell
+    ./siege.sh
+    ```
+
+1. Launch the Kiali dashboard:
+
+    ```shell
+    istioctl dashboard kiali
+    ```
+
+    Select the Graph view and the `default` namespace.  The flow of requests through the applications call graph will be rendered.
 
 ## Exposing metrics
 
@@ -524,4 +542,24 @@ This is done with a set of [annotations on the deployment](./manifests/deploy/cu
 
 See [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging) for more information.
 
-We leave as an exercise to access the Prometheus dashboard and perform queries against any of these metrics.
+## Viewing the Istio Grafana metrics dashboards
+
+Launch the grafana dashboard, while maintaining a request load against the application.
+
+```shell
+./siege.sh
+```
+
+Then:
+
+```shell
+istioctl dash grafana
+```
+
+Review the Istio Service Dashboards for the three services `petclinic-frontend`, `customers`, and `visits`.
+
+You can also load the legacy dashboard that came with the petclinic application.  You'll find the Grafana dashboard definition (a json file) [here](./grafana-petclinic-dashboard.json).  Import the dashboard and then view it.
+
+This dashboard has a couple of now-redundant panels showing the request volume and latencies, both of which are now subsumed by standard Istio dashboards.
+
+But it also shows business metrics exposed by the application.  Metrics such as number of owners, pets, and visits created or updated.
