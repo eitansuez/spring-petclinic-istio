@@ -18,3 +18,6 @@ target/
 generated/
 .DS_Store
 .vscode/settings.json
+
+# mkdocs
+site/

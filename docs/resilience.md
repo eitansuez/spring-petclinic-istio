@@ -1,10 +1,10 @@
 ## Test resilience and fallback
 
-The original spring-cloud version of petclinic used [Resilience4j](https://resilience4j.readme.io/docs) to [configure calls to the visit service with a timeout of 4 seconds](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/ApiGatewayApplication.java#L83), and [a fallback to return an empty list of visits](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/boundary/web/ApiGatewayController.java#L56) in the event that the request to get visits timed out (took longer).
+The original Spring Cloud version of PetClinic used [Resilience4j](https://resilience4j.readme.io/docs) to [configure calls to the visit service with a timeout of 4 seconds](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/ApiGatewayApplication.java#L83), and [a fallback to return an empty list of visits](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/boundary/web/ApiGatewayController.java#L56) in the event that the request to get visits timed out (took longer).
 
 Spring Cloud was removed.  We can replace this configuration with an Istio Custom Resource.
 
-The file [`timeouts.yaml`](manifests/config/timeouts.yaml) configures the equivalent 4s timeout on requests to the `visits` service, replacing the previous Resilience4j-based implementation.
+The file [`timeouts.yaml`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/config/timeouts.yaml) configures the equivalent 4s timeout on requests to the `visits` service, replacing the previous Resilience4j-based implementation.
 
 Apply the timeout configuration to your cluster:
 
@@ -12,9 +12,9 @@ Apply the timeout configuration to your cluster:
 kubectl apply -f manifests/config/timeouts.yaml
 ```
 
-The fallback logic in [`PetClinicController.getOwnerDetails`](./petclinic-frontend/src/main/java/org/springframework/samples/petclinic/api/boundary/web/PetClinicController.java#L34) was retrofitted to detect the Gateway Timeout (504) response code instead of using a Resilience4j API.
+The fallback logic in [`PetClinicController.getOwnerDetails`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-frontend/src/main/java/org/springframework/samples/petclinic/api/boundary/web/PetClinicController.java#L34) was retrofitted to detect the Gateway Timeout (504) response code instead of using a Resilience4j API.
 
-To test this feature, the environment variable [DELAY_MILLIS](./manifests/deploy/visits-service.yaml#L72) was introduced into the visits service to insert a delay when fetching visits.
+To test this feature, the environment variable [DELAY_MILLIS](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/visits-service.yaml#L72) was introduced into the visits service to insert a delay when fetching visits.
 
 Here is how to test the behavior:
 

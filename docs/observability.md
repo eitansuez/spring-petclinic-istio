@@ -2,9 +2,9 @@
 
 All boot apps are configured to propagate trace headers using [micrometer-tracing](https://micrometer.io/docs/tracing), per the [Istio documentation](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/#trace-context-propagation).
 
-See the [`application.yaml` resource files](./petclinic-vets-service/src/main/resources/application.yaml#L56) and the property `management.tracing.baggage.remote-fields` which configures the fields to propagate.
+See the [`application.yaml` resource files](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-vets-service/src/main/resources/application.yaml#L56) and the property `management.tracing.baggage.remote-fields` which configures the fields to propagate.
 
-To make testing this easier, Istio is [configured with 100% trace sampling](./istio-install-manifest.yaml#L21).
+To make testing this easier, Istio is [configured with 100% trace sampling](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/istio-install-manifest.yaml#L21).
 
 ### Steps
 
@@ -73,7 +73,7 @@ The Kiali dashboard can likewise be used to display visualizations of such end-t
 
 Istio has built-in support for Prometheus as a mechanism for metrics collection.
 
-Each Spring Boot application is configured with a [micrometer dependency](./petclinic-customers-service/pom.xml#L55-L58) to expose a scrape endpoint for Prometheus to collect metrics.
+Each Spring Boot application is configured with a [micrometer dependency](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-customers-service/pom.xml#L55-L58) to expose a scrape endpoint for Prometheus to collect metrics.
 
 Call the scrape endpoint and inspect the metrics exposed directly by the Spring Boot application:
 
@@ -103,7 +103,7 @@ kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15020/stats
 
 For this to work, Envoy must be given the URL (endpoint) where the application's metrics are exposed.
 
-This is done with a set of [annotations on the deployment](./manifests/deploy/customers-service.yaml#L40-L43).
+This is done with a set of [annotations on the deployment](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/customers-service.yaml#L40-L43).
 
 See [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging) for more information.
 
@@ -123,7 +123,7 @@ istioctl dash grafana
 
 Review the Istio Service Dashboards for the three services `petclinic-frontend`, `customers`, and `visits`.
 
-You can also load the legacy dashboard that came with the petclinic application.  You'll find the Grafana dashboard definition (a json file) [here](./grafana-petclinic-dashboard.json).  Import the dashboard and then view it.
+You can also load the legacy dashboard that came with the petclinic application.  You'll find the Grafana dashboard definition (a json file) [here](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/grafana-petclinic-dashboard.json).  Import the dashboard and then view it.
 
 This dashboard has a couple of now-redundant panels showing the request volume and latencies, both of which are now subsumed by standard Istio dashboards.
 

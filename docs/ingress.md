@@ -29,7 +29,7 @@ curl -v http://$LB_IP/
 
 ### Configure routing
 
-The original [Spring Cloud Gateway routing rules](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) were replaced and are now captured with a standard Istio VirtualService CRD in [`manifests/ingress/routes.yaml`](manifests/ingress/routes.yaml).
+The original [Spring Cloud Gateway routing rules](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) were replaced and are now captured with a standard Istio VirtualService CRD in [`manifests/ingress/routes.yaml`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/ingress/routes.yaml).
 
 Apply the routing rules for the gateway:
 
@@ -37,7 +37,7 @@ Apply the routing rules for the gateway:
 kubectl apply -f manifests/ingress/routes.yaml
 ```
 
-[`routes.yaml`](manifests/ingress/routes.yaml) configures routing for the Istio ingress gateway (which [replaces spring cloud gateway](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95)) to the application's API endpoints.
+[`routes.yaml`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/ingress/routes.yaml) configures routing for the Istio ingress gateway (which [replaces spring cloud gateway](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95)) to the application's API endpoints.
 
 It exposes endpoints to each of the services, and in addition, routes requests with the `/api/gateway` prefix to the `petclinic-frontend` application.  In the original version, the petclinic-frontend application and the gateway "proper" were bundled together as a single microservice.
 

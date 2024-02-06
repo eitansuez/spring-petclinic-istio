@@ -13,7 +13,7 @@ We make use of Istio's [sleep](https://github.com/istio/istio/tree/master/sample
 
 The `sleep` deployment is a blank client Pod that can be used to send direct calls to specific microservices from within the Kubernetes cluster.
 
-Deploy [`sleep`](manifests/sleep.yaml) to your cluster:
+Deploy [`sleep`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/sleep.yaml) to your cluster:
 
 ```shell
 kubectl apply -f manifests/sleep.yaml
