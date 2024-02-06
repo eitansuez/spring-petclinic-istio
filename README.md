@@ -6,6 +6,9 @@ For general information about the PetClinic sample application, see the [Spring 
 
 Watch [a video walkthrough](https://youtu.be/1UybZGws4m8).
 
+The below content was re-organized into a [Material for MkDocs site](https://squidfunk.github.io/mkdocs-material/).
+It might be simpler to consume it that way.  Here is the link:  https://eitansuez.github.io/spring-petclinic-istio/
+
 ## Summary
 
 A great deal of "cruft" accumulates inside many files in `spring-petclinic-cloud`: configuration for service discovery, load balancing, routing, retries, resilience, and so on.
