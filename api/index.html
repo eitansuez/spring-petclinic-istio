@@ -436,6 +436,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -590,6 +599,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -625,6 +643,7 @@
 </code></pre></div>
 <p>Wait for the sleep pod to be ready (2/2 containers).</p>
 <h2 id="test-individual-service-endpoints">Test individual service endpoints<a class="headerlink" href="#test-individual-service-endpoints" title="Permanent link">&para;</a></h2>
+<p>We assume that you have the excellent <a href="https://jqlang.github.io/jq/">jq</a> utility already installed.</p>
 <h3 id="call-the-vets-controller-endpoint">Call the "Vets" controller endpoint<a class="headerlink" href="#call-the-vets-controller-endpoint" title="Permanent link">&para;</a></h3>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Internal</label><label for="__tabbed_1_2">External</label></div>
 <div class="tabbed-content">
@@ -660,21 +679,21 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Internal</label><label for="__tabbed_3_2">External</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>-v<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>customers-service:8080/owners/1/pets<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{ &quot;name&quot;: &quot;Sir Hiss&quot;, &quot;typeId&quot;: 4, &quot;birthDate&quot;: &quot;2020-01-01&quot; }&#39;</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>curl<span class="w"> </span>-v<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span>http://<span class="nv">$LB_IP</span>/api/customer/owners/1/pets<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{ &quot;name&quot;: &quot;Sir Hiss&quot;, &quot;typeId&quot;: 4, &quot;birthDate&quot;: &quot;2020-01-01&quot; }&#39;</span>
 </code></pre></div>
+</div>
+</div>
+</div>
 <p>This can also be performed directly from the UI.</p>
-</div>
-</div>
-</div>
 <h3 id="the-visits-service">The Visits service<a class="headerlink" href="#the-visits-service" title="Permanent link">&para;</a></h3>
 <p>Test one of the <code>visits-service</code> endpoints:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Internal</label><label for="__tabbed_4_2">External</label></div>
@@ -703,6 +722,8 @@
 </div>
 </div>
 </div>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>Now that we have some familiarity with some of the API endpoints that make up this application, let's turn our attention to configuring a small aspect of resilience:  timeouts.</p>
 
 
 

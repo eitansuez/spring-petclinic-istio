@@ -506,8 +506,37 @@
 <p>The original Spring Cloud version of PetClinic used <a href="https://resilience4j.readme.io/docs">Resilience4j</a> to <a href="https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/ApiGatewayApplication.java#L83">configure calls to the visit service with a timeout of 4 seconds</a>, and <a href="https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/spring-petclinic-api-gateway/src/main/java/org/springframework/samples/petclinic/api/boundary/web/ApiGatewayController.java#L56">a fallback to return an empty list of visits</a> in the event that the request to get visits timed out (took longer).</p>
 <p>Spring Cloud was removed.  We can replace this configuration with an Istio Custom Resource.</p>
 <p>The file <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/config/timeouts.yaml"><code>timeouts.yaml</code></a> configures the equivalent 4s timeout on requests to the <code>visits</code> service, replacing the previous Resilience4j-based implementation.</p>
+<details class="tldr">
+<summary>timeouts.yaml</summary>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="nn">---</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.istio.io/v1beta1</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VirtualService</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="nt">metadata</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">visits</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">visits-service.default.svc.cluster.local</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">  </span><span class="nt">http</span><span class="p">:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">route</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">destination</span><span class="p">:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">          </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">visits-service.default.svc.cluster.local</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">    </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4s</span>
+</code></pre></div></td></tr></table></div>
+</details>
 <p>Apply the timeout configuration to your cluster:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>manifests/config/timeouts.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>manifests/config/timeouts.yaml
 </code></pre></div>
 <p>The fallback logic in <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-frontend/src/main/java/org/springframework/samples/petclinic/api/boundary/web/PetClinicController.java#L34"><code>PetClinicController.getOwnerDetails</code></a> was retrofitted to detect the Gateway Timeout (504) response code instead of using a Resilience4j API.</p>
 <p>To test this feature, the environment variable <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/visits-service.yaml#L72">DELAY_MILLIS</a> was introduced into the visits service to insert a delay when fetching visits.</p>
@@ -515,29 +544,29 @@
 <ol>
 <li>
 <p>Call <code>visits-service</code> directly:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>visits-service:8080/pets/visits?petId<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>visits-service:8080/pets/visits?petId<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
 <p>Observe the call succeed and return a list of visits for this particular pet.</p>
 </li>
 <li>
 <p>Call the <code>petclinic-frontend</code> endpoint, and note that for each pet, we see a list of visits:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>petclinic-frontend:8080/api/gateway/owners/6<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>petclinic-frontend:8080/api/gateway/owners/6<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
 </li>
 <li>
 <p>Edit the deployment manifest for the <code>visits-service</code> so that the environment variable <code>DELAY_MILLIS</code> is set to the value "5000" (which is 5 seconds).  One way to do this is to edit the file with (then save and exit):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>edit<span class="w"> </span>deploy<span class="w"> </span>visits-v1
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span>edit<span class="w"> </span>deploy<span class="w"> </span>visits-v1
 </code></pre></div>
 </li>
 <li>
 <p>Once the new <code>visits-service</code> pod reaches <em>Ready</em> status, make the same call again:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-v<span class="w"> </span>visits-service:8080/pets/visits?petId<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-v<span class="w"> </span>visits-service:8080/pets/visits?petId<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
 <p>Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).</p>
 </li>
 <li>
 <p>Call the <code>petclinic-frontend</code> endpoint once more, and note that for each pet, the list of visits is empty:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>petclinic-frontend:8080/api/gateway/owners/6<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>petclinic-frontend:8080/api/gateway/owners/6<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
 <p>That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
 Tail the logs of <code>petclinic-frontend</code> and observe a log message indicating the fallback was triggered.</p>
