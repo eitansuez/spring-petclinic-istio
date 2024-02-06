@@ -15,15 +15,15 @@ Deployment decisions:
 
 1. Add the helm repository:
 
-   ```shell
-   helm repo add bitnami https://charts.bitnami.com/bitnami
-   ```
+    ```shell
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    ```
 
 1. Update it:
 
-   ```shell
-   helm repo update
-   ```
+    ```shell
+    helm repo update
+    ```
 
 ### Deploy the databases
 
