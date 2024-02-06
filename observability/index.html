@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#observe-distributed-traces" class="md-skip">
+        <a href="#distributed-tracing" class="md-skip">
           Skip to content
         </a>
       
@@ -431,19 +431,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#observe-distributed-traces" class="md-nav__link">
+  <a href="#distributed-tracing" class="md-nav__link">
     <span class="md-ellipsis">
-      Observe Distributed Traces
+      Distributed Tracing
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Observe Distributed Traces">
+    <nav class="md-nav" aria-label="Distributed Tracing">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#steps" class="md-nav__link">
+  <a href="#observe-distributed-traces" class="md-nav__link">
     <span class="md-ellipsis">
-      Steps
+      Observe distributed traces
     </span>
   </a>
   
@@ -451,15 +451,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kiali" class="md-nav__link">
-    <span class="md-ellipsis">
-      Kiali
-    </span>
-  </a>
   
 </li>
       
@@ -473,9 +464,45 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#viewing-the-istio-grafana-metrics-dashboards" class="md-nav__link">
+  <a href="#send-requests-to-the-application" class="md-nav__link">
     <span class="md-ellipsis">
-      Viewing the Istio Grafana metrics dashboards
+      Send requests to the application
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-prometheus-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Prometheus dashboard
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#istios-grafana-metrics-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Istio's Grafana metrics dashboards
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#petclinic-custom-grafana-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      PetClinic custom Grafana dashboard
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kiali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kiali
     </span>
   </a>
   
@@ -514,19 +541,19 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#observe-distributed-traces" class="md-nav__link">
+  <a href="#distributed-tracing" class="md-nav__link">
     <span class="md-ellipsis">
-      Observe Distributed Traces
+      Distributed Tracing
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Observe Distributed Traces">
+    <nav class="md-nav" aria-label="Distributed Tracing">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#steps" class="md-nav__link">
+  <a href="#observe-distributed-traces" class="md-nav__link">
     <span class="md-ellipsis">
-      Steps
+      Observe distributed traces
     </span>
   </a>
   
@@ -534,15 +561,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#kiali" class="md-nav__link">
-    <span class="md-ellipsis">
-      Kiali
-    </span>
-  </a>
   
 </li>
       
@@ -556,9 +574,45 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#viewing-the-istio-grafana-metrics-dashboards" class="md-nav__link">
+  <a href="#send-requests-to-the-application" class="md-nav__link">
     <span class="md-ellipsis">
-      Viewing the Istio Grafana metrics dashboards
+      Send requests to the application
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-prometheus-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Prometheus dashboard
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#istios-grafana-metrics-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Istio's Grafana metrics dashboards
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#petclinic-custom-grafana-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      PetClinic custom Grafana dashboard
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kiali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kiali
     </span>
   </a>
   
@@ -584,11 +638,15 @@
 
   <h1>Observability</h1>
 
-<h2 id="observe-distributed-traces">Observe Distributed Traces<a class="headerlink" href="#observe-distributed-traces" title="Permanent link">&para;</a></h2>
-<p>All boot apps are configured to propagate trace headers using <a href="https://micrometer.io/docs/tracing">micrometer-tracing</a>, per the <a href="https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/#trace-context-propagation">Istio documentation</a>.</p>
+<h2 id="distributed-tracing">Distributed Tracing<a class="headerlink" href="#distributed-tracing" title="Permanent link">&para;</a></h2>
+<p>The Istio documentation dedicates <a href="https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/#trace-context-propagation">a page</a> to guide users on how to propagate trace headers in calls between microservices, in order to support distributed tracing.</p>
+<p>In this version of PetClinic, all Spring Boot microservices have been configured to propagate trace headers using <a href="https://micrometer.io/docs/tracing">micrometer-tracing</a>.</p>
+<p>Micrometer tracing is an elegant solution, in that we do not have to couple the trace header propagation with the application logic.  Instead, it becomes a simple matter of static configuration.</p>
 <p>See the <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-vets-service/src/main/resources/application.yaml#L56"><code>application.yaml</code> resource files</a> and the property <code>management.tracing.baggage.remote-fields</code> which configures the fields to propagate.</p>
 <p>To make testing this easier, Istio is <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/istio-install-manifest.yaml#L21">configured with 100% trace sampling</a>.</p>
-<h3 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h3>
+<h3 id="observe-distributed-traces">Observe distributed traces<a class="headerlink" href="#observe-distributed-traces" title="Permanent link">&para;</a></h3>
+<p>In its <code>samples</code> directory, Istio provides sample deployment manifests for various observability tools, including Zipkin and Jaeger.</p>
+<p>Deploy Jaeger to your Kubernetes cluster:</p>
 <ol>
 <li>
 <p>Navigate to the base directory of your Istio distribution:</p>
@@ -596,79 +654,134 @@
 </code></pre></div>
 </li>
 <li>
-<p>Deploy Istio observability samples:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/prometheus.yaml
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/jaeger.yaml
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/kiali.yaml
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/grafana.yaml
-</code></pre></div>
-<p>Wait for the observability pods to be ready:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-n<span class="w"> </span>istio-system
+<p>Deploy jaeger:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/jaeger.yaml
 </code></pre></div>
 </li>
 <li>
-<p>Call the <code>petclinic-frontend</code> endpoint that calls both the customers and visits services, perhaps a two or three times so that the requests get sampled:</p>
+<p>Wait for the Jaeger pod to be ready:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-n<span class="w"> </span>istio-system
+</code></pre></div>
+</li>
+</ol>
+<p>Next, let us turn our attention to calling an endpoint that will generate a trace capture, and observe it in the Jaeger dashboard:</p>
+<ol>
+<li>
+<p>Call the <code>petclinic-frontend</code> endpoint that calls both the <code>customers</code> and <code>visits</code> services.  Feel free to make mulitple requests to generate multiple traces.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://<span class="nv">$LB_IP</span>/api/gateway/owners/6<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
 </li>
 <li>
-<p>Start the jaeger dashboard:</p>
+<p>Launch the jaeger dashboard:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>istioctl<span class="w"> </span>dashboard<span class="w"> </span>jaeger
 </code></pre></div>
 </li>
 <li>
-<p>In Jaeger, search for traces involving the services petclinic-frontend, customers, and visits.</p>
+<p>In Jaeger, search for traces involving the services <code>petclinic-frontend</code>, <code>customers</code>, and <code>visits</code>.</p>
 </li>
 </ol>
-<p>You should see new traces, with six spans, showing the full end-to-end request-response flow across all three services.</p>
+<p>You should see one or more traces, each with six spans.  Click on any one of them to display the full end-to-end request-response flow across all three services.</p>
 <p><img alt="Distributed Trace Example" src="../jaeger-screenshot.png" /></p>
-<p>Close the jaeger dashboard.</p>
-<h2 id="kiali">Kiali<a class="headerlink" href="#kiali" title="Permanent link">&para;</a></h2>
-<p>The Kiali dashboard can likewise be used to display visualizations of such end-to-end flows.</p>
+<p>Close the Jaeger dashboard.</p>
+<h2 id="exposing-metrics">Exposing metrics<a class="headerlink" href="#exposing-metrics" title="Permanent link">&para;</a></h2>
+<p>Istio has built-in support for <a href="https://prometheus.io/">Prometheus</a> as a mechanism for metrics collection.</p>
+<p>Each Spring Boot application is configured with a <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-customers-service/pom.xml#L55-L58">micrometer dependency</a> to expose a scrape endpoint for Prometheus to collect metrics.</p>
+<p>Call the scrape endpoint and inspect the metrics exposed directly by the Spring Boot application:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080/actuator/prometheus
+</code></pre></div>
+<p>Separately, Envoy collects a variety of metrics, often referred to as RED metrics, for: Requests, Errors, and Durations.</p>
+<p>Inspect the metrics collected and exposed by the Envoy sidecar:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:15090/stats/prometheus
+</code></pre></div>
+<p>One common metric to note is the counter <code>istio_requests_total</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:15090/stats/prometheus<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>istio_requests_total
+</code></pre></div>
+<p>Both the application metrics and envoy's metrics are aggregated (merged) and exposed on port 15020:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:15020/stats/prometheus
+</code></pre></div>
+<p>What allows Istio to aggregate both scrape endpoints are annotations placed in the pod template specification for each application, communicating the URL of the Prometheus scrape endpoint.</p>
+<p>For example, <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/customers-service.yaml#L40-L43">here are the prometheus annotations</a> for the <code>customers</code> service.</p>
+<p>For more information on metrics merging and Prometheus, see <a href="https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging">the Istio documentation</a>.</p>
+<h2 id="send-requests-to-the-application">Send requests to the application<a class="headerlink" href="#send-requests-to-the-application" title="Permanent link">&para;</a></h2>
+<p>To send a steady stream of requests through the <code>petclinic-frontend</code> application, we use <a href="https://www.joedog.org/siege-manual/">siege</a>.  Feel free to use other tools, or maybe a simple bash <code>while</code> loop.</p>
+<p>Run the following <code>siege</code> command to send requests to various endpoints in our application:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>siege<span class="w"> </span>--concurrent<span class="o">=</span><span class="m">6</span><span class="w"> </span>--delay<span class="o">=</span><span class="m">2</span><span class="w"> </span>--file<span class="o">=</span>./urls.txt
+</code></pre></div>
+<p>Leave the siege command running.</p>
+<p>Open a separate terminal in which to run subsequent commands.</p>
+<h2 id="the-prometheus-dashboard">The Prometheus dashboard<a class="headerlink" href="#the-prometheus-dashboard" title="Permanent link">&para;</a></h2>
+<p>Deploy Prometheus to your Kubernetes cluster:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/prometheus.yaml
+</code></pre></div>
+<p>The latest version of Spring Boot (3.2) takes advantage of a relatively recent feature of Prometheus known as "exemplars."  The current version of Istio uses an older version of Prometheus (2.41) that does not yet support exemplars.</p>
+<p>Before deploying Prometheus, patch the prometheus deployment to use the latest version of the image:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>kubectl<span class="w"> </span>patch<span class="w"> </span>deploy<span class="w"> </span>-n<span class="w"> </span>istio-system<span class="w"> </span>prometheus<span class="w"> </span>--patch-file<span class="o">=</span>manifests/config/prom-patch.yaml
+</code></pre></div>
+<p>Launch the Prometheus dashboard:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>prometheus
+</code></pre></div>
+<p>Here are some PromQL queries you can try out, that will fetch metrics from Prometheus' metrics store:</p>
 <ol>
 <li>
-<p>Send a light load of requests against your application.</p>
-<p>We provide a simple <a href="https://www.joedog.org/siege-manual/">siege</a> script to send requests through to the <code>petclinic-frontend</code> endpoint that aggregates responses from both <code>customers</code> and <code>visits</code> services.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./siege.sh
+<p>The number of requests made by <code>petclinic-frontend</code> to the <code>cutomers</code> service:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">istio_requests_total</span><span class="p">{</span><span class="nl">source_app</span><span class="o">=</span><span class="p">&quot;</span><span class="s">petclinic-frontend</span><span class="p">&quot;,</span><span class="nl">destination_app</span><span class="o">=</span><span class="p">&quot;</span><span class="s">customers-service</span><span class="p">&quot;,</span><span class="nl">reporter</span><span class="o">=</span><span class="p">&quot;</span><span class="s">source</span><span class="p">&quot;}</span>
+</code></pre></div>
+</li>
+<li>
+<p>A business metric exposed by the application proper:  the number of calls to the <code>findPet</code> method:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">petclinic_pet_seconds_count</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">&quot;</span><span class="s">findPet</span><span class="p">&quot;}</span>
+</code></pre></div>
+</li>
+</ol>
+<h2 id="istios-grafana-metrics-dashboards">Istio's Grafana metrics dashboards<a class="headerlink" href="#istios-grafana-metrics-dashboards" title="Permanent link">&para;</a></h2>
+<p>Istio provides standard service mesh dashboards, based on the standard metrics collected by Envoy and sent to Prometheus.</p>
+<p>Deploy Grafana:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/grafana.yaml
+</code></pre></div>
+<p>Launch the Grafana dashboard:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>grafana
+</code></pre></div>
+<p>Navigate to the dashboards section, you will see an Istio folder.</p>
+<p>Select the Istio service dashboard.</p>
+<p>Review the Istio Service Dashboards for the services <code>petclinic-frontend</code>, <code>vets</code>, <code>customers</code>, and <code>visits</code>.</p>
+<p>The dashboard exposes metrics such as the client request volume, client success rate, and client request durations:</p>
+<p><img alt="Istio service dashboard for the customers service" src="../grafana-screenshot.png" /></p>
+<h2 id="petclinic-custom-grafana-dashboard">PetClinic custom Grafana dashboard<a class="headerlink" href="#petclinic-custom-grafana-dashboard" title="Permanent link">&para;</a></h2>
+<p>The version of PetClinic from which this version derives <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/grafana-petclinic-dashboard.json">already contained a custom Grafana dashboard</a>.</p>
+<p>To import the dashboard into Grafana:</p>
+<ol>
+<li>Navigate to "Dashboards"</li>
+<li>Click the "New" pulldown button, and select "Import"</li>
+<li>Select "Upload dashboard JSON file", and select the file <code>grafana-petclinic-dashboard.json</code> from the repository's base directory.</li>
+<li>Select "Prometheus" as the data source</li>
+<li>Finally, click "Import"</li>
+</ol>
+<p>The top two panels showing request latencies and request volumes are technically now redundant:  both are now subsumed by the standard Istio dashboards.</p>
+<p>Below those panels are custom application metrics. Metrics such as number of owners, pets, and visits created or updated.</p>
+<p>Create a new Owner, give an existing owner a new pet, or add a visit for a pet, and watch those counters increment in Grafana.</p>
+<h2 id="kiali">Kiali<a class="headerlink" href="#kiali" title="Permanent link">&para;</a></h2>
+<p>Kiali is a bespoke "console" for Istio Service Mesh.  One of the features of Kiali that stands out are the visualizations of requests making their way through the call graph.</p>
+<ol>
+<li>
+<p>Cancel the currently-running siege command.  Relaunch siege, but with a different set of target endpoints:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>siege<span class="w"> </span>--concurrent<span class="o">=</span><span class="m">6</span><span class="w"> </span>--delay<span class="o">=</span><span class="m">2</span><span class="w"> </span>--file<span class="o">=</span>./frontend-urls.txt
+</code></pre></div>
+</li>
+<li>
+<p>Deploy Kiali:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/kiali.yaml
 </code></pre></div>
 </li>
 <li>
 <p>Launch the Kiali dashboard:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>istioctl<span class="w"> </span>dashboard<span class="w"> </span>kiali
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>istioctl<span class="w"> </span>dashboard<span class="w"> </span>kiali
 </code></pre></div>
+<p>Select the Graph view and the <code>default</code> namespace.</p>
+<p>The flow of requests through the applications call graph will be rendered.</p>
 </li>
 </ol>
-<p>Select the Graph view and the <code>default</code> namespace.  The flow of requests through the applications call graph will be rendered.</p>
-<h2 id="exposing-metrics">Exposing metrics<a class="headerlink" href="#exposing-metrics" title="Permanent link">&para;</a></h2>
-<p>Istio has built-in support for Prometheus as a mechanism for metrics collection.</p>
-<p>Each Spring Boot application is configured with a <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-customers-service/pom.xml#L55-L58">micrometer dependency</a> to expose a scrape endpoint for Prometheus to collect metrics.</p>
-<p>Call the scrape endpoint and inspect the metrics exposed directly by the Spring Boot application:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080/actuator/prometheus
-</code></pre></div>
-<p>Separately, Envoy collects a variety of metrics, often referred to as RED metrics (Requests, Errors, Durations).</p>
-<p>Inspect the metrics collected and exposed by the Envoy sidecar:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:15090/stats/prometheus
-</code></pre></div>
-<p>One common metric to note is <code>istio_requests_total</code></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:15090/stats/prometheus<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>istio_requests_total
-</code></pre></div>
-<p>Both sets of metrics are aggregated (merged) and exposed on port 15020:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:15020/stats/prometheus
-</code></pre></div>
-<p>For this to work, Envoy must be given the URL (endpoint) where the application's metrics are exposed.</p>
-<p>This is done with a set of <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/customers-service.yaml#L40-L43">annotations on the deployment</a>.</p>
-<p>See <a href="https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging">the Istio documentation</a> for more information.</p>
-<h2 id="viewing-the-istio-grafana-metrics-dashboards">Viewing the Istio Grafana metrics dashboards<a class="headerlink" href="#viewing-the-istio-grafana-metrics-dashboards" title="Permanent link">&para;</a></h2>
-<p>Launch the grafana dashboard, while maintaining a request load against the application.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>./siege.sh
-</code></pre></div>
-<p>Then:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>grafana
-</code></pre></div>
-<p>Review the Istio Service Dashboards for the three services <code>petclinic-frontend</code>, <code>customers</code>, and <code>visits</code>.</p>
-<p>You can also load the legacy dashboard that came with the petclinic application.  You'll find the Grafana dashboard definition (a json file) <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/grafana-petclinic-dashboard.json">here</a>.  Import the dashboard and then view it.</p>
-<p>This dashboard has a couple of now-redundant panels showing the request volume and latencies, both of which are now subsumed by standard Istio dashboards.</p>
-<p>But it also shows business metrics exposed by the application.  Metrics such as number of owners, pets, and visits created or updated.</p>
+<p><img alt="Visualization of traffic flow in Kiali" src="../kiali-screenshot.png" /></p>
 
 
 
