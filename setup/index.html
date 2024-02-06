@@ -331,9 +331,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deploy-istio" class="md-nav__link">
+  <a href="#istio" class="md-nav__link">
     <span class="md-ellipsis">
-      Deploy Istio
+      Istio
     </span>
   </a>
   
@@ -510,9 +510,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deploy-istio" class="md-nav__link">
+  <a href="#istio" class="md-nav__link">
     <span class="md-ellipsis">
-      Deploy Istio
+      Istio
     </span>
   </a>
   
@@ -538,8 +538,9 @@
 
   <h1>Setup</h1>
 
-<p>Below are two main options for environments.</p>
+<p>Begin by cloning a local copy of the <a href="https://github.com/spring-petclinic/spring-petclinic-istio">Spring PetClinic Istio repository</a> from GitHub.</p>
 <h2 id="kubernetes">Kubernetes<a class="headerlink" href="#kubernetes" title="Permanent link">&para;</a></h2>
+<p>Select whether you wish to provision Kubernetes locally or remotely using a cloud provider.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Local Setup</label><label for="__tabbed_1_2">Remote Setup</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -552,9 +553,11 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--port<span class="w"> </span><span class="m">80</span>:80@loadbalancer<span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span>--registry-create<span class="w"> </span>my-cluster-registry:0.0.0.0:5010
 </code></pre></div>
-<p>Above, we:
-- Disable the default traefik load balancer and configure local port 80 to instead forward to the "istio-ingressgateway" load balancer.
-- Create a registry we can push to locally on port 5010 that is accessible from the Kubernetes cluster at "my-cluster-registry:5000".</p>
+<p>Above, we:</p>
+<ul>
+<li>Disable the default traefik load balancer and configure local port 80 to instead forward to the "istio-ingressgateway" load balancer.</li>
+<li>Create a registry we can push to locally on port 5010 that is accessible from the Kubernetes cluster at "my-cluster-registry:5000".</li>
+</ul>
 </div>
 <div class="tabbed-block">
 <p>Provision a k8s cluster in the cloud of your choice.  For example, on GCP:</p>
@@ -568,21 +571,21 @@
 </div>
 </div>
 <h2 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
-<p>Use the file <code>envrc-template.sh</code> as the basis for configuring environment variables.</p>
+<p>Use <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/envrc-template.sh"><code>envrc-template.sh</code></a> as the basis for configuring environment variables.</p>
 <p>Be sure to:</p>
 <ol>
 <li>Set the local variable <code>local_setup</code> to either "true" or "false", depending on your choice of a local or remote cluster.</li>
 <li>If using a remote setup, set the value of PUSH_IMAGE_REGISTRY to the value of your image registry URL.</li>
 </ol>
-<p>I highly recommend using <a href="https://direnv.net/"><code>direnv</code></a>, a convenient way of associating the setting environment variables to entering a specific directory.</p>
+<p>I highly recommend using <a href="https://direnv.net/"><code>direnv</code></a>, a convenient way of associating setting environment variables with a specific directory.</p>
 <p>If you choose to use <code>direnv</code>, then the variables can be automatically set by renaming the file to <code>.envrc</code> and running the command <code>direnv allow</code>.</p>
-<h2 id="deploy-istio">Deploy Istio<a class="headerlink" href="#deploy-istio" title="Permanent link">&para;</a></h2>
+<h2 id="istio">Istio<a class="headerlink" href="#istio" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
 <p>Follow the Istio documentation's instructions to <a href="https://istio.io/latest/docs/setup/getting-started/#download">download Istio</a>.</p>
 </li>
 <li>
-<p>Once the <code>istioctl</code> CLI has been added to your path, run the following installation command:</p>
+<p>After you have added the <code>istioctl</code> CLI to your PATH, run the following installation command:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>istioctl<span class="w"> </span>install<span class="w"> </span>-f<span class="w"> </span>manifests/istio-install-manifest.yaml
 </code></pre></div>
 </li>

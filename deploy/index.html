@@ -397,9 +397,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#analysis" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
-      Analysis
+      Summary
     </span>
   </a>
   
@@ -600,9 +600,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#analysis" class="md-nav__link">
+  <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
-      Analysis
+      Summary
     </span>
   </a>
   
@@ -631,25 +631,28 @@
 <p>Deployment decisions:</p>
 <ul>
 <li>We use mysql.  Mysql can be installed with helm.  Its charts are in the bitnami repository.</li>
-<li>We deploy a separate database statefulset for each service</li>
-<li>Inside each statefulset we name the database "service_instance_db"</li>
-<li>Apps use the root username "root"</li>
-<li>The helm installation will generate a root user password in a secret</li>
-<li>The applications reference the secret name to get at the db credentials</li>
+<li>We deploy a separate database statefulset for each service.</li>
+<li>Inside each statefulset we name the database "service_instance_db".</li>
+<li>Apps use the root username "root".</li>
+<li>The helm installation will generate a root user password in a secret.</li>
+<li>The applications reference the secret name to get at the database credentials.</li>
 </ul>
 <h3 id="preparatory-steps">Preparatory steps<a class="headerlink" href="#preparatory-steps" title="Permanent link">&para;</a></h3>
+<p>We assume you already have <a href="https://helm.sh/">helm</a> installed.</p>
 <ol>
-<li>Add the helm repository:</li>
-</ol>
+<li>
+<p>Add the helm repository:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>bitnami<span class="w"> </span>https://charts.bitnami.com/bitnami
 </code></pre></div>
-<ol>
-<li>Update it:</li>
-</ol>
+</li>
+<li>
+<p>Update it:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>helm<span class="w"> </span>repo<span class="w"> </span>update
 </code></pre></div>
+</li>
+</ol>
 <h3 id="deploy-the-databases">Deploy the databases<a class="headerlink" href="#deploy-the-databases" title="Permanent link">&para;</a></h3>
-<p>Now we're ready to deploy the databases with a <code>helm install</code> command for each app/service:</p>
+<p>Deploy the databases with a <code>helm install</code> command, one for each app/service:</p>
 <ol>
 <li>
 <p>Vets:</p>
@@ -667,8 +670,10 @@
 </code></pre></div>
 </li>
 </ol>
+<p>The databases should be up after ~ 1-2 minutes.</p>
 <p>Wait for the pods to be ready (2/2 containers).</p>
 <h2 id="build-the-apps-create-the-docker-images-push-them-to-the-local-registry">Build the apps, create the docker images, push them to the local registry<a class="headerlink" href="#build-the-apps-create-the-docker-images-push-them-to-the-local-registry" title="Permanent link">&para;</a></h2>
+<p>We assume you already have <a href="https://maven.apache.org/">maven</a> installed locally.</p>
 <ol>
 <li>
 <p>Compile the apps and run the tests:</p>
@@ -688,40 +693,64 @@
 </ol>
 <h2 id="deploy-the-apps">Deploy the apps<a class="headerlink" href="#deploy-the-apps" title="Permanent link">&para;</a></h2>
 <p>The deployment manifests are located in <code>manifests/deploy</code>.</p>
-<p>The services are <code>vets</code>, <code>visits</code>, <code>customers</code>, and <code>petclinic-frontend</code>.  For each service we create a Kubernetes Service Account, a Deployment, and a ClusterIP service.</p>
+<p>The services are <code>vets</code>, <code>visits</code>, <code>customers</code>, and <code>petclinic-frontend</code>.  For each service we create a Kubernetes <a href="https://kubernetes.io/docs/concepts/security/service-accounts/">ServiceAccount</a>, a Deployment, and a ClusterIP service.</p>
 <p>Apply the deployment manifests:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>manifests/deploy/*.yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>envsubst<span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
 </code></pre></div>
+<p>The manifests reference the image registry environment variable, and so are passed through <code>envsubst</code> for resolution before being applied to the Kubernetes cluster.</p>
 <p>Wait for the pods to be ready (2/2 containers).</p>
+<p>Here is a simple diagnostic command that tails the logs of the customers service pod, showing that the Spring Boot application has come up and is listening on port 8080.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>kubectl<span class="w"> </span>logs<span class="w"> </span>--follow<span class="w"> </span>svc/customers-service
+</code></pre></div>
 <h2 id="test-database-connectivity">Test database connectivity<a class="headerlink" href="#test-database-connectivity" title="Permanent link">&para;</a></h2>
+<p>The below instructions are taken from the output from the prior <code>helm install</code> command.</p>
 <p>Connect directly to the <code>vets-db-mysql</code> database:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>--namespace<span class="w"> </span>default<span class="w"> </span>vets-db-mysql<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&quot;{.data.mysql-root-password}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
+<ol>
+<li>
+<p>Obtain the root password from the Kubernetes secret:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">bash shell</label><label for="__tabbed_1_2">fish shell</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>--namespace<span class="w"> </span>default<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>vets-db-mysql<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&quot;{.data.mysql-root-password}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>vets-db-mysql-client<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span>--rm<span class="w"> </span>--tty<span class="w"> </span>-i<span class="w"> </span>--restart<span class="o">=</span><span class="s1">&#39;Never&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span>--image<span class="w"> </span>docker.io/bitnami/mysql:8.0.36-debian-11-r2<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span>--namespace<span class="w"> </span>default<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span>--env<span class="w"> </span><span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="nv">$MYSQL_ROOT_PASSWORD</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span>--command<span class="w"> </span>--<span class="w"> </span>bash
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nb">set</span><span class="w"> </span>MYSQL_ROOT_PASSWORD<span class="w"> </span><span class="k">$(</span>kubectl<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>--namespace<span class="w"> </span>default<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span>vets-db-mysql<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&quot;{.data.mysql-root-password}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>mysql<span class="w"> </span>-h<span class="w"> </span>vets-db-mysql.default.svc.cluster.local<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">&quot;</span><span class="nv">$MYSQL_ROOT_PASSWORD</span><span class="s2">&quot;</span>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Create, and shell into a mysql client pod:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>kubectl<span class="w"> </span>run<span class="w"> </span>vets-db-mysql-client<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span>--rm<span class="w"> </span>--tty<span class="w"> </span>-i<span class="w"> </span>--restart<span class="o">=</span><span class="s1">&#39;Never&#39;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span>--image<span class="w"> </span>docker.io/bitnami/mysql:8.0.36-debian-11-r2<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span>--namespace<span class="w"> </span>default<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span>--env<span class="w"> </span><span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="nv">$MYSQL_ROOT_PASSWORD</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">  </span>--command<span class="w"> </span>--<span class="w"> </span>bash
 </code></pre></div>
-<p>At the mysql prompt, can select the database, show tables, and query records:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>use<span class="w"> </span>service_instance_db<span class="p">;</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>show<span class="w"> </span>tables<span class="p">;</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">select</span><span class="w"> </span>*<span class="w"> </span>from<span class="w"> </span>vets<span class="p">;</span>
+</li>
+<li>
+<p>Use the <code>mysql</code> client to connect to the database:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>mysql<span class="w"> </span>-h<span class="w"> </span>vets-db-mysql.default.svc.cluster.local<span class="w"> </span>-uroot<span class="w"> </span>-p<span class="s2">&quot;</span><span class="nv">$MYSQL_ROOT_PASSWORD</span><span class="s2">&quot;</span>
 </code></pre></div>
-<p>Exit with <code>\q</code> then <code>exit</code>.</p>
-<p>One can similarly access the other two databases <code>customers-db-mysql</code> and <code>visits-db-mysql</code>.</p>
-<h2 id="analysis">Analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h2>
-<p>Prior to Istio, the common solution in the Spring ecosystem to issues of service discovery, resilience, load balancing was Spring Cloud.  Spring Cloud consists of multiple projects that provide dependencies that developers add to their applications to help them deal with issues of client-side load-balancing, retries, circuit-breaking, service discovery and so on.</p>
-<p>In <code>spring-petclinic-istio</code>, those dependencies have been removed.  What remains as dependencies inside each service are what you'd expect to find:</p>
-<ul>
-<li>Spring boot and actuator are the foundation of modern Spring applications</li>
-<li>Spring data jpa and the mysql connector for database access</li>
-<li>micrometer for exposing application metrics via a Prometheus endpoint</li>
-<li>micrometer-tracing for <a href="https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/">propagating trace headers</a> through these applications</li>
-</ul>
+</li>
+</ol>
+<p>At the mysql prompt, select the database, list the tables, and query vet records:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>use<span class="w"> </span>service_instance_db<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>show<span class="w"> </span>tables<span class="p">;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">select</span><span class="w"> </span>*<span class="w"> </span>from<span class="w"> </span>vets<span class="p">;</span>
+</code></pre></div>
+<p>Exit the mysql prompt with <code>\q</code>, then exit the pod with <code>exit</code>.</p>
+<p>One can similarly connect to and inspect the <code>customers-db-mysql</code> and <code>visits-db-mysql</code> databases.</p>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>At this point you should have all applications deployed and running, connected to their respective databases.</p>
+<p>But we cannot access the application's UI until we configure ingress, which is our next topic.</p>
 
 
 
