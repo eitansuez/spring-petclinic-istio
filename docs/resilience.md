@@ -6,6 +6,11 @@ Spring Cloud was removed.  We can replace this configuration with an Istio Custo
 
 The file [`timeouts.yaml`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/config/timeouts.yaml) configures the equivalent 4s timeout on requests to the `visits` service, replacing the previous Resilience4j-based implementation.
 
+??? tldr "timeouts.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/config/timeouts.yaml"
+    ```
+
 Apply the timeout configuration to your cluster:
 
 ```shell

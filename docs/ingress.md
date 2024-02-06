@@ -14,17 +14,18 @@ Ingress is configured with Istio in two parts:  the gateway configuration proper
 
 ## Configure the Gateway
 
+The below configuration creates a listener on the ingress gateway for HTTP traffic on port 80.
 
-```yaml
---8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/ingress/gateway.yaml"
-```
+??? tldr "gateway.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/ingress/gateway.yaml"
+    ```
 
+Apply the gateway configuration to your cluster:
 
 ```shell
 kubectl apply -f manifests/ingress/gateway.yaml
 ```
-
-The above configuration creates a listener on the ingress gateway for HTTP traffic on port 80.
 
 Since no routing has been configured yet for the gateway, a request to the gateway should return an HTTP 404 response:
 
@@ -32,10 +33,18 @@ Since no routing has been configured yet for the gateway, a request to the gatew
 curl -v http://$LB_IP/
 ```
 
-
 ## Configure routing
 
-The original [Spring Cloud Gateway routing rules](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) were replaced and are now captured with a standard Istio VirtualService CRD in [`manifests/ingress/routes.yaml`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/ingress/routes.yaml).
+The original [Spring Cloud Gateway routing rules](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95) were replaced and are now captured with a standard [Istio VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/) in [`manifests/ingress/routes.yaml`](https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/ingress/routes.yaml):
+
+[`routes.yaml`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/ingress/routes.yaml) configures routing for the Istio ingress gateway (which [replaces spring cloud gateway](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95)) to the application's API endpoints.
+
+It exposes endpoints to each of the services, and in addition, routes requests with the `/api/gateway` prefix to the `petclinic-frontend` application.  In the original version, the petclinic-frontend application and the gateway "proper" were bundled together as a single microservice.
+
+??? tldr "routes.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/ingress/routes.yaml"
+    ```
 
 Apply the routing rules for the gateway:
 
@@ -43,13 +52,9 @@ Apply the routing rules for the gateway:
 kubectl apply -f manifests/ingress/routes.yaml
 ```
 
-[`routes.yaml`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/ingress/routes.yaml) configures routing for the Istio ingress gateway (which [replaces spring cloud gateway](https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95)) to the application's API endpoints.
-
-It exposes endpoints to each of the services, and in addition, routes requests with the `/api/gateway` prefix to the `petclinic-frontend` application.  In the original version, the petclinic-frontend application and the gateway "proper" were bundled together as a single microservice.
-
 ## Visit the app
 
-With the application deployed, and ingress configured, we can finally view the application's user interface.
+With the application deployed and ingress configured, we can finally view the application's user interface.
 
 To see the running PetClinic application, open a browser tab and visit http://$LB_IP/.
 
@@ -61,7 +66,7 @@ Prior to Istio, the common solution in the Spring ecosystem to issues of service
 
 In `spring-petclinic-istio`, those dependencies have been removed.  What remains as dependencies inside each service are what you'd expect to find:
 
-- [Spring boot](https://spring.io/projects/spring-boot) and actuator are the foundation of modern Spring applications.
+- [Spring Boot](https://spring.io/projects/spring-boot) and actuator are the foundation of modern Spring applications.
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa) and the mysql connector for database access.
 - [Micrometer](https://micrometer.io/) for exposing application metrics via a Prometheus endpoint.
 - [Micrometer-tracing](https://docs.micrometer.io/tracing/reference/) for [propagating trace headers](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/) through these applications.

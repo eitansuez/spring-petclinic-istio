@@ -24,6 +24,8 @@ Wait for the sleep pod to be ready (2/2 containers).
 
 ## Test individual service endpoints
 
+We assume that you have the excellent [jq](https://jqlang.github.io/jq/) utility already installed.
+
 ### Call the "Vets" controller endpoint
 
 === "Internal"
@@ -67,7 +69,7 @@ Give the owner _George Franklin_ a new pet, _Sir Hiss_ (a snake):
 === "Internal"
 
     ```shell
-    kubectl exec deploy/sleep -- curl -s \
+    kubectl exec deploy/sleep -- curl -s -v \
       -X POST -H 'Content-Type: application/json' \
       customers-service:8080/owners/1/pets \
       -d '{ "name": "Sir Hiss", "typeId": 4, "birthDate": "2020-01-01" }'
@@ -76,12 +78,12 @@ Give the owner _George Franklin_ a new pet, _Sir Hiss_ (a snake):
 === "External"
 
     ```shell
-    curl -X POST -H 'Content-Type: application/json' \
+    curl -v -X POST -H 'Content-Type: application/json' \
       http://$LB_IP/api/customer/owners/1/pets \
       -d '{ "name": "Sir Hiss", "typeId": 4, "birthDate": "2020-01-01" }'
     ```
 
-    This can also be performed directly from the UI.
+This can also be performed directly from the UI.
 
 ### The Visits service
 
@@ -114,3 +116,7 @@ Call `petclinic-frontend` endpoint that calls both the customers and visits serv
     ```shell
     curl -s http://$LB_IP/api/gateway/owners/6 | jq
     ```
+
+## Summary
+
+Now that we have some familiarity with some of the API endpoints that make up this application, let's turn our attention to configuring a small aspect of resilience:  timeouts.

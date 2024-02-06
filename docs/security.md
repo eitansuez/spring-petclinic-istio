@@ -10,11 +10,16 @@ For example, we can restrict access to each database exclusively to its correspo
 - Only the vets service can access the vets db
 - Only the customers service can access the customers db
 
-The above policy is specified in the file `authorization-policies.yaml`.
+The above policy is specified in the file `authorization-policies.yaml`:
+
+??? tldr "authorization-policies.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/config/authorization-policies.yaml"
+    ```
 
 ### Exercise
 
-1. Use the previous [Test database connectivity](#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
+1. Use the previous ["Test database connectivity"](../deploy/#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
 
 1. Apply the authorization policies:
 
@@ -24,5 +29,5 @@ The above policy is specified in the file `authorization-policies.yaml`.
 
 1. Attempt once more to create a client pod to connect to the "vets" database.  This time the operation will fail.  That's because only the vets service is now allowed to connect to the database.
 
-1. Also verify that the application itself continues to function because all database queries are performed via its associated service.
+1. Verify that the application itself continues to function because all database queries are performed via its associated service.
 

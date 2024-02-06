@@ -11,7 +11,7 @@ To make testing this easier, Istio is [configured with 100% trace sampling](http
 1. Navigate to the base directory of your Istio distribution:
 
     ```shell
-    cd istio-1.20.2
+    cd istio-{{istio.version}}
     ```
 
 1. Deploy Istio observability samples:
