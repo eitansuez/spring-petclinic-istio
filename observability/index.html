@@ -586,8 +586,8 @@
 
 <h2 id="observe-distributed-traces">Observe Distributed Traces<a class="headerlink" href="#observe-distributed-traces" title="Permanent link">&para;</a></h2>
 <p>All boot apps are configured to propagate trace headers using <a href="https://micrometer.io/docs/tracing">micrometer-tracing</a>, per the <a href="https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/#trace-context-propagation">Istio documentation</a>.</p>
-<p>See the <a href="./petclinic-vets-service/src/main/resources/application.yaml#L56"><code>application.yaml</code> resource files</a> and the property <code>management.tracing.baggage.remote-fields</code> which configures the fields to propagate.</p>
-<p>To make testing this easier, Istio is <a href="./istio-install-manifest.yaml#L21">configured with 100% trace sampling</a>.</p>
+<p>See the <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-vets-service/src/main/resources/application.yaml#L56"><code>application.yaml</code> resource files</a> and the property <code>management.tracing.baggage.remote-fields</code> which configures the fields to propagate.</p>
+<p>To make testing this easier, Istio is <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/istio-install-manifest.yaml#L21">configured with 100% trace sampling</a>.</p>
 <h3 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
@@ -625,7 +625,7 @@ kubectl get pod -n istio-system
 </li>
 </ol>
 <p>You should see new traces, with six spans, showing the full end-to-end request-response flow across all three services.</p>
-<p><img alt="Distributed Trace Example" src="jaeger-screenshot.png" /></p>
+<p><img alt="Distributed Trace Example" src="../jaeger-screenshot.png" /></p>
 <p>Close the jaeger dashboard.</p>
 <h2 id="kiali">Kiali<a class="headerlink" href="#kiali" title="Permanent link">&para;</a></h2>
 <p>The Kiali dashboard can likewise be used to display visualizations of such end-to-end flows.</p>
@@ -647,7 +647,7 @@ kubectl get pod -n istio-system
 <p>Select the Graph view and the <code>default</code> namespace.  The flow of requests through the applications call graph will be rendered.</p>
 <h2 id="exposing-metrics">Exposing metrics<a class="headerlink" href="#exposing-metrics" title="Permanent link">&para;</a></h2>
 <p>Istio has built-in support for Prometheus as a mechanism for metrics collection.</p>
-<p>Each Spring Boot application is configured with a <a href="./petclinic-customers-service/pom.xml#L55-L58">micrometer dependency</a> to expose a scrape endpoint for Prometheus to collect metrics.</p>
+<p>Each Spring Boot application is configured with a <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-customers-service/pom.xml#L55-L58">micrometer dependency</a> to expose a scrape endpoint for Prometheus to collect metrics.</p>
 <p>Call the scrape endpoint and inspect the metrics exposed directly by the Spring Boot application:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8080/actuator/prometheus
 </code></pre></div>
@@ -662,7 +662,7 @@ kubectl get pod -n istio-system
 <div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/customers-v1<span class="w"> </span>-c<span class="w"> </span>istio-proxy<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:15020/stats/prometheus
 </code></pre></div>
 <p>For this to work, Envoy must be given the URL (endpoint) where the application's metrics are exposed.</p>
-<p>This is done with a set of <a href="./manifests/deploy/customers-service.yaml#L40-L43">annotations on the deployment</a>.</p>
+<p>This is done with a set of <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/customers-service.yaml#L40-L43">annotations on the deployment</a>.</p>
 <p>See <a href="https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging">the Istio documentation</a> for more information.</p>
 <h2 id="viewing-the-istio-grafana-metrics-dashboards">Viewing the Istio Grafana metrics dashboards<a class="headerlink" href="#viewing-the-istio-grafana-metrics-dashboards" title="Permanent link">&para;</a></h2>
 <p>Launch the grafana dashboard, while maintaining a request load against the application.</p>
@@ -672,7 +672,7 @@ kubectl get pod -n istio-system
 <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>grafana
 </code></pre></div>
 <p>Review the Istio Service Dashboards for the three services <code>petclinic-frontend</code>, <code>customers</code>, and <code>visits</code>.</p>
-<p>You can also load the legacy dashboard that came with the petclinic application.  You'll find the Grafana dashboard definition (a json file) <a href="./grafana-petclinic-dashboard.json">here</a>.  Import the dashboard and then view it.</p>
+<p>You can also load the legacy dashboard that came with the petclinic application.  You'll find the Grafana dashboard definition (a json file) <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/grafana-petclinic-dashboard.json">here</a>.  Import the dashboard and then view it.</p>
 <p>This dashboard has a couple of now-redundant panels showing the request volume and latencies, both of which are now subsumed by standard Istio dashboards.</p>
 <p>But it also shows business metrics exposed by the application.  Metrics such as number of owners, pets, and visits created or updated.</p>
 

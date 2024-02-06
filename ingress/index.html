@@ -587,11 +587,11 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>curl<span class="w"> </span>-v<span class="w"> </span>http://<span class="nv">$LB_IP</span>/
 </code></pre></div>
 <h3 id="configure-routing">Configure routing<a class="headerlink" href="#configure-routing" title="Permanent link">&para;</a></h3>
-<p>The original <a href="https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95">Spring Cloud Gateway routing rules</a> were replaced and are now captured with a standard Istio VirtualService CRD in <a href="manifests/ingress/routes.yaml"><code>manifests/ingress/routes.yaml</code></a>.</p>
+<p>The original <a href="https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95">Spring Cloud Gateway routing rules</a> were replaced and are now captured with a standard Istio VirtualService CRD in <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/ingress/routes.yaml"><code>manifests/ingress/routes.yaml</code></a>.</p>
 <p>Apply the routing rules for the gateway:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>manifests/ingress/routes.yaml
 </code></pre></div>
-<p><a href="manifests/ingress/routes.yaml"><code>routes.yaml</code></a> configures routing for the Istio ingress gateway (which <a href="https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95">replaces spring cloud gateway</a>) to the application's API endpoints.</p>
+<p><a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/ingress/routes.yaml"><code>routes.yaml</code></a> configures routing for the Istio ingress gateway (which <a href="https://github.com/spring-petclinic/spring-petclinic-cloud/blob/master/k8s/init-services/02-config-map.yaml#L95">replaces spring cloud gateway</a>) to the application's API endpoints.</p>
 <p>It exposes endpoints to each of the services, and in addition, routes requests with the <code>/api/gateway</code> prefix to the <code>petclinic-frontend</code> application.  In the original version, the petclinic-frontend application and the gateway "proper" were bundled together as a single microservice.</p>
 <h2 id="visit-the-app">Visit the app<a class="headerlink" href="#visit-the-app" title="Permanent link">&para;</a></h2>
 <p>With the application deployed, and ingress configured, we can finally view the application's user interface.</p>
