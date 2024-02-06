@@ -5,13 +5,15 @@
 Deployment decisions:
 
 - We use mysql.  Mysql can be installed with helm.  Its charts are in the bitnami repository.
-- We deploy a separate database statefulset for each service
-- Inside each statefulset we name the database "service_instance_db"
-- Apps use the root username "root"
-- The helm installation will generate a root user password in a secret
-- The applications reference the secret name to get at the db credentials
+- We deploy a separate database statefulset for each service.
+- Inside each statefulset we name the database "service_instance_db".
+- Apps use the root username "root".
+- The helm installation will generate a root user password in a secret.
+- The applications reference the secret name to get at the database credentials.
 
 ### Preparatory steps
+
+We assume you already have [helm](https://helm.sh/) installed.
 
 1. Add the helm repository:
 
@@ -27,7 +29,7 @@ Deployment decisions:
 
 ### Deploy the databases
 
-Now we're ready to deploy the databases with a `helm install` command for each app/service:
+Deploy the databases with a `helm install` command, one for each app/service:
 
 1. Vets:
 
@@ -47,9 +49,13 @@ Now we're ready to deploy the databases with a `helm install` command for each a
     helm install customers-db-mysql bitnami/mysql --set auth.database=service_instance_db
     ```
 
+The databases should be up after ~ 1-2 minutes.
+
 Wait for the pods to be ready (2/2 containers).
 
 ## Build the apps, create the docker images, push them to the local registry
+
+We assume you already have [maven](https://maven.apache.org/) installed locally.
 
 1. Compile the apps and run the tests:
 
@@ -73,7 +79,7 @@ Wait for the pods to be ready (2/2 containers).
 
 The deployment manifests are located in `manifests/deploy`.
 
-The services are `vets`, `visits`, `customers`, and `petclinic-frontend`.  For each service we create a Kubernetes Service Account, a Deployment, and a ClusterIP service.
+The services are `vets`, `visits`, `customers`, and `petclinic-frontend`.  For each service we create a Kubernetes [ServiceAccount](https://kubernetes.io/docs/concepts/security/service-accounts/), a Deployment, and a ClusterIP service.
 
 Apply the deployment manifests:
 
@@ -81,49 +87,75 @@ Apply the deployment manifests:
 cat manifests/deploy/*.yaml | envsubst | kubectl apply -f -
 ```
 
+The manifests reference the image registry environment variable, and so are passed through `envsubst` for resolution before being applied to the Kubernetes cluster.
+
 Wait for the pods to be ready (2/2 containers).
+
+Here is a simple diagnostic command that tails the logs of the customers service pod, showing that the Spring Boot application has come up and is listening on port 8080.
+
+```shell
+kubectl logs --follow svc/customers-service
+```
 
 ## Test database connectivity
 
+The below instructions are taken from the output from the prior `helm install` command.
+
 Connect directly to the `vets-db-mysql` database:
 
-```shell
-MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default vets-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
-```
+1. Obtain the root password from the Kubernetes secret:
 
-```shell
-kubectl run vets-db-mysql-client \
-  --rm --tty -i --restart='Never' \
-  --image docker.io/bitnami/mysql:8.0.36-debian-11-r2 \
-  --namespace default \
-  --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
-  --command -- bash
-```
+    === "bash shell"
 
-```shell
-mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
-```
+        ```shell
+        MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default \
+          vets-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
+        ```
 
-At the mysql prompt, can select the database, show tables, and query records:
+    === "fish shell"
+
+        ```shell
+        set MYSQL_ROOT_PASSWORD $(kubectl get secret --namespace default \
+          vets-db-mysql -o jsonpath="{.data.mysql-root-password}" | base64 -d)
+        ```
+
+1. Create, and shell into a mysql client pod:
+
+    ```shell
+    kubectl run vets-db-mysql-client \
+      --rm --tty -i --restart='Never' \
+      --image docker.io/bitnami/mysql:8.0.36-debian-11-r2 \
+      --namespace default \
+      --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
+      --command -- bash
+    ```
+
+1. Use the `mysql` client to connect to the database:
+
+    ```shell
+    mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
+    ```
+
+At the mysql prompt, select the database, list the tables, and query vet records:
 
 ```shell
 use service_instance_db;
+```
+
+```shell
 show tables;
+```
+
+```shell
 select * from vets;
 ```
 
-Exit with `\q` then `exit`.
+Exit the mysql prompt with `\q`, then exit the pod with `exit`.
 
-One can similarly access the other two databases `customers-db-mysql` and `visits-db-mysql`.
+One can similarly connect to and inspect the `customers-db-mysql` and `visits-db-mysql` databases.
 
-## Analysis
+## Summary
 
-Prior to Istio, the common solution in the Spring ecosystem to issues of service discovery, resilience, load balancing was Spring Cloud.  Spring Cloud consists of multiple projects that provide dependencies that developers add to their applications to help them deal with issues of client-side load-balancing, retries, circuit-breaking, service discovery and so on.
+At this point you should have all applications deployed and running, connected to their respective databases.
 
-In `spring-petclinic-istio`, those dependencies have been removed.  What remains as dependencies inside each service are what you'd expect to find:
-
-- Spring boot and actuator are the foundation of modern Spring applications
-- Spring data jpa and the mysql connector for database access
-- micrometer for exposing application metrics via a Prometheus endpoint
-- micrometer-tracing for [propagating trace headers](https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/) through these applications
-
+But we cannot access the application's UI until we configure ingress, which is our next topic.

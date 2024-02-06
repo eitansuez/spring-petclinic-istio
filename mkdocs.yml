@@ -39,6 +39,7 @@ markdown_extensions:
   - pymdownx.snippets:
       base_path: artifacts
       check_paths: true
+      url_download: true
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.caret
