@@ -27,6 +27,7 @@ nav:
   - resilience.md
   - security.md
   - observability.md
+  - summary.md
 markdown_extensions:
   - admonition
   - pymdownx.details
