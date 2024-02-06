@@ -2,7 +2,7 @@
 
 This repository is derived from [Spring PetClinic Cloud](https://github.com/spring-petclinic/spring-petclinic-cloud), which in turn was derived from the [Spring PetClinic Microservices](https://github.com/spring-petclinic/spring-petclinic-microservices) version.
 
-The instructions to set up, build, deploy, and configure PetClinic with Istio, along with explorations of the capabilities unlocked by Istio, see https://eitansuez.github.io/spring-petclinic-istio/
+For instructions to set up, build, deploy, and configure PetClinic with Istio, along with explorations of the capabilities unlocked by Istio, see https://eitansuez.github.io/spring-petclinic-istio/
 
 Watch [a video walkthrough](https://youtu.be/1UybZGws4m8).
 
