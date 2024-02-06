@@ -1,0 +1,62 @@
+site_name: Spring PetClinic on Istio
+repo_url: https://github.com/spring-petclinic/spring-petclinic-istio
+theme:
+  name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  features:
+    - navigation.top
+    - navigation.instant
+    - navigation.tracking
+    - navigation.footer
+    - content.code.copy
+#    - navigation.tabs
+nav:
+  - index.md
+  - setup.md
+  - deploy.md
+  - ingress.md
+  - api.md
+  - resilience.md
+  - security.md
+  - observability.md
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      use_pygments: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: artifacts
+      check_paths: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.keys
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.smartsymbols
+  - toc:
+      permalink: true
+plugins:
+  - search
+  # https://mkdocs-macros-plugin.readthedocs.io/en/latest/
+  - macros
+extra:
+  istio:
+    version: 1.20.2
