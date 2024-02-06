@@ -383,15 +383,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#analysis" class="md-nav__link">
-    <span class="md-ellipsis">
-      Analysis
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -480,6 +471,26 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -528,15 +539,6 @@
   <a href="#visit-the-app" class="md-nav__link">
     <span class="md-ellipsis">
       Visit the app
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#analysis" class="md-nav__link">
-    <span class="md-ellipsis">
-      Analysis
     </span>
   </a>
   
@@ -732,15 +734,7 @@
 <p>With the application deployed and ingress configured, we can finally view the application's user interface.</p>
 <p>To see the running PetClinic application, open a browser tab and visit http://$LB_IP/.</p>
 <p>You should see a home page.  Navigate to the Vets page, then the Pet Owners page, and finally, drill down to a specific pet owner, and otherwise get acquainted with the UI.</p>
-<h2 id="analysis">Analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h2>
-<p>Prior to Istio, the common solution in the Spring ecosystem to issues of service discovery, resilience, load balancing was <a href="https://spring.io/projects/spring-cloud">Spring Cloud</a>.  Spring Cloud consists of multiple projects that provide dependencies that developers add to their applications to help them deal with issues of client-side load-balancing, retries, circuit-breaking, service discovery and so on.</p>
-<p>In <code>spring-petclinic-istio</code>, those dependencies have been removed.  What remains as dependencies inside each service are what you'd expect to find:</p>
-<ul>
-<li><a href="https://spring.io/projects/spring-boot">Spring Boot</a> and actuator are the foundation of modern Spring applications.</li>
-<li><a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> and the mysql connector for database access.</li>
-<li><a href="https://micrometer.io/">Micrometer</a> for exposing application metrics via a Prometheus endpoint.</li>
-<li><a href="https://docs.micrometer.io/tracing/reference/">Micrometer-tracing</a> for <a href="https://istio.io/latest/docs/tasks/observability/distributed-tracing/overview/">propagating trace headers</a> through these applications.</li>
-</ul>
+<p>Next, let us explore some of the API endpoints exposed by the PetClinic application.</p>
 
 
 
