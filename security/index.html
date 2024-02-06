@@ -436,6 +436,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -509,6 +518,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
   
 </li>
       
@@ -647,6 +665,13 @@
 <a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="w">            </span><span class="nt">ports</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;3306&quot;</span><span class="p p-Indicator">]</span>
 </code></pre></div></td></tr></table></div>
 </details>
+<p>The main aspects of each authorization policy are:</p>
+<ol>
+<li>The <code>selector</code> identifies the workload to apply the policy to</li>
+<li>The <code>action</code> in this case is to Allow requests that match the given rules</li>
+<li>The <code>rules</code> section which specify the source <code>principal</code>, aka workload identity.</li>
+<li>The <code>to</code> section applies the policy to requests on port 3306, the port that <code>mysqld</code> listens on.</li>
+</ol>
 <h3 id="exercise">Exercise<a class="headerlink" href="#exercise" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
@@ -664,6 +689,10 @@
 <p>Verify that the application itself continues to function because all database queries are performed via its associated service.</p>
 </li>
 </ol>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>One problem in the enterprise is enforcing access to data via microservices.  Giving another team direct access to data is a well-known anti-pattern, as it couples multiple applications to a specific storage technology, a specific database schema, one that cannot be allowed to evolve without impacting everyone.</p>
+<p>With the aid of Istio and workload identity, we can make sure that the manner in which data is stored by a microservice is an entirely internal concern, one that can be modified at a later time, perhaps to use a different storage backend, or perhaps simply to allow for the evolution of the schema without "breaking all the clients".</p>
+<p>After traffic management, resilience, and security, it is time to discuss the other important facet that servicec meshes help with:  Observability.</p>
 
 
 
