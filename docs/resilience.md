@@ -24,7 +24,7 @@ Here is how to test the behavior:
     kubectl exec deploy/sleep -- curl -s visits-service:8080/pets/visits?petId=8 | jq
     ```
 
-   Observe the call succeed and return a list of visits for this particular pet.
+    Observe the call succeed and return a list of visits for this particular pet.
 
 1. Call the `petclinic-frontend` endpoint, and note that for each pet, we see a list of visits:
 
@@ -44,7 +44,7 @@ Here is how to test the behavior:
     kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits?petId=8 | jq
     ```
 
-   Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).
+    Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).
 
 1. Call the `petclinic-frontend` endpoint once more, and note that for each pet, the list of visits is empty:
 
@@ -52,8 +52,8 @@ Here is how to test the behavior:
     kubectl exec deploy/sleep -- curl -s petclinic-frontend:8080/api/gateway/owners/6 | jq
     ```
 
-   That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
-   Tail the logs of `petclinic-frontend` and observe a log message indicating the fallback was triggered.
+    That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
+    Tail the logs of `petclinic-frontend` and observe a log message indicating the fallback was triggered.
 
-1. To restore the original behavior with no delay, edit the `visits-v1` deployment again and set the environment variable value to "0".
+To restore the original behavior with no delay, edit the `visits-v1` deployment again and set the environment variable value to "0".
 

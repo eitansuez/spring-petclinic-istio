@@ -23,7 +23,7 @@ To make testing this easier, Istio is [configured with 100% trace sampling](http
     kubectl apply -f samples/addons/grafana.yaml
     ```
 
-   Wait for the observability pods to be ready:
+    Wait for the observability pods to be ready:
 
     ```shell
     kubectl get pod -n istio-system
@@ -55,7 +55,7 @@ The Kiali dashboard can likewise be used to display visualizations of such end-t
 
 1. Send a light load of requests against your application.
 
-   We provide a simple [siege](https://www.joedog.org/siege-manual/) script to send requests through to the `petclinic-frontend` endpoint that aggregates responses from both `customers` and `visits` services.
+    We provide a simple [siege](https://www.joedog.org/siege-manual/) script to send requests through to the `petclinic-frontend` endpoint that aggregates responses from both `customers` and `visits` services.
 
     ```shell
     ./siege.sh

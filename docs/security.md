@@ -12,7 +12,7 @@ For example, we can restrict access to each database exclusively to its correspo
 
 The above policy is specified in the file `authorization-policies.yaml`.
 
-### Exercise:
+### Exercise
 
 1. Use the previous [Test database connectivity](#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
 
