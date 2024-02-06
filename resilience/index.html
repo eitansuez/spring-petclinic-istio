@@ -517,10 +517,8 @@
 <p>Call <code>visits-service</code> directly:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>visits-service:8080/pets/visits?petId<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
-</li>
-</ol>
 <p>Observe the call succeed and return a list of visits for this particular pet.</p>
-<ol>
+</li>
 <li>
 <p>Call the <code>petclinic-frontend</code> endpoint, and note that for each pet, we see a list of visits:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>petclinic-frontend:8080/api/gateway/owners/6<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
@@ -535,21 +533,17 @@
 <p>Once the new <code>visits-service</code> pod reaches <em>Ready</em> status, make the same call again:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-v<span class="w"> </span>visits-service:8080/pets/visits?petId<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
-</li>
-</ol>
 <p>Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).</p>
-<ol>
+</li>
 <li>
 <p>Call the <code>petclinic-frontend</code> endpoint once more, and note that for each pet, the list of visits is empty:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>deploy/sleep<span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>-s<span class="w"> </span>petclinic-frontend:8080/api/gateway/owners/6<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
 </code></pre></div>
+<p>That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
+Tail the logs of <code>petclinic-frontend</code> and observe a log message indicating the fallback was triggered.</p>
 </li>
 </ol>
-<p>That is, the call succeeds, the timeout is caught, and the fallback empty list of visits is returned in its place.
-   Tail the logs of <code>petclinic-frontend</code> and observe a log message indicating the fallback was triggered.</p>
-<ol>
-<li>To restore the original behavior with no delay, edit the <code>visits-v1</code> deployment again and set the environment variable value to "0".</li>
-</ol>
+<p>To restore the original behavior with no delay, edit the <code>visits-v1</code> deployment again and set the environment variable value to "0".</p>
 
 
 
