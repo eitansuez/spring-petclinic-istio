@@ -657,55 +657,47 @@
 <span class="normal"><a href="#__codelineno-3-38">38</a></span>
 <span class="normal"><a href="#__codelineno-3-39">39</a></span>
 <span class="normal"><a href="#__codelineno-3-40">40</a></span>
-<span class="normal"><a href="#__codelineno-3-41">41</a></span>
-<span class="normal"><a href="#__codelineno-3-42">42</a></span>
-<span class="normal"><a href="#__codelineno-3-43">43</a></span>
-<span class="normal"><a href="#__codelineno-3-44">44</a></span>
-<span class="normal"><a href="#__codelineno-3-45">45</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># 1. Enables mysql filter, see:</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="c1"># - https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="c1"># - https://istio.io/latest/docs/reference/commands/pilot-discovery/#envvars</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># 2. Turns on sidecar access logging to stdout</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="c1"># 3. Sets trace sampling to 100% to easily expose see distributed traces (for testing)</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">install.istio.io/v1alpha1</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IstioOperator</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="nt">spec</span><span class="p">:</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">  </span><span class="nt">meshConfig</span><span class="p">:</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">    </span><span class="nt">accessLogFile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev/stdout</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">    </span><span class="nt">extensionProviders</span><span class="p">:</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">      </span><span class="nt">envoyOtelAls</span><span class="p">:</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">        </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry-collector.istio-system.svc.cluster.local</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4317</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16"></a>
-<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="w">  </span><span class="nt">components</span><span class="p">:</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="w">    </span><span class="nt">pilot</span><span class="p">:</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">      </span><span class="nt">k8s</span><span class="p">:</span>
-<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PILOT_TRACE_SAMPLING</span>
-<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="w">            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100&quot;</span>
-<a id="__codelineno-3-23" name="__codelineno-3-23"></a><span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
-<a id="__codelineno-3-25" name="__codelineno-3-25"></a><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
-<a id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100Mi</span>
-<a id="__codelineno-3-27" name="__codelineno-3-27"></a>
-<a id="__codelineno-3-28" name="__codelineno-3-28"></a><span class="w">  </span><span class="nt">values</span><span class="p">:</span>
-<a id="__codelineno-3-29" name="__codelineno-3-29"></a><span class="w">    </span><span class="nt">global</span><span class="p">:</span>
-<a id="__codelineno-3-30" name="__codelineno-3-30"></a><span class="w">      </span><span class="nt">proxy</span><span class="p">:</span>
-<a id="__codelineno-3-31" name="__codelineno-3-31"></a><span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
-<a id="__codelineno-3-32" name="__codelineno-3-32"></a><span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
-<a id="__codelineno-3-33" name="__codelineno-3-33"></a><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
-<a id="__codelineno-3-34" name="__codelineno-3-34"></a><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40Mi</span>
-<a id="__codelineno-3-35" name="__codelineno-3-35"></a>
-<a id="__codelineno-3-36" name="__codelineno-3-36"></a><span class="w">    </span><span class="nt">pilot</span><span class="p">:</span>
-<a id="__codelineno-3-37" name="__codelineno-3-37"></a><span class="w">      </span><span class="nt">autoscaleEnabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-3-38" name="__codelineno-3-38"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span>
-<a id="__codelineno-3-39" name="__codelineno-3-39"></a><span class="w">        </span><span class="nt">PILOT_ENABLE_MYSQL_FILTER</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
-<a id="__codelineno-3-40" name="__codelineno-3-40"></a>
-<a id="__codelineno-3-41" name="__codelineno-3-41"></a><span class="w">    </span><span class="nt">gateways</span><span class="p">:</span>
-<a id="__codelineno-3-42" name="__codelineno-3-42"></a><span class="w">      </span><span class="nt">istio-egressgateway</span><span class="p">:</span>
-<a id="__codelineno-3-43" name="__codelineno-3-43"></a><span class="w">        </span><span class="nt">autoscaleEnabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<a id="__codelineno-3-44" name="__codelineno-3-44"></a><span class="w">      </span><span class="nt">istio-ingressgateway</span><span class="p">:</span>
-<a id="__codelineno-3-45" name="__codelineno-3-45"></a><span class="w">        </span><span class="nt">autoscaleEnabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="normal"><a href="#__codelineno-3-41">41</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="nn">---</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">install.istio.io/v1alpha1</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IstioOperator</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">  </span><span class="nt">meshConfig</span><span class="p">:</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="nt">accessLogFile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/dev/stdout</span><span class="w"> </span><span class="c1"># (1)</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">    </span><span class="nt">extensionProviders</span><span class="p">:</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">      </span><span class="nt">envoyOtelAls</span><span class="p">:</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">        </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">opentelemetry-collector.istio-system.svc.cluster.local</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4317</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="w">    </span><span class="nt">pilot</span><span class="p">:</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="w">      </span><span class="nt">k8s</span><span class="p">:</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PILOT_TRACE_SAMPLING</span><span class="w"> </span><span class="c1"># (2)</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="w">            </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;100&quot;</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21"></a><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100Mi</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23"></a>
+<a id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="w">  </span><span class="nt">values</span><span class="p">:</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25"></a><span class="w">    </span><span class="nt">global</span><span class="p">:</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="w">      </span><span class="nt">proxy</span><span class="p">:</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27"></a><span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28"></a><span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29"></a><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30"></a><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">40Mi</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31"></a>
+<a id="__codelineno-3-32" name="__codelineno-3-32"></a><span class="w">    </span><span class="nt">pilot</span><span class="p">:</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33"></a><span class="w">      </span><span class="nt">autoscaleEnabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34"></a><span class="w">      </span><span class="nt">env</span><span class="p">:</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35"></a><span class="w">        </span><span class="nt">PILOT_ENABLE_MYSQL_FILTER</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="c1"># (3)</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36"></a>
+<a id="__codelineno-3-37" name="__codelineno-3-37"></a><span class="w">    </span><span class="nt">gateways</span><span class="p">:</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38"></a><span class="w">      </span><span class="nt">istio-egressgateway</span><span class="p">:</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39"></a><span class="w">        </span><span class="nt">autoscaleEnabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-3-40" name="__codelineno-3-40"></a><span class="w">      </span><span class="nt">istio-ingressgateway</span><span class="p">:</span>
+<a id="__codelineno-3-41" name="__codelineno-3-41"></a><span class="w">        </span><span class="nt">autoscaleEnabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div></td></tr></table></div>
 <ol>
 <li>Turns on sidecar access logging to stdout</li>
