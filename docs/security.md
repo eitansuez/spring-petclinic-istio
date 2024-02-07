@@ -26,7 +26,7 @@ The main aspects of each authorization policy are:
 
 ### Exercise
 
-1. Use the previous ["Test database connectivity"](../deploy/#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
+1. Use the previous ["Test database connectivity"](deploy.md#test-database-connectivity) instructions to create a client pod and to use it to connect to the "vets" database.  This operation should succeed.  You should be able to see the "service_instance_db" and see the tables and query them.
 
 1. Apply the authorization policies:
 

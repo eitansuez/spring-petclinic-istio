@@ -53,7 +53,7 @@ The databases should be up after ~ 1-2 minutes.
 
 Wait for the pods to be ready (2/2 containers).
 
-## Build the apps, create the docker images, push them to the local registry
+## Build the apps, docker images, and push them to image registry
 
 We assume you already have [maven](https://maven.apache.org/) installed locally.
 
@@ -79,7 +79,27 @@ We assume you already have [maven](https://maven.apache.org/) installed locally.
 
 The deployment manifests are located in `manifests/deploy`.
 
-The services are `vets`, `visits`, `customers`, and `petclinic-frontend`.  For each service we create a Kubernetes [ServiceAccount](https://kubernetes.io/docs/concepts/security/service-accounts/), a Deployment, and a ClusterIP service.
+The services are `vets`, `visits`, `customers`, and `petclinic-frontend`.  For each service we create a Kubernetes [ServiceAccount](https://kubernetes.io/docs/concepts/security/service-accounts/), a [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/), and a [ClusterIP service](https://kubernetes.io/docs/concepts/services-networking/service/#type-clusterip).
+
+??? tldr "vets-service.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/deploy/vets-service.yaml"
+    ```
+
+??? tldr "visits-service.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/deploy/visits-service.yaml"
+    ```
+
+??? tldr "customers-service.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/deploy/customers-service.yaml"
+    ```
+
+??? tldr "petclinic-frontend.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/deploy/petclinic-frontend.yaml"
+    ```
 
 Apply the deployment manifests:
 
@@ -136,19 +156,25 @@ Connect directly to the `vets-db-mysql` database:
     mysql -h vets-db-mysql.default.svc.cluster.local -uroot -p"$MYSQL_ROOT_PASSWORD"
     ```
 
-At the mysql prompt, select the database, list the tables, and query vet records:
+At the mysql prompt:
 
-```shell
-use service_instance_db;
-```
+1. Select the database:
 
-```shell
-show tables;
-```
+    ```shell
+    use service_instance_db;
+    ```
 
-```shell
-select * from vets;
-```
+1. List the tables:
+
+    ```shell
+    show tables;
+    ```
+
+1. Query vet records:
+
+    ```shell
+    select * from vets;
+    ```
 
 Exit the mysql prompt with `\q`, then exit the pod with `exit`.
 
