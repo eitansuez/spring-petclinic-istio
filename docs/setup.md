@@ -54,7 +54,7 @@ If you choose to use `direnv`, then the variables can be automatically set by re
 
 1. Follow the Istio documentation's instructions to [download Istio](https://istio.io/latest/docs/setup/getting-started/#download).
 
-1. After you have added the `istioctl` CLI to your PATH, run the following installation command:
+1. After you have added the `istioctl` CLI to your PATH, run the following command to install Istio:
 
     ```shell
     istioctl install -f manifests/istio-install-manifest.yaml
@@ -64,6 +64,15 @@ The [above-referenced configuration manifest](https://github.com/spring-petclini
 
 1. Setting trace sampling at 100%, for ease of obtaining distributed traces
 1. Deploying sidecars (envoy proxies) not only alongside workloads, but also in front of mysql databases.
+
+??? tldr "istio-install-manifest.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/istio-install-manifest.yaml"
+    ```
+
+    1. Turns on sidecar access logging to stdout
+    1. Sets trace sampling to 100% to easily expose see distributed traces (for testing)
+    1. Enables mysql filter, see [protocol selection](https://istio.io/latest/docs/ops/configuration/traffic-management/protocol-selection/) and [env vars](https://istio.io/latest/docs/reference/commands/pilot-discovery/#envvars)
 
 Once Istio is installed, feel free to verify the installation with:
 

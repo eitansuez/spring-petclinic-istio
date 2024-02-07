@@ -17,6 +17,7 @@ theme:
     - navigation.tracking
     - navigation.footer
     - content.code.copy
+    - content.code.annotate
 #    - navigation.tabs
 nav:
   - index.md
