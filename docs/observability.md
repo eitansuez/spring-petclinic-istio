@@ -16,16 +16,10 @@ In its `samples` directory, Istio provides sample deployment manifests for vario
 
 Deploy Jaeger to your Kubernetes cluster:
 
-1. Navigate to the base directory of your Istio distribution:
+1. Deploy Jaeger:
 
     ```shell
-    cd istio-{{istio.version}}
-    ```
-
-1. Deploy jaeger:
-
-    ```shell
-    kubectl apply -f samples/addons/jaeger.yaml
+    kubectl apply -f istio-{{istio.version}}/samples/addons/jaeger.yaml
     ```
    
 1. Wait for the Jaeger pod to be ready:
@@ -114,7 +108,7 @@ Open a separate terminal in which to run subsequent commands.
 Deploy Prometheus to your Kubernetes cluster:
 
 ```shell
-kubectl apply -f samples/addons/prometheus.yaml
+kubectl apply -f istio-{{istio.version}}/samples/addons/prometheus.yaml
 ```
 
 The latest version of Spring Boot (3.2) takes advantage of a relatively recent feature of Prometheus known as "exemplars."  The current version of Istio uses an older version of Prometheus (2.41) that does not yet support exemplars.
@@ -158,7 +152,7 @@ Istio provides standard service mesh dashboards, based on the standard metrics c
 Deploy Grafana:
 
 ```shell
-kubectl apply -f samples/addons/grafana.yaml
+kubectl apply -f istio-{{istio.version}}/samples/addons/grafana.yaml
 ```
 
 Launch the Grafana dashboard:
@@ -208,7 +202,7 @@ Kiali is a bespoke "console" for Istio Service Mesh.  One of the features of Kia
 1. Deploy Kiali:
 
     ```shell
-    kubectl apply -f samples/addons/kiali.yaml
+    kubectl apply -f istio-{{istio.version}}/samples/addons/kiali.yaml
     ```
 
 1. Launch the Kiali dashboard:

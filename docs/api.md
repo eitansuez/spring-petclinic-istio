@@ -16,7 +16,7 @@ The `sleep` deployment is a blank client Pod that can be used to send direct cal
 Deploy [`sleep`](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/sleep.yaml) to your cluster:
 
 ```shell
-kubectl apply -f manifests/sleep.yaml
+kubectl apply -f istio-{{istio.version}}/samples/sleep/sleep.yaml
 ```
 
 Wait for the sleep pod to be ready (2/2 containers).
