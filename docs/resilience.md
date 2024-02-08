@@ -57,13 +57,13 @@ Here is how to test the behavior:
     === "bash shell"
 
         ```shell
-        kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits?petId=8 | jq
+        kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits?petId=8
         ```
 
     === "fish shell"
 
         ```shell
-        kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits\?petId=8 | jq
+        kubectl exec deploy/sleep -- curl -v visits-service:8080/pets/visits\?petId=8
         ```
 
     Observe the 504 (Gateway timeout) response this time around (because it exceeds the 4-second timeout).
