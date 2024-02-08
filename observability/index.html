@@ -740,29 +740,44 @@
 <p>Before deploying Prometheus, patch the prometheus deployment to use the latest version of the image:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>kubectl<span class="w"> </span>patch<span class="w"> </span>deploy<span class="w"> </span>-n<span class="w"> </span>istio-system<span class="w"> </span>prometheus<span class="w"> </span>--patch-file<span class="o">=</span>manifests/config/prom-patch.yaml
 </code></pre></div>
+<details class="tldr">
+<summary>prom-patch.yaml</summary>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span>
+<span class="normal"><a href="#__codelineno-12-4">4</a></span>
+<span class="normal"><a href="#__codelineno-12-5">5</a></span>
+<span class="normal"><a href="#__codelineno-12-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">  </span><span class="nt">template</span><span class="p">:</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus-server</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:latest</span>
+</code></pre></div></td></tr></table></div>
+</details>
 <p>Launch the Prometheus dashboard:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>prometheus
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>prometheus
 </code></pre></div>
 <p>Here are some PromQL queries you can try out, that will fetch metrics from Prometheus' metrics store:</p>
 <ol>
 <li>
 <p>The number of requests made by <code>petclinic-frontend</code> to the <code>cutomers</code> service:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">istio_requests_total</span><span class="p">{</span><span class="nl">source_app</span><span class="o">=</span><span class="p">&quot;</span><span class="s">petclinic-frontend</span><span class="p">&quot;,</span><span class="nl">destination_app</span><span class="o">=</span><span class="p">&quot;</span><span class="s">customers-service</span><span class="p">&quot;,</span><span class="nl">reporter</span><span class="o">=</span><span class="p">&quot;</span><span class="s">source</span><span class="p">&quot;}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">istio_requests_total</span><span class="p">{</span><span class="nl">source_app</span><span class="o">=</span><span class="p">&quot;</span><span class="s">petclinic-frontend</span><span class="p">&quot;,</span><span class="nl">destination_app</span><span class="o">=</span><span class="p">&quot;</span><span class="s">customers-service</span><span class="p">&quot;,</span><span class="nl">reporter</span><span class="o">=</span><span class="p">&quot;</span><span class="s">source</span><span class="p">&quot;}</span>
 </code></pre></div>
 </li>
 <li>
 <p>A business metric exposed by the application proper:  the number of calls to the <code>findPet</code> method:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">petclinic_pet_seconds_count</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">&quot;</span><span class="s">findPet</span><span class="p">&quot;}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nv">petclinic_pet_seconds_count</span><span class="p">{</span><span class="nl">method</span><span class="o">=</span><span class="p">&quot;</span><span class="s">findPet</span><span class="p">&quot;}</span>
 </code></pre></div>
 </li>
 </ol>
 <h2 id="istios-grafana-metrics-dashboards">Istio's Grafana metrics dashboards<a class="headerlink" href="#istios-grafana-metrics-dashboards" title="Permanent link">&para;</a></h2>
 <p>Istio provides standard service mesh dashboards, based on the standard metrics collected by Envoy and sent to Prometheus.</p>
 <p>Deploy Grafana:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/grafana.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/grafana.yaml
 </code></pre></div>
 <p>Launch the Grafana dashboard:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>grafana
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>istioctl<span class="w"> </span>dash<span class="w"> </span>grafana
 </code></pre></div>
 <p>Navigate to the dashboards section, you will see an Istio folder.</p>
 <p>Select the Istio service dashboard.</p>
@@ -787,17 +802,17 @@
 <ol>
 <li>
 <p>Cancel the currently-running siege command.  Relaunch siege, but with a different set of target endpoints:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>siege<span class="w"> </span>--concurrent<span class="o">=</span><span class="m">6</span><span class="w"> </span>--delay<span class="o">=</span><span class="m">2</span><span class="w"> </span>--file<span class="o">=</span>./frontend-urls.txt
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>siege<span class="w"> </span>--concurrent<span class="o">=</span><span class="m">6</span><span class="w"> </span>--delay<span class="o">=</span><span class="m">2</span><span class="w"> </span>--file<span class="o">=</span>./frontend-urls.txt
 </code></pre></div>
 </li>
 <li>
 <p>Deploy Kiali:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/kiali.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>samples/addons/kiali.yaml
 </code></pre></div>
 </li>
 <li>
 <p>Launch the Kiali dashboard:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>istioctl<span class="w"> </span>dashboard<span class="w"> </span>kiali
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>istioctl<span class="w"> </span>dashboard<span class="w"> </span>kiali
 </code></pre></div>
 <p>Select the Graph view and the <code>default</code> namespace.</p>
 <p>The flow of requests through the applications call graph will be rendered.</p>
