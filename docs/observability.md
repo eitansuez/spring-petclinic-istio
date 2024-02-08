@@ -122,7 +122,8 @@ The latest version of Spring Boot (3.2) takes advantage of a relatively recent f
 Before deploying Prometheus, patch the prometheus deployment to use the latest version of the image:
 
 ```shell
-kubectl patch deploy -n istio-system prometheus --patch-file=manifests/config/prom-patch.yaml
+kubectl patch deploy -n istio-system prometheus \
+  --patch-file=manifests/config/prom-patch.yaml
 ```
 
 ??? tldr "prom-patch.yaml"
