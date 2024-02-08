@@ -125,6 +125,11 @@ Before deploying Prometheus, patch the prometheus deployment to use the latest v
 kubectl patch deploy -n istio-system prometheus --patch-file=manifests/config/prom-patch.yaml
 ```
 
+??? tldr "prom-patch.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/config/prom-patch.yaml"
+    ```
+
 Launch the Prometheus dashboard:
 
 ```shell
