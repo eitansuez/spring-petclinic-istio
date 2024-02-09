@@ -2,7 +2,7 @@
 
 A great deal of "cruft" accumulates inside many files in [`spring-petclinic-cloud`](https://github.com/spring-petclinic/spring-petclinic-cloud): configuration for service discovery, load balancing, routing, retries, resilience, and so on.
 
-When you move to Istio, you get separation of concerns.  It's ironic that the Spring framework's raison d'être was separation of concerns, but its focus is inside a monolithic application, not between microservices.  When you move to cloud-native applications, you end up with a tangle of concerns that Istio helps you untangle.
+When you move to Istio, you get separation of concerns.  It's ironic that the Spring framework's raison d'être is separation of concerns, but its focus is inside a monolithic application, not between microservices.  When you move to cloud-native applications, you end up with a tangle of concerns that Istio helps you untangle.
 
 And, little by little, our apps become sane again.  It reminds me of one of Antoine de Saint-Exupéry's famous quotes:
 

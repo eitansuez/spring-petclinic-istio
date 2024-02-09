@@ -2,16 +2,17 @@
 
 --todo:
 
-Optional, app-specific:
 
-- https://github.com/spring-petclinic/spring-petclinic-cloud appears to be out of sync with,
-  or to have diverged from the https://github.com/spring-projects/spring-petclinic:
-  - the .less files are now .scss files, and the wro plugin is no longer used (since we're using sass)
-  - the java class names are different
-
+not applicable / unrelated to istio..
 - java -> kotlin & eliminate lombok
 - mvn -> gradle
   iirc there's an issue with the migration to gradle due to a dependency on a maven plugin for the front-end stuff (wro4j).
+
+  https://github.com/spring-petclinic/spring-petclinic-cloud appears to be out of sync with,
+  or to have diverged from the https://github.com/spring-projects/spring-petclinic:
+  - the .less files are now .scss files, and the wro plugin is no longer used (since we're using sass)
+  - the java class names are different
+  (i suspect these changes were made to support gradle)
 
 --done:
 x review the docs/readme learn the basics of using the repo
@@ -90,5 +91,7 @@ x add to readme a section that discusses/documents exposing a prometheus scrape 
     and how i use the istio conventional annotation to expose app-specific metrics in deployments
 x go through readme once more with a remote setup using a gcp-provisioned cluster
 x make sure the latest images work (updated spring boot from v3.0.0 to v3.0.5)
+
+2024..
 x upgrade spring boot to latest version 3.2.2 and micrometer tracing to 1.2.2
-x configure timedAspect per documentation in order to enable @Timed anntoation (visits and customers services) for business metrics
+x configure timedAspect per documentation in order to enable @Timed annotation (visits and customers services) for business metrics
