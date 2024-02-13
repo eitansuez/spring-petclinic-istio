@@ -59,7 +59,8 @@ Each Spring Boot application is configured with a [micrometer dependency](https:
 Call the scrape endpoint and inspect the metrics exposed directly by the Spring Boot application:
 
 ```shell
-kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:8080/actuator/prometheus
+kubectl exec deploy/customers-v1 -c istio-proxy -- \
+  curl -s localhost:8080/actuator/prometheus
 ```
 
 Separately, Envoy collects a variety of metrics, often referred to as RED metrics, for: Requests, Errors, and Durations.
@@ -67,7 +68,8 @@ Separately, Envoy collects a variety of metrics, often referred to as RED metric
 Inspect the metrics collected and exposed by the Envoy sidecar:
 
 ```shell
-kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15090/stats/prometheus
+kubectl exec deploy/customers-v1 -c istio-proxy -- \
+  curl -s localhost:15090/stats/prometheus
 ```
 
 One common metric to note is the counter `istio_requests_total`:
@@ -80,7 +82,8 @@ kubectl exec deploy/customers-v1 -c istio-proxy -- \
 Both the application metrics and envoy's metrics are aggregated (merged) and exposed on port 15020:
 
 ```shell
-kubectl exec deploy/customers-v1 -c istio-proxy -- curl -s localhost:15020/stats/prometheus
+kubectl exec deploy/customers-v1 -c istio-proxy -- \
+  curl -s localhost:15020/stats/prometheus
 ```
 
 What allows Istio to aggregate both scrape endpoints are annotations placed in the pod template specification for each application, communicating the URL of the Prometheus scrape endpoint.
@@ -216,3 +219,5 @@ Kiali is a bespoke "console" for Istio Service Mesh.  One of the features of Kia
     The flow of requests through the applications call graph will be rendered.
 
 ![Visualization of traffic flow in Kiali](kiali-screenshot.png)
+
+Kiali also has [integrations specific for JVM and Spring Boot applications](https://kiali.io/docs/features/details/#spring-boot).
