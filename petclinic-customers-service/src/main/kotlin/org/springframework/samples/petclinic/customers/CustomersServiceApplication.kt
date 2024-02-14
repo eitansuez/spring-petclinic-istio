@@ -116,7 +116,7 @@ class PetsController(
     @PathVariable("ownerId") ownerId: Int
   ): Pet {
     val owner = ownerRepository.findById(ownerId)
-      .orElseThrow { ResourceNotFoundException("Owner ${ownerId} not found") }
+      .orElseThrow { ResourceNotFoundException("Owner $ownerId not found") }
     return save(owner, petRequest)
   }
 
