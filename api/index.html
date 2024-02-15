@@ -659,7 +659,7 @@
 <p>We make use of Istio's <a href="https://github.com/istio/istio/tree/master/samples/sleep">sleep</a> sample application to facilitate the task of making calls to workloads from inside the cluster.</p>
 <p>The <code>sleep</code> deployment is a blank client Pod that can be used to send direct calls to specific microservices from within the Kubernetes cluster.</p>
 <p>Deploy <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/sleep.yaml"><code>sleep</code></a> to your cluster:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>istio-1.20.2/samples/sleep/sleep.yaml
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>istio-1.20.3/samples/sleep/sleep.yaml
 </code></pre></div>
 <p>Wait for the sleep pod to be ready (2/2 containers).</p>
 <h2 id="test-individual-service-endpoints">Test individual service endpoints<a class="headerlink" href="#test-individual-service-endpoints" title="Permanent link">&para;</a></h2>
