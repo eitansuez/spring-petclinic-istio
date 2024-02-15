@@ -15,13 +15,12 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.data.repository.query.Param
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
-import java.util.*
-import kotlin.jvm.optionals.getOrNull
 
 @SpringBootApplication
 class CustomersServiceApplication {
@@ -40,7 +39,7 @@ interface PetRepository : JpaRepository<Pet, Int> {
   fun findPetTypes(): List<PetType>
 
   @Query("FROM PetType ptype WHERE ptype.id = :typeId")
-  fun findPetTypeById(@Param("typeId") typeId: Int): Optional<PetType>
+  fun findPetTypeById(@Param("typeId") typeId: Int): PetType?
 }
 
 @Entity
@@ -115,13 +114,9 @@ class PetsController(
     @RequestBody petRequest: PetRequest,
     @PathVariable("ownerId") ownerId: Int
   ): Pet {
-    val owner = ownerRepository.findById(ownerId)
-      .orElseThrow { ResourceNotFoundException("Owner $ownerId not found") }
-    return save(owner, petRequest)
-  }
-
-  private fun save(owner: Owner, petRequest: PetRequest): Pet {
-    val petType = petRepository.findPetTypeById(petRequest.typeId).getOrNull()
+    val owner = ownerRepository.findByIdOrNull(ownerId)
+      ?: throw ResourceNotFoundException("Owner $ownerId not found")
+    val petType = petRepository.findPetTypeById(petRequest.typeId)
     val pet = Pet(
       name = petRequest.name,
       birthDate = petRequest.birthDate,
@@ -140,7 +135,7 @@ class PetsController(
 
     pet.name = petRequest.name
     pet.birthDate = petRequest.birthDate
-    val petType = petRepository.findPetTypeById(petRequest.typeId).getOrNull()
+    val petType = petRepository.findPetTypeById(petRequest.typeId)
     pet.type = petType
     log.info("Updating pet $pet")
     petRepository.save(pet)
@@ -152,11 +147,9 @@ class PetsController(
   }
 
   private fun findPetById(petId: Int): Pet {
-    val pet = petRepository.findById(petId)
-    if (pet.isEmpty) {
+    val pet = petRepository.findByIdOrNull(petId) ?:
       throw ResourceNotFoundException("Pet $petId not found")
-    }
-    return pet.get()
+    return pet
   }
 }
 
@@ -165,8 +158,7 @@ class ResourceNotFoundException(message: String) : RuntimeException(message)
 
 data class PetRequest(
   val id: Int,
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  val birthDate: LocalDate,
+  @DateTimeFormat(pattern = "yyyy-MM-dd") val birthDate: LocalDate,
   @Size(min = 1) val name: String,
   val typeId: Int
 )
@@ -194,36 +186,29 @@ class OwnersController(val ownerRepository: OwnerRepository) {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  fun createOwner(@Valid @RequestBody owner: Owner): Owner {
-    return ownerRepository.save(owner)
-  }
+  fun createOwner(@Valid @RequestBody owner: Owner): Owner =
+    ownerRepository.save(owner)
 
   @GetMapping("/{ownerId}")
-  fun findOwner(@PathVariable("ownerId") ownerId: Int): Optional<Owner> {
-    return ownerRepository.findById(ownerId)
-  }
+  fun findOwner(@PathVariable("ownerId") ownerId: Int): Owner? =
+    ownerRepository.findByIdOrNull(ownerId)
 
   @GetMapping
-  fun findAll() : List<Owner> {
-    return ownerRepository.findAll()
-  }
+  fun findAll() : List<Owner> = ownerRepository.findAll()
 
   @PutMapping("/{ownerId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   fun updateOwner(@PathVariable("ownerId") ownerId: Int,
                   @Valid @RequestBody ownerRequest: Owner) {
-    val owner = ownerRepository.findById(ownerId)
-    val ownerModel = owner.orElseThrow { ResourceNotFoundException("Owner $ownerId not found") }
-    // This is done by hand for simplicity purpose.
-    // In a real life use-case we should consider using MapStruct.
-    ownerModel.firstName = ownerRequest.firstName
-    ownerModel.lastName = ownerRequest.lastName
-    ownerModel.city = ownerRequest.city
-    ownerModel.address = ownerRequest.address
-    ownerModel.telephone = ownerRequest.telephone
-    log.info("Saving owner $ownerModel")
-    ownerRepository.save(ownerModel)
-
+    val owner = ownerRepository.findByIdOrNull(ownerId)
+      ?: throw ResourceNotFoundException("Owner $ownerId not found")
+    owner.firstName = ownerRequest.firstName
+    owner.lastName = ownerRequest.lastName
+    owner.city = ownerRequest.city
+    owner.address = ownerRequest.address
+    owner.telephone = ownerRequest.telephone
+    log.info("Saving owner $owner")
+    ownerRepository.save(owner)
   }
 
 }

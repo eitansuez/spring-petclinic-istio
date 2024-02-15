@@ -1,25 +1,19 @@
 package org.springframework.samples.petclinic.api
 
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class PetClinicControllerTest {
-  @MockBean
-  private lateinit var customersServiceClient: CustomersServiceClient
-
-  @MockBean
-  private lateinit var visitsServiceClient: VisitsServiceClient
-
-  @Autowired
-  private lateinit var client: WebTestClient
+class PetClinicControllerTest(@Autowired val client: WebTestClient) {
+  @MockkBean private lateinit var customersServiceClient: CustomersServiceClient
+  @MockkBean private lateinit var visitsServiceClient: VisitsServiceClient
 
   @Test
   fun getOwnerDetails_withAvailableVisitsService() {
@@ -28,17 +22,16 @@ class PetClinicControllerTest {
     val cat = PetDetails(id=20, name="Garfield", birthDate="03-02-1999",
       type=PetType("cat"))
     owner.pets.add(cat)
-    Mockito
-      .`when`(customersServiceClient.getOwner(1))
-      .thenReturn(Mono.just(owner))
+
+    every {
+      customersServiceClient.getOwner(1)
+    } returns Mono.just(owner)
 
     val visits = Visits()
-    val visit = VisitDetails(id=300, description="First visit",
-      petId=cat.id)
-    visits.items.add(visit)
-    Mockito
-      .`when`(visitsServiceClient.getVisitsForPets(listOf(cat.id)))
-      .thenReturn(Mono.just(visits))
+    visits.items.add(VisitDetails(id = 300, description = "First visit", petId = cat.id))
+    every {
+      visitsServiceClient.getVisitsForPets(listOf(cat.id))
+    } returns Mono.just(visits)
 
     client.get()
       .uri("/api/gateway/owners/1")
@@ -62,17 +55,15 @@ class PetClinicControllerTest {
       type=PetType("cat"))
     owner.pets.add(cat)
 
-    Mockito
-      .`when`(customersServiceClient.getOwner(1))
-      .thenReturn(Mono.just(owner))
+    every {
+      customersServiceClient.getOwner(1)
+    } returns Mono.just(owner)
 
-    Mockito
-      .`when`(visitsServiceClient.getVisitsForPets(listOf(cat.id)))
-      .thenReturn(
-        Mono.error(
-          WebClientResponseException(HttpStatus.GATEWAY_TIMEOUT.value(), "Simulated Gateway Timeout", null, null, null)
-        )
-      )
+    every {
+      visitsServiceClient.getVisitsForPets(listOf(cat.id))
+    } returns Mono.error(
+      WebClientResponseException(HttpStatus.GATEWAY_TIMEOUT.value(), "Simulated Gateway Timeout", null, null, null)
+    )
 
     client.get()
       .uri("/api/gateway/owners/1")

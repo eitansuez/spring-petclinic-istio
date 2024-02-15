@@ -1,30 +1,32 @@
 package org.springframework.samples.petclinic.vets
 
-import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito.given
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 
 @WebMvcTest(controllers = [VetsController::class])
-class VetsControllerTest {
+class VetsControllerTest(@Autowired val mvc: MockMvc) {
 
-  @Autowired private lateinit var mvc: MockMvc
-  @MockBean private lateinit var vetRepository: VetRepository
+  @MockkBean
+  private lateinit var vetRepository: VetRepository
 
   @Test
   fun shouldGetAListOfVets() {
-    val vet = Vet(1, "John", "Doe")
-    given(vetRepository.findAll()).willReturn(listOf(vet));
-    mvc.perform(get("/vets").accept(MediaType.APPLICATION_JSON))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$[0].id").value(1));
+    every {
+      vetRepository.findAll()
+    } returns listOf(Vet(1, "John", "Doe"))
+
+    mvc.get("/vets") {
+      accept = APPLICATION_JSON
+    }.andExpect {
+      status { isOk() }
+      jsonPath("$[0].id") { value(1) }
+    }
   }
 
 }

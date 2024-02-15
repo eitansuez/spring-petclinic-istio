@@ -45,5 +45,4 @@ class VisitsServiceClientIntegrationTest {
     assertEquals("test visit", visits.items[0].description)
   }
 
-
 }
