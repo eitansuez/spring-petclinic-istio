@@ -63,7 +63,7 @@ We assume you already have [maven](https://maven.apache.org/) installed locally.
     mvn clean package
     ```
 
-2. Build the images
+2. Build the images (this takes a little over 5 minutes)
 
     ```shell
     mvn spring-boot:build-image
