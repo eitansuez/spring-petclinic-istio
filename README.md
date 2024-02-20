@@ -4,7 +4,7 @@ This repository is derived from [Spring PetClinic Cloud](https://github.com/spri
 
 For instructions to set up, build, deploy, and configure PetClinic with Istio, along with explorations of the capabilities unlocked by Istio, see https://eitansuez.github.io/spring-petclinic-istio/
 
-Watch [a video walkthrough](https://youtu.be/1UybZGws4m8).
+Watch [a video walkthrough](https://youtu.be/m4GTHZ1S2F8).
 
 For general information about the PetClinic sample application, see the [Spring PetClinic](https://spring-petclinic.github.io/) website.
 
