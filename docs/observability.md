@@ -90,7 +90,8 @@ What allows Istio to aggregate both scrape endpoints are annotations placed in t
 
 For example, [here are the prometheus annotations](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/customers-service.yaml#L40-L43) for the `customers` service.
 
-For more information on metrics merging and Prometheus, see [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging).
+[Rob Salmond's blog entry on Prometheus](https://superorbital.io/blog/istio-metrics-merging/) provides a nice illustration of how both scrape endpoints are aggregated.  For more information on metrics merging and Prometheus, see [the Istio documentation](https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging).
+
 
 ## Send requests to the application
 
