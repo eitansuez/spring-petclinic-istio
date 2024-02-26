@@ -84,4 +84,10 @@ Here is how to test the behavior:
 
 Restore the original behavior with no delay:  edit the `visits-v1` deployment again and set the environment variable value to "0".
 
+To learn more about resilience features in Istio, see:
+
+- The [Network and resilience concepts section](https://istio.io/latest/docs/concepts/traffic-management/#network-resilience-and-testing) from the reference documentation,
+- The [circuit-breaking how-to](https://istio.io/latest/docs/tasks/traffic-management/circuit-breaking/), and
+- A lab on [circuit breaking in Istio](https://tetratelabs.github.io/istio-0to60/circuit-breakers/) from Tetrate's Istio workshop.
+
 Let us next turn our attention to security-related configuration.
