@@ -722,7 +722,7 @@
 </code></pre></div>
 <p>What allows Istio to aggregate both scrape endpoints are annotations placed in the pod template specification for each application, communicating the URL of the Prometheus scrape endpoint.</p>
 <p>For example, <a href="https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/manifests/deploy/customers-service.yaml#L40-L43">here are the prometheus annotations</a> for the <code>customers</code> service.</p>
-<p>For more information on metrics merging and Prometheus, see <a href="https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging">the Istio documentation</a>.</p>
+<p><a href="https://superorbital.io/blog/istio-metrics-merging/">Rob Salmond's blog entry on Prometheus</a> provides a nice illustration of how both scrape endpoints are aggregated.  For more information on metrics merging and Prometheus, see <a href="https://istio.io/latest/docs/ops/integrations/prometheus/#option-1-metrics-merging">the Istio documentation</a>.</p>
 <h2 id="send-requests-to-the-application">Send requests to the application<a class="headerlink" href="#send-requests-to-the-application" title="Permanent link">&para;</a></h2>
 <p>To send a steady stream of requests through the <code>petclinic-frontend</code> application, we use <a href="https://www.joedog.org/siege-manual/">siege</a>.  Feel free to use other tools, or maybe a simple bash <code>while</code> loop.</p>
 <p>Run the following <code>siege</code> command to send requests to various endpoints in our application:</p>
