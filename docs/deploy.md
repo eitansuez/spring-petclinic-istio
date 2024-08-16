@@ -34,19 +34,25 @@ Deploy the databases with a `helm install` command, one for each app/service:
 1. Vets:
 
     ```bash
-    helm install vets-db-mysql bitnami/mysql --set auth.database=service_instance_db
+    helm install vets-db-mysql bitnami/mysql \
+      --set auth.database=service_instance_db \
+      --version 10.3.0
     ```
 
 2. Visits:
 
     ```bash
-    helm install visits-db-mysql bitnami/mysql --set auth.database=service_instance_db
+    helm install visits-db-mysql bitnami/mysql \
+      --set auth.database=service_instance_db \
+      --version 10.3.0
     ```
 
 3. Customers:
 
     ```bash
-    helm install customers-db-mysql bitnami/mysql --set auth.database=service_instance_db
+    helm install customers-db-mysql bitnami/mysql \
+      --set auth.database=service_instance_db \
+      --version 10.3.0
     ```
 
 The databases should be up after ~ 1-2 minutes.
@@ -144,7 +150,7 @@ Connect directly to the `vets-db-mysql` database:
     ```shell
     kubectl run vets-db-mysql-client \
       --rm --tty -i --restart='Never' \
-      --image docker.io/bitnami/mysql:8.4.2-debian-12-r2 \
+      --image docker.io/bitnami/mysql:8.0.37-debian-12-r2 \
       --namespace default \
       --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
       --command -- bash
