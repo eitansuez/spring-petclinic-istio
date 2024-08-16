@@ -9,18 +9,21 @@ spec:
       envoyOtelAls:
         service: opentelemetry-collector.istio-system.svc.cluster.local
         port: 4317
-
+    - name: zipkin
+      zipkin:
+        service: zipkin.istio-system.svc.cluster.local
+        port: 9411
+    enableTracing: true
+    defaultConfig:
+      tracing:
+        sampling: 100.0 # (2)
   components:
     pilot:
       k8s:
-        env:
-          - name: PILOT_TRACE_SAMPLING # (2)
-            value: "100"
         resources:
           requests:
             cpu: 10m
             memory: 100Mi
-
   values:
     global:
       proxy:
@@ -28,12 +31,10 @@ spec:
           requests:
             cpu: 10m
             memory: 40Mi
-
     pilot:
       autoscaleEnabled: false
       env:
         PILOT_ENABLE_MYSQL_FILTER: "true" # (3)
-
     gateways:
       istio-egressgateway:
         autoscaleEnabled: false

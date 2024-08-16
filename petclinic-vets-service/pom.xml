@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.3.2</version>
         <relativePath />
     </parent>
 
@@ -17,7 +17,7 @@
     <version>1.0</version>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>22</java.version>
         <!--suppress UnresolvedMavenProperty -->
         <spring-boot.build-image.imageName>${env.PUSH_IMAGE_REGISTRY}/${project.artifactId}</spring-boot.build-image.imageName>
         <spring-boot.build-image.publish>false</spring-boot.build-image.publish>

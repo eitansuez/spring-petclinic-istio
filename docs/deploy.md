@@ -144,7 +144,7 @@ Connect directly to the `vets-db-mysql` database:
     ```shell
     kubectl run vets-db-mysql-client \
       --rm --tty -i --restart='Never' \
-      --image docker.io/bitnami/mysql:8.0.36-debian-11-r2 \
+      --image docker.io/bitnami/mysql:8.4.2-debian-12-r2 \
       --namespace default \
       --env MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD \
       --command -- bash

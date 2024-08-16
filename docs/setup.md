@@ -81,9 +81,3 @@ istioctl verify-install
 ```
 
 In the next section, you will work on deploying the microservices to the `default` namespace.
-
-As a final step, label the `default` namespace for sidecar injection with:
-
-```shell
-kubectl label ns default istio-injection=enabled
-```

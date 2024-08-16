@@ -8,7 +8,11 @@ Micrometer tracing is an elegant solution, in that we do not have to couple the 
 
 See the [`application.yaml` resource files](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/petclinic-vets-service/src/main/resources/application.yaml#L56) and the property `management.tracing.baggage.remote-fields` which configures the fields to propagate.
 
-To make testing this easier, Istio is [configured with 100% trace sampling](https://github.com/spring-petclinic/spring-petclinic-istio/blob/master/istio-install-manifest.yaml#L21).
+To make testing this easier, configure Istio with 100% trace sampling, as follows:
+
+```shell
+kubectl apply -f manifests/config/telemetry.yaml
+```
 
 ### Observe distributed traces
 

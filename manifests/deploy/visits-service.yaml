@@ -37,6 +37,7 @@ spec:
       labels:
         app: visits-service
         version: v1
+        sidecar.istio.io/inject: "true"
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
