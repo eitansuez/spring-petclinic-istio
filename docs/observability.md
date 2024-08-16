@@ -10,6 +10,11 @@ See the [`application.yaml` resource files](https://github.com/spring-petclinic/
 
 To make testing this easier, configure Istio with 100% trace sampling, as follows:
 
+??? tldr "telemetry.yaml"
+    ```yaml linenums="1"
+    --8<-- "https://raw.githubusercontent.com/eitansuez/spring-petclinic-istio/master/manifests/config/telemetry.yaml"
+    ```
+
 ```shell
 kubectl apply -f manifests/config/telemetry.yaml
 ```
