@@ -12,7 +12,7 @@ To make testing this easier, configure Istio with 100% trace sampling, as follow
 
 ??? tldr "telemetry.yaml"
     ```yaml linenums="1"
-    --8<-- "https://raw.githubusercontent.com/eitansuez/spring-petclinic-istio/master/manifests/config/telemetry.yaml"
+    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/config/telemetry.yaml"
     ```
 
 ```shell
