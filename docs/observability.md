@@ -124,20 +124,6 @@ Deploy Prometheus to your Kubernetes cluster:
 kubectl apply -f istio-{{istio.version}}/samples/addons/prometheus.yaml
 ```
 
-The latest version of Spring Boot (3.2) takes advantage of a relatively recent feature of Prometheus known as "exemplars."  The current version of Istio uses an older version of Prometheus (2.41) that does not yet support exemplars.
-
-Before deploying Prometheus, patch the prometheus deployment to use the latest version of the image:
-
-```shell
-kubectl patch deploy -n istio-system prometheus \
-  --patch-file=manifests/config/prom-patch.yaml
-```
-
-??? tldr "prom-patch.yaml"
-    ```yaml linenums="1"
-    --8<-- "https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-istio/master/manifests/config/prom-patch.yaml"
-    ```
-
 Launch the Prometheus dashboard:
 
 ```shell
